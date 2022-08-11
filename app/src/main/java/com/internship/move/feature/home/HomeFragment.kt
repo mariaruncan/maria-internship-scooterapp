@@ -1,4 +1,4 @@
-package com.internship.move.feature.onboarding
+package com.internship.move.feature.home
 
 import android.os.Bundle
 import android.view.View
