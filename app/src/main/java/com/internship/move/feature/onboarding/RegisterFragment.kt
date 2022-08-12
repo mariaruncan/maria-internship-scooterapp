@@ -16,7 +16,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.homeBtn.setOnClickListener {
-            findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToHomeGaph())
+            findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToHomeGraph())
         }
 
         binding.loginBtn.setOnClickListener {

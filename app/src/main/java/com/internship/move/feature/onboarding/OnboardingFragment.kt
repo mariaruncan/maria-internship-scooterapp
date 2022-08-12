@@ -15,7 +15,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.getStartedBtn.setOnClickListener{
+        binding.getStartedBtn.setOnClickListener {
             findNavController().navigate(OnboardingFragmentDirections.actionOnboardingFragmentToRegisterFragment())
         }
     }

@@ -15,7 +15,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.logoutBtn.setOnClickListener {
-            activity?.onBackPressed()
+            val intent = requireActivity().intent
+            requireActivity().finish()
+            startActivity(intent)
         }
     }
 }
