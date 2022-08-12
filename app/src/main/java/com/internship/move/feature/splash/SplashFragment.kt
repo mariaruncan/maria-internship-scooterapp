@@ -15,6 +15,10 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 
         Handler(Looper.getMainLooper()).postDelayed({
             findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnboardingGraph())
-        }, 2000)
+        }, SPLASH_FRAGMENT_DELAY)
+    }
+
+    companion object {
+        private const val SPLASH_FRAGMENT_DELAY = 1500L
     }
 }
