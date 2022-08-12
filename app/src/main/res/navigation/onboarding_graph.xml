@@ -28,7 +28,8 @@
 
         <action
             android:id="@+id/action_registerFragment_to_home_gaph"
-            app:destination="@id/home_graph" />
+            app:destination="@id/home_graph"
+            app:popUpTo="@navigation/splash_graph" />
     </fragment>
 
     <fragment
