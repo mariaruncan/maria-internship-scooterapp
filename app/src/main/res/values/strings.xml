@@ -5,5 +5,11 @@
     <string name="onboarding_fragment_title">Onboarding fragment</string>
     <string name="home_fragment_title">Map fragment</string>
     <string name="login_fragment_title">Login fragment</string>
+
+    <!-- Buttons text -->
     <string name="get_started_label">Get started</string>
+    <string name="home_label">Home</string>
+    <string name="login_label">Login</string>
+    <string name="register_label">Register</string>
+    <string name="log_out_label">Log out</string>
 </resources>
