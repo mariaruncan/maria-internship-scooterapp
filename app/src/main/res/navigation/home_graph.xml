@@ -9,5 +9,26 @@
         android:id="@+id/homeFragment"
         android:name="com.internship.move.feature.home.HomeFragment"
         android:label="HomeFragment"
-        tools:layout="@layout/fragment_home"/>
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_homeFragment_to_helpFragment"
+            app:destination="@id/helpFragment" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_splash_graph"
+            app:destination="@id/splash_graph" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.internship.move.feature.home.HelpFragment"
+        android:label="HelpFragment"
+        tools:layout="@layout/fragment_help">
+
+        <argument
+            android:name="helpInfo"
+            app:argType="com.internship.move.feature.model.HelpInfo"
+            app:nullable="true" />
+    </fragment>
 </navigation>
