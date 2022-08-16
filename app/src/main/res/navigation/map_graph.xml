@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/map_graph"
+    app:startDestination="@id/mapFragment">
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.internship.move.feature.map.MapFragment"
+        android:label="MapFragment"
+        tools:layout="@layout/fragment_map">
+
+        <action
+            android:id="@+id/action_mapFragment_to_helpFragment"
+            app:destination="@id/helpFragment" />
+
+        <action
+            android:id="@+id/action_mapFragment_to_splash_graph"
+            app:destination="@id/splash_graph" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.internship.move.feature.map.HelpFragment"
+        android:label="HelpFragment"
+        tools:layout="@layout/fragment_help">
+
+        <argument
+            android:name="helpInfo"
+            app:argType="com.internship.move.feature.model.HelpInfo"
+            app:nullable="true" />
+    </fragment>
+</navigation>
