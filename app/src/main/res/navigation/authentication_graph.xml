@@ -19,7 +19,7 @@
 
         <action
             android:id="@+id/action_registerFragment_to_home_graph"
-            app:destination="@id/home_graph"
+            app:destination="@id/map_graph"
             app:popUpTo="@navigation/splash_graph" />
     </fragment>
 
@@ -36,10 +36,10 @@
             app:popUpToInclusive="true" />
 
         <action
-            android:id="@+id/action_loginFragment_to_home_graph"
-            app:destination="@id/home_graph"
+            android:id="@+id/action_loginFragment_to_map_graph"
+            app:destination="@id/map_graph"
             app:popUpTo="@navigation/splash_graph" />
     </fragment>
 
-    <include app:graph="@navigation/home_graph" />
+    <include app:graph="@navigation/map_graph" />
 </navigation>

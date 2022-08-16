@@ -16,7 +16,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.homeBtn.setOnClickListener {
-            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeGraph())
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMapGraph())
         }
 
         binding.registerBtn.setOnClickListener {
