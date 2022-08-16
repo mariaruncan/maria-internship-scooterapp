@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="help_message_input_width">200dp</dimen>
+
+    <!-- region Splash -->
+    <dimen name="scooter_image_width">645dp</dimen>
+    <dimen name="scooter_image_height">684dp</dimen>
+    <dimen name="scooter_image_margin_start">-236dp</dimen>
 </resources>
