@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="help_message_input_width">200dp</dimen>
+
+    <!-- styles -->
+    <dimen name="h1_text_size">32sp</dimen>
+    <dimen name="h2_text_size">20sp</dimen>
+    <dimen name="h3_text_size">17sp</dimen>
+    <dimen name="h4_text_size">17sp</dimen>
+    <dimen name="button2_text_size">14sp</dimen>
+    <dimen name="caption_text_size">12sp</dimen>
+    <dimen name="body1_text_size">16sp</dimen>
+    <dimen name="body2_text_size">14sp</dimen>
+    <dimen name="info_text_size">12sp</dimen>
 </resources>
