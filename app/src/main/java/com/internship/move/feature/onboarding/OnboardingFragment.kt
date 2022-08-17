@@ -8,7 +8,6 @@ import com.internship.move.R
 import com.internship.move.databinding.FragmentOnboardingBinding
 import com.internship.move.util.ONBOARDING_NUMBER_OF_PAGES
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
-import kotlinx.parcelize.Parcelize
 
 class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
 

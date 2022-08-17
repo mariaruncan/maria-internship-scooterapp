@@ -9,7 +9,7 @@ typealias OnNextButtonClickListener = (currentPageNo: Int) -> Unit
 class PagesAdapter(
     val fragment: Fragment,
     private val onNextButtonClickListener: OnNextButtonClickListener
-): FragmentStateAdapter(fragment) {
+) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int = ONBOARDING_NUMBER_OF_PAGES
 

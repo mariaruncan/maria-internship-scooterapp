@@ -54,7 +54,7 @@ class PageFragment : Fragment(R.layout.fragment_page) {
         else -> throw IllegalArgumentException("Wrong page number.")
     }
 
-    private fun getPageTitle(): String = when(pageNumber) {
+    private fun getPageTitle(): String = when (pageNumber) {
         0 -> requireContext().getString(R.string.title_first_page)
         1 -> requireContext().getString(R.string.title_second_page)
         2 -> requireContext().getString(R.string.title_third_page)
@@ -62,7 +62,7 @@ class PageFragment : Fragment(R.layout.fragment_page) {
         else -> throw IllegalArgumentException("Wrong page number.")
     }
 
-    private fun getPageDescription(): String = when(pageNumber) {
+    private fun getPageDescription(): String = when (pageNumber) {
         0 -> requireContext().getString(R.string.description_first_page)
         1 -> requireContext().getString(R.string.description_second_page)
         2 -> requireContext().getString(R.string.description_third_page)
