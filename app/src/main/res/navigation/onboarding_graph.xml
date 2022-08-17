@@ -9,11 +9,15 @@
         android:id="@+id/onboardingFragment"
         android:name="com.internship.move.feature.onboarding.OnboardingFragment"
         android:label="OnboardingFragment"
-        tools:layout="@layout/fragment_onboarding">
+        tools:layout="@layout/fragment_page">
 
         <action
             android:id="@+id/action_onboardingFragment_to_authentication_graph"
-            app:destination="@id/authentication_graph" />
+            app:destination="@id/authentication_graph"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <include app:graph="@navigation/authentication_graph" />

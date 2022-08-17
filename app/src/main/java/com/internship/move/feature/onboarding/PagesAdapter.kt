@@ -2,8 +2,7 @@ package com.internship.move.feature.onboarding
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-
-const val NUM_PAGES = 4
+import com.internship.move.util.ONBOARDING_NUMBER_OF_PAGES
 
 typealias OnNextButtonClickListener = (currentPageNo: Int) -> Unit
 
@@ -12,7 +11,7 @@ class PagesAdapter(
     private val onNextButtonClickListener: OnNextButtonClickListener
 ): FragmentStateAdapter(fragment) {
 
-    override fun getItemCount(): Int = NUM_PAGES
+    override fun getItemCount(): Int = ONBOARDING_NUMBER_OF_PAGES
 
     override fun createFragment(position: Int): Fragment = PageFragment.newInstance(position, onNextButtonClickListener)
 }
