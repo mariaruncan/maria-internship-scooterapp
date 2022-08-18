@@ -7,10 +7,22 @@
     <string name="login_fragment_title">Login fragment</string>
 
     <!-- Buttons text -->
-    <string name="get_started_label">Get started</string>
     <string name="map_label">Map</string>
     <string name="login_label">Login</string>
     <string name="register_label">Register</string>
     <string name="log_out_label">Log out</string>
     <string name="help_label">Help</string>
+
+    <!-- region Onboarding -->
+    <string name="onboarding_next_btn_text">Next</string>
+    <string name="onboarding_skip_btn_text">Skip</string>
+    <string name="onboarding_get_started_btn_text">Get started</string>
+    <string name="onboarding_title_first_page">Safety</string>
+    <string name="onboarding_title_second_page">Scan</string>
+    <string name="onboarding_title_third_page">Parking</string>
+    <string name="onboarding_title_fourth_page">Rules</string>
+    <string name="onboarding_description_first_page">Please wear a helmet and protect yourself while riding</string>
+    <string name="onboarding_description_second_page">Scan the QR code or NFC sticker on top of the scooter to unlock and ride.</string>
+    <string name="onboarding_description_third_page">If convenient, park at a bike rack. If not, park close to the edge of the sidewalk closest to the street. Do not block sidewalks, doors or ramps.</string>
+    <string name="onboarding_description_fourth_page">You must be 18 years or and older with a valid driving licence to operate a scooter. Please follow all street signs, signals and markings, and obey local traffic laws.</string>
 </resources>

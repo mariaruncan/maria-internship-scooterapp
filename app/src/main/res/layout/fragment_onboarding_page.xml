@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".feature.onboarding.adapter.OnboardingPageFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <ImageView
+        android:id="@+id/backgroundIV"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/horizontalGL"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/bg_first_onboarding_page" />
+
+    <TextView
+        android:id="@+id/titleTV"
+        style="@style/Heading1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/onboarding_margin_size"
+        android:layout_marginTop="@dimen/onboarding_margin_size"
+        android:textColor="@color/indigo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/backgroundIV"
+        tools:text="@tools:sample/lorem" />
+
+    <TextView
+        android:id="@+id/descriptionTV"
+        style="@style/Body1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/onboarding_margin_size"
+        android:layout_marginEnd="@dimen/onboarding_margin_size"
+        android:textColor="@color/indigo"
+        app:layout_constraintTop_toBottomOf="@id/titleTV"
+        tools:text="Please wear a helmet and protect yourself while riding" />
+
+    <TextView
+        android:id="@+id/skipTV"
+        style="@style/Button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/onboarding_margin_size"
+        android:background="?selectableItemBackground"
+        android:text="@string/onboarding_skip_btn_text"
+        app:layout_constraintBottom_toBottomOf="@id/titleTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/titleTV" />
+</androidx.constraintlayout.widget.ConstraintLayout>
