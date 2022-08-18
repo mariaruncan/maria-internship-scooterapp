@@ -26,7 +26,6 @@ class OnboardingPageFragment : Fragment(R.layout.fragment_onboarding_page) {
 
     private fun displayData() {
         val details = pageDetails ?: return
-        ResourcesCompat.getDrawable(resources, details.backgroundId, null)
         binding.backgroundIV.setImageDrawable(ResourcesCompat.getDrawable(resources, details.backgroundId, null))
         binding.titleTV.text = getText(details.titleId)
         binding.descriptionTV.text = getText(details.descriptionId)
