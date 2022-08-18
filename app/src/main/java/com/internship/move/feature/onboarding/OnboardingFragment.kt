@@ -1,5 +1,6 @@
 package com.internship.move.feature.onboarding
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -28,6 +29,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding), SkipCallback 
 
         binding.nextBtn.setOnClickListener {
             if (binding.viewPager.currentItem == adapter.itemCount - 1) {
+                updateSharedPreferences()
                 findNavController().navigate(OnboardingFragmentDirections.actionOnboardingFragmentToAuthenticationGraph())
             } else {
                 binding.viewPager.currentItem += 1
@@ -35,6 +37,15 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding), SkipCallback 
                     binding.nextBtn.text = getText(R.string.onboarding_get_started_btn_text)
                 }
             }
+        }
+    }
+
+    private fun updateSharedPreferences() {
+        val sharedPref = requireActivity().getSharedPreferences(
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE) ?: return
+        with(sharedPref.edit()) {
+            putBoolean(getString(R.string.has_visited_onboarding_key), true)
+            apply()
         }
     }
 

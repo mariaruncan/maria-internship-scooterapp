@@ -15,7 +15,13 @@
         android:id="@+id/logoutBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/log_out_label" />
+        android:text="@string/map_log_out_btn_text" />
+
+    <Button
+        android:id="@+id/clearAppBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/map_clear_app_btn_text" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="@dimen/help_message_input_width"
@@ -31,5 +37,5 @@
         android:id="@+id/helpBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/help_label" />
+        android:text="@string/help_btn_text" />
 </LinearLayout>
