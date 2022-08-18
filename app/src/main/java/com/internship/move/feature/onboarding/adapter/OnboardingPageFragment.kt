@@ -1,4 +1,4 @@
-package com.internship.move.feature.onboarding
+package com.internship.move.feature.onboarding.adapter
 
 import android.os.Bundle
 import android.view.View
@@ -7,12 +7,13 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.internship.move.R
 import com.internship.move.databinding.FragmentOnboardingPageBinding
+import com.internship.move.feature.onboarding.SkipCallback
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
 class OnboardingPageFragment : Fragment(R.layout.fragment_onboarding_page) {
 
     private val binding by viewBinding(FragmentOnboardingPageBinding::bind)
-    private var pageDetails: PageDetails? = null
+    private var pageDetails: OnboardingPageDetails? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,7 +44,7 @@ class OnboardingPageFragment : Fragment(R.layout.fragment_onboarding_page) {
 
         private const val PAGE_DETAILS_KEY = "PAGE_DETAILS"
 
-        fun newInstance(pageDetails: PageDetails) = OnboardingPageFragment().apply {
+        fun newInstance(pageDetails: OnboardingPageDetails) = OnboardingPageFragment().apply {
             arguments = Bundle().apply {
                 putParcelable(PAGE_DETAILS_KEY, pageDetails)
             }
