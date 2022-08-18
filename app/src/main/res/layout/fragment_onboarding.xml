@@ -1,5 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.viewpager2.widget.ViewPager2 xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/viewPager"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/nextBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/nextBtn"
+        style="@style/Button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/onboarding_margin_size"
+        android:layout_marginBottom="@dimen/onboarding_margin_size"
+        android:background="@drawable/ic_rectangle"
+        android:drawableEnd="@drawable/ic_arrow_right"
+        android:text="@string/onboarding_next_btn_text"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/pink"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+        android:id="@+id/dotsIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/onboarding_margin_size"
+        app:dotsColor="@color/pastel_purple"
+        app:dotsCornerRadius="@dimen/onboarding_dots_corner_radius"
+        app:dotsSize="@dimen/onboarding_dots_size"
+        app:dotsSpacing="@dimen/onboarding_dots_spacing"
+        app:dotsWidthFactor="4"
+        app:layout_constraintBottom_toBottomOf="@id/nextBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/nextBtn"
+        app:progressMode="false"
+        app:selectedDotColor="@color/indigo" />
+</androidx.constraintlayout.widget.ConstraintLayout>

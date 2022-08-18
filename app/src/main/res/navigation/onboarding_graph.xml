@@ -9,7 +9,7 @@
         android:id="@+id/onboardingFragment"
         android:name="com.internship.move.feature.onboarding.OnboardingFragment"
         android:label="OnboardingFragment"
-        tools:layout="@layout/fragment_page">
+        tools:layout="@layout/fragment_onboarding_page">
 
         <action
             android:id="@+id/action_onboardingFragment_to_authentication_graph"

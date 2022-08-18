@@ -12,4 +12,10 @@
     <dimen name="body1_text_size">16sp</dimen>
     <dimen name="body2_text_size">14sp</dimen>
     <dimen name="info_text_size">12sp</dimen>
+
+    <!-- region Onboarding -->
+    <dimen name="onboarding_margin_size">24dp</dimen>
+    <dimen name="onboarding_dots_corner_radius">1.5dp</dimen>
+    <dimen name="onboarding_dots_size">4dp</dimen>
+    <dimen name="onboarding_dots_spacing">8dp</dimen>
 </resources>
