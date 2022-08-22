@@ -1,6 +1,6 @@
 package com.internship.move.feature.onboarding
 
-import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -9,6 +9,8 @@ import com.internship.move.R
 import com.internship.move.databinding.FragmentOnboardingBinding
 import com.internship.move.feature.onboarding.adapter.OnboardingPageDetails
 import com.internship.move.feature.onboarding.adapter.PagesAdapter
+import com.internship.move.util.Constants.SharedPref.KEY_APP_PREFERECES
+import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_ONBOARDING
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
 class OnboardingFragment : Fragment(R.layout.fragment_onboarding), SkipCallback {
@@ -40,17 +42,15 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding), SkipCallback 
         }
     }
 
-    private fun updateSharedPreferences() {
-        val sharedPref = requireActivity().getSharedPreferences(
-            getString(R.string.preference_file_key), Context.MODE_PRIVATE) ?: return
-        with(sharedPref.edit()) {
-            putBoolean(getString(R.string.has_visited_onboarding_key), true)
-            apply()
-        }
+    override fun onSkipButtonClick() {
+        updateSharedPreferences()
+        findNavController().navigate(OnboardingFragmentDirections.actionOnboardingFragmentToAuthenticationGraph())
     }
 
-    override fun onSkipButtonClick() {
-        findNavController().navigate(OnboardingFragmentDirections.actionOnboardingFragmentToAuthenticationGraph())
+    private fun updateSharedPreferences() {
+        requireActivity().getSharedPreferences(KEY_APP_PREFERECES, MODE_PRIVATE).edit()
+            .putBoolean(KEY_HAS_VISITED_ONBOARDING, true)
+            .apply()
     }
 
     private fun getPagesDetails(): List<OnboardingPageDetails> = listOf(

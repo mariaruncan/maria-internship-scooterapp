@@ -1,6 +1,6 @@
-package com.internship.move.feature.map
+package com.internship.move.feature.home
 
-import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -8,6 +8,9 @@ import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentMapBinding
 import com.internship.move.feature.model.HelpInfo
+import com.internship.move.util.Constants.SharedPref.KEY_APP_PREFERECES
+import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_AUTHENTICATION
+import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_ONBOARDING
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
 class MapFragment : Fragment(R.layout.fragment_map) {
@@ -22,19 +25,19 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun initListeners() {
         binding.logoutBtn.setOnClickListener {
-            with(requireActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit()) {
-                putBoolean(getString(R.string.has_visited_authentication_key), false)
-                apply()
-            }
+            requireActivity().getSharedPreferences(KEY_APP_PREFERECES, MODE_PRIVATE).edit()
+                .putBoolean(KEY_HAS_VISITED_AUTHENTICATION, false)
+                .apply()
+
             findNavController().navigate(MapFragmentDirections.actionMapFragmentToSplashGraph())
         }
 
         binding.clearAppBtn.setOnClickListener {
-            with(requireActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).edit()) {
-                putBoolean(getString(R.string.has_visited_onboarding_key), false)
-                putBoolean(getString(R.string.has_visited_authentication_key), false)
-                apply()
-            }
+            requireActivity().getSharedPreferences(KEY_APP_PREFERECES, MODE_PRIVATE).edit()
+                .putBoolean(KEY_HAS_VISITED_ONBOARDING, false)
+                .putBoolean(KEY_HAS_VISITED_AUTHENTICATION, false)
+                .apply()
+
             findNavController().navigate(MapFragmentDirections.actionMapFragmentToSplashGraph())
         }
 
