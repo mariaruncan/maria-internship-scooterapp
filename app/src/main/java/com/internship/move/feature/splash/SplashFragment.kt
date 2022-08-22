@@ -1,24 +1,44 @@
 package com.internship.move.feature.splash
 
-import android.os.Bundle
+import android.content.Context.MODE_PRIVATE
 import android.os.Handler
 import android.os.Looper
-import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
+import com.internship.move.util.Constants.SharedPref.KEY_APP_PREFERECES
+import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_AUTHENTICATION
+import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_ONBOARDING
 
 class SplashFragment : Fragment(R.layout.fragment_splash) {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private val navigationHandler: Handler = Handler(Looper.getMainLooper())
+    private val navigationRunnableJob: Runnable = Runnable {
+        val sharedPref = requireActivity().getSharedPreferences(KEY_APP_PREFERECES, MODE_PRIVATE)
+        val hasVisitedOnboarding = sharedPref.getBoolean(KEY_HAS_VISITED_ONBOARDING, false)
+        val hasVisitedAuthentication = sharedPref.getBoolean(KEY_HAS_VISITED_AUTHENTICATION, false)
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnboardingGraph())
-        }, SPLASH_FRAGMENT_DELAY)
+        when {
+            hasVisitedOnboarding and hasVisitedAuthentication -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToHomeGraph())
+            hasVisitedOnboarding -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToAuthenticationGraph())
+            else -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnboardingGraph())
+        }
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        navigationHandler.removeCallbacks(navigationRunnableJob)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        navigationHandler.postDelayed(navigationRunnableJob, SPLASH_FRAGMENT_DELAY)
+    }
+
+
     companion object {
-        private const val SPLASH_FRAGMENT_DELAY = 1500L
+        private const val SPLASH_FRAGMENT_DELAY = 2000L
     }
 }

@@ -1,4 +1,4 @@
-package com.internship.move.feature.map
+package com.internship.move.feature.home
 
 import android.os.Bundle
 import android.view.View
