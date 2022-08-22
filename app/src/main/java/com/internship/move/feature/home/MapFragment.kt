@@ -8,7 +8,7 @@ import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentMapBinding
 import com.internship.move.feature.model.HelpInfo
-import com.internship.move.util.Constants.SharedPref.KEY_APP_PREFERECES
+import com.internship.move.util.Constants.SharedPref.KEY_APP_PREFERENCES
 import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_AUTHENTICATION
 import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_ONBOARDING
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
@@ -25,7 +25,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun initListeners() {
         binding.logoutBtn.setOnClickListener {
-            requireActivity().getSharedPreferences(KEY_APP_PREFERECES, MODE_PRIVATE).edit()
+            requireActivity().getSharedPreferences(KEY_APP_PREFERENCES, MODE_PRIVATE).edit()
                 .putBoolean(KEY_HAS_VISITED_AUTHENTICATION, false)
                 .apply()
 
@@ -33,7 +33,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
 
         binding.clearAppBtn.setOnClickListener {
-            requireActivity().getSharedPreferences(KEY_APP_PREFERECES, MODE_PRIVATE).edit()
+            requireActivity().getSharedPreferences(KEY_APP_PREFERENCES, MODE_PRIVATE).edit()
                 .putBoolean(KEY_HAS_VISITED_ONBOARDING, false)
                 .putBoolean(KEY_HAS_VISITED_AUTHENTICATION, false)
                 .apply()

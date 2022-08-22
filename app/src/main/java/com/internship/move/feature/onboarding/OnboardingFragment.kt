@@ -9,7 +9,7 @@ import com.internship.move.R
 import com.internship.move.databinding.FragmentOnboardingBinding
 import com.internship.move.feature.onboarding.adapter.OnboardingPageDetails
 import com.internship.move.feature.onboarding.adapter.PagesAdapter
-import com.internship.move.util.Constants.SharedPref.KEY_APP_PREFERECES
+import com.internship.move.util.Constants.SharedPref.KEY_APP_PREFERENCES
 import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_ONBOARDING
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
@@ -48,7 +48,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding), SkipCallback 
     }
 
     private fun updateSharedPreferences() {
-        requireActivity().getSharedPreferences(KEY_APP_PREFERECES, MODE_PRIVATE).edit()
+        requireActivity().getSharedPreferences(KEY_APP_PREFERENCES, MODE_PRIVATE).edit()
             .putBoolean(KEY_HAS_VISITED_ONBOARDING, true)
             .apply()
     }

@@ -1,15 +1,7 @@
 <resources>
     <string name="app_name">Move</string>
-    <string name="splash_fragment_title">Splash fragment</string>
-    <string name="register_fragment_title">Register fragment</string>
-    <string name="onboarding_fragment_title">Onboarding fragment</string>
     <string name="home_fragment_title">Map fragment</string>
     <string name="login_fragment_title">Login fragment</string>
-
-    <!-- region Shared Preferences Keys -->
-    <string name="preference_file_key">preference_file</string>
-    <string name="has_visited_onboarding_key">has_visited_onboarding</string>
-    <string name="has_visited_authentication_key">has_visited_authentication</string>
 
     <!-- Buttons text -->
     <string name="map_btn_text">Map</string>
@@ -33,4 +25,12 @@
     <!-- region MapFragment -->
     <string name="map_log_out_btn_text">Log out</string>
     <string name="map_clear_app_btn_text">Clear App</string>
+
+    <!-- region Register -->
+    <string name="register_title">Let\'s get started</string>
+    <string name="register_subtitle">Sign up or login and start riding right away</string>
+    <string name="register_email_hint">Email address</string>
+    <string name="register_username_hint">Username</string>
+    <string name="register_password_hint">Password</string>
+    <string name="register_terms_privacy_text">By continuing you agree to Move’s Terms and Conditions and Privacy Policy</string>
 </resources>

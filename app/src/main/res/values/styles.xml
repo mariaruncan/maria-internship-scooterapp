@@ -3,7 +3,7 @@
 
     <style name="TextAppearance">
         <item name="android:fontFamily">@font/bai_jamjuree_regular</item>
-        <item name="android:textColor">@color/pastel_purple</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/body1_text_size</item>
     </style>
 
@@ -55,5 +55,12 @@
 
     <style name="SmallText" parent="TextAppearance">
         <item name="android:textSize">@dimen/info_text_size</item>
+    </style>
+
+    <style name="TextInputEditText" parent="TextAppearance">
+        <item name="boxStrokeColor">@color/text_input_box_stroke_color</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="endIconTint">@color/pastel_purple</item>
+        <item name="hintTextColor">@color/pastel_purple</item>
     </style>
 </resources>
