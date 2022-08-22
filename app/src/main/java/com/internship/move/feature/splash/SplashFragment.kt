@@ -15,15 +15,13 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     private val navigationHandler: Handler = Handler(Looper.getMainLooper())
     private val navigationRunnableJob: Runnable = Runnable {
         val sharedPref = requireActivity().getSharedPreferences(KEY_APP_PREFERECES, MODE_PRIVATE)
+        val hasVisitedOnboarding = sharedPref.getBoolean(KEY_HAS_VISITED_ONBOARDING, false)
+        val hasVisitedAuthentication = sharedPref.getBoolean(KEY_HAS_VISITED_AUTHENTICATION, false)
 
-        when (sharedPref.getBoolean(KEY_HAS_VISITED_ONBOARDING, false)) {
-            true -> {
-                when (sharedPref.getBoolean(KEY_HAS_VISITED_AUTHENTICATION, false)) {
-                    true -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToHomeGraph())
-                    false -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToAuthenticationGraph())
-                }
-            }
-            false -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnboardingGraph())
+        when {
+            hasVisitedOnboarding and hasVisitedAuthentication -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToHomeGraph())
+            hasVisitedOnboarding -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToAuthenticationGraph())
+            else -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnboardingGraph())
         }
     }
 
