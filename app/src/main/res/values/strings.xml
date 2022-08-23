@@ -33,4 +33,9 @@
     <string name="register_username_hint">Username</string>
     <string name="register_password_hint">Password</string>
     <string name="register_terms_privacy_text">By continuing you agree to Move’s Terms and Conditions and Privacy Policy</string>
+    <string name="register_terms_and_conditions_text">Terms and Conditions</string>
+    <string name="register_privacy_policy_text">Privacy Policy</string>
+    <string name="register_login_text">You already have an account? You can log in here</string>
+    <string name="register_login_here_text">log in here</string>
+    <string name="register_get_started_button_text">Get started</string>
 </resources>

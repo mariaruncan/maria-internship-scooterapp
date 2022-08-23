@@ -9,6 +9,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.TextView
+import com.internship.move.R
 
 fun TextView.addClickableSpan(text: String, callback: View.OnClickListener) {
     val spannableString = SpannableString(this.text)
@@ -18,6 +19,7 @@ fun TextView.addClickableSpan(text: String, callback: View.OnClickListener) {
         override fun updateDrawState(textPaint: TextPaint) {
             super.updateDrawState(textPaint)
             textPaint.isUnderlineText = true
+            textPaint.color = context.getColor(R.color.pink)
         }
 
         override fun onClick(view: View) {

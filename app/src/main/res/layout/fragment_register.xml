@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="@dimen/margin_size">
+        android:padding="@dimen/medium_margin_size">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -36,14 +36,14 @@
             style="@style/Heading1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_size"
+            android:layout_marginTop="@dimen/medium_margin_size"
             android:text="@string/register_title" />
 
         <TextView
             style="@style/Heading2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_size"
+            android:layout_marginTop="@dimen/small_margin_size"
             android:text="@string/register_subtitle" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -51,7 +51,7 @@
             style="@style/TextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_size"
+            android:layout_marginTop="@dimen/small_margin_size"
             android:hint="@string/register_email_hint"
             app:endIconMode="clear_text">
 
@@ -69,7 +69,7 @@
             style="@style/TextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_size"
+            android:layout_marginTop="@dimen/medium_margin_size"
             android:hint="@string/register_username_hint"
             app:endIconMode="clear_text">
 
@@ -87,7 +87,7 @@
             style="@style/TextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_size"
+            android:layout_marginTop="@dimen/medium_margin_size"
             android:hint="@string/register_password_hint"
             app:endIconMode="password_toggle">
 
@@ -105,20 +105,25 @@
             style="@style/SmallText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_size"
+            android:layout_marginTop="@dimen/medium_margin_size"
             android:text="@string/register_terms_privacy_text" />
 
         <Button
-            android:id="@+id/homeBtn"
-            android:layout_width="wrap_content"
+            android:id="@+id/getStartedBtn"
+            style="@style/GetStartedButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_size"
-            android:text="@string/map_btn_text" />
+            android:layout_marginTop="@dimen/small_margin_size"
+            android:enabled="false"
+            android:text="@string/register_get_started_button_text" />
 
-        <Button
-            android:id="@+id/loginBtn"
+        <TextView
+            android:id="@+id/loginTV"
+            style="@style/SmallText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login_btn_text" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/medium_margin_size"
+            android:text="@string/register_login_text" />
     </LinearLayout>
 </FrameLayout>

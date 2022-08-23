@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="help_message_input_width">200dp</dimen>
+    <dimen name="small_margin_size">16dp</dimen>
+    <dimen name="medium_margin_size">24dp</dimen>
 
     <!-- styles -->
     <dimen name="h1_text_size">32sp</dimen>
@@ -14,7 +16,6 @@
     <dimen name="info_text_size">12sp</dimen>
 
     <!-- region Onboarding -->
-    <dimen name="margin_size">24dp</dimen>
     <dimen name="onboarding_dots_corner_radius">1.5dp</dimen>
     <dimen name="onboarding_dots_size">4dp</dimen>
     <dimen name="onboarding_dots_spacing">8dp</dimen>
