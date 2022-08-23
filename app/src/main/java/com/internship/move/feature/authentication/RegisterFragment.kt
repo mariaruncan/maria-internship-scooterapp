@@ -32,23 +32,17 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun initFieldsListeners() {
         binding.emailTIET.addTextChangedListener {
             emailIsEmpty = binding.emailTIET.text?.isEmpty() ?: false
-            if (!emailIsEmpty) {
-                changeGetStartedButtonState()
-            }
+            changeGetStartedButtonState()
         }
 
         binding.usernameTIET.addTextChangedListener {
             usernameIsEmpty = binding.usernameTIET.text?.isEmpty() ?: false
-            if (!usernameIsEmpty) {
-                changeGetStartedButtonState()
-            }
+            changeGetStartedButtonState()
         }
 
         binding.passwordTIET.addTextChangedListener {
             passwordIsEmpty = binding.emailTIET.text?.isEmpty() ?: false
-            if (!passwordIsEmpty) {
-                changeGetStartedButtonState()
-            }
+            changeGetStartedButtonState()
         }
     }
 
