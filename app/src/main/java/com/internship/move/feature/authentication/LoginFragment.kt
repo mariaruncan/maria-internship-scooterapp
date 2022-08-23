@@ -30,7 +30,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun initClickableText() {
         binding.forgotPasswordTV.addClickableText(getString(R.string.login_forgot_password_text)) {
-            Toast.makeText(context, getString(R.string.login_forgot_password_text), Toast.LENGTH_SHORT).show()
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
         }
 
         binding.registerTV.addClickableText(getString(R.string.login_create_account_text)) {
@@ -57,7 +57,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun initButtonsListeners() {
         binding.loginBtn.setOnClickListener {
             updateSharedPreferences()
-            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToMapGraph())
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeGraph())
         }
     }
 

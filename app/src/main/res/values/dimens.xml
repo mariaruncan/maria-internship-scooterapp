@@ -3,6 +3,7 @@
     <dimen name="help_message_input_width">200dp</dimen>
     <dimen name="small_margin_size">16dp</dimen>
     <dimen name="medium_margin_size">24dp</dimen>
+    <dimen name="large_margin_size">32dp</dimen>
 
     <!-- styles -->
     <dimen name="h1_text_size">32sp</dimen>
