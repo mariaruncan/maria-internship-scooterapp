@@ -29,13 +29,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun initClickableText() {
-        binding.forgotPasswordTV.addClickableText(getString(R.string.login_forgot_password_text)) {
+        binding.forgotPasswordTV.addClickableText(getString(R.string.login_forgot_password_text), {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
-        }
+        }, requireContext().getColor(R.color.white))
 
-        binding.registerTV.addClickableText(getString(R.string.login_create_account_text)) {
+        binding.registerTV.addClickableText(getString(R.string.login_create_account_text), {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
-        }
+        })
     }
 
     private fun initFieldsListeners() {

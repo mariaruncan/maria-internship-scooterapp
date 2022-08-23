@@ -11,7 +11,7 @@ import android.view.View
 import android.widget.TextView
 import com.internship.move.R
 
-fun TextView.addClickableText(text: String, callback: View.OnClickListener) {
+fun TextView.addClickableText(text: String, callback: View.OnClickListener, color: Int = context.getColor(R.color.pink)) {
     val spannableString = SpannableString(this.text)
     var startIndexOfLink = -1
 
@@ -19,7 +19,7 @@ fun TextView.addClickableText(text: String, callback: View.OnClickListener) {
         override fun updateDrawState(textPaint: TextPaint) {
             super.updateDrawState(textPaint)
             textPaint.isUnderlineText = true
-            textPaint.color = context.getColor(R.color.pink)
+            textPaint.color = color
         }
 
         override fun onClick(view: View) {
