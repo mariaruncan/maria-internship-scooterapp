@@ -28,7 +28,7 @@
 
     <!-- region Register -->
     <string name="register_title">Let\'s get started</string>
-    <string name="register_subtitle">Sign up or login and start riding right away</string>
+    <string name="register_description">Sign up or login and start riding right away</string>
     <string name="register_email_hint">Email address</string>
     <string name="register_username_hint">Username</string>
     <string name="register_password_hint">Password</string>
@@ -38,4 +38,14 @@
     <string name="register_login_text">You already have an account? You can log in here</string>
     <string name="register_login_here_text">log in here</string>
     <string name="register_get_started_button_text">Get started</string>
+
+    <!-- region Login -->
+    <string name="login_title">Login</string>
+    <string name="login_description">Enter your account credentials and start riding away</string>
+    <string name="login_email_hint">Email address</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_forgot_password_text">Forgot your password?</string>
+    <string name="login_button_text">Login</string>
+    <string name="login_register_text">Don’t have an account? You can start with one here</string>
+    <string name="login_create_account_text">start with one here</string>
 </resources>

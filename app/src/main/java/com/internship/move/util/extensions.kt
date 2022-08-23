@@ -11,7 +11,7 @@ import android.view.View
 import android.widget.TextView
 import com.internship.move.R
 
-fun TextView.addClickableSpan(text: String, callback: View.OnClickListener) {
+fun TextView.addClickableText(text: String, callback: View.OnClickListener) {
     val spannableString = SpannableString(this.text)
     var startIndexOfLink = -1
 

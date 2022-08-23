@@ -11,7 +11,7 @@ import com.internship.move.R
 import com.internship.move.databinding.FragmentRegisterBinding
 import com.internship.move.util.Constants.SharedPref.KEY_APP_PREFERENCES
 import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_AUTHENTICATION
-import com.internship.move.util.addClickableSpan
+import com.internship.move.util.addClickableText
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
@@ -24,8 +24,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initListeners()
         initClickableText()
+        initButtonsListeners()
         initFieldsListeners()
     }
 
@@ -51,18 +51,18 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun initClickableText() {
-        binding.termsPrivacyTV.addClickableSpan(getString(R.string.register_terms_and_conditions_text)) {
+        binding.termsPrivacyTV.addClickableText(getString(R.string.register_terms_and_conditions_text)) {
             Toast.makeText(context, getString(R.string.register_terms_and_conditions_text), Toast.LENGTH_SHORT).show()
         }
-        binding.termsPrivacyTV.addClickableSpan(getString(R.string.register_privacy_policy_text)) {
+        binding.termsPrivacyTV.addClickableText(getString(R.string.register_privacy_policy_text)) {
             Toast.makeText(context, getString(R.string.register_privacy_policy_text), Toast.LENGTH_SHORT).show()
         }
-        binding.loginTV.addClickableSpan(getString(R.string.register_login_here_text)) {
+        binding.loginTV.addClickableText(getString(R.string.register_login_here_text)) {
             findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToLoginFragment())
         }
     }
 
-    private fun initListeners() {
+    private fun initButtonsListeners() {
         binding.getStartedBtn.setOnClickListener {
             updateSharedPreferences()
             findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToHomeGraph())
