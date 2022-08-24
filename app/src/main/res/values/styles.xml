@@ -3,7 +3,7 @@
 
     <style name="TextAppearance">
         <item name="android:fontFamily">@font/bai_jamjuree_regular</item>
-        <item name="android:textColor">@color/pastel_purple</item>
+        <item name="android:textColor">?attr/text_color_light</item>
         <item name="android:textSize">@dimen/body1_text_size</item>
     </style>
 
@@ -28,6 +28,9 @@
 
     <style name="Button1" parent="TextAppearance">
         <item name="fontFamily">@font/bai_jamjuree_bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:background">@drawable/ic_wide_pink_rectangle</item>
+        <item name="backgroundTint">?attr/accent_color</item>
     </style>
 
     <style name="Button2" parent="TextAppearance">
@@ -55,5 +58,12 @@
 
     <style name="SmallText" parent="TextAppearance">
         <item name="android:textSize">@dimen/info_text_size</item>
+    </style>
+
+    <style name="TextInputLayout" parent="TextAppearance">
+        <item name="boxStrokeColor">?attr/box_stoke_color</item>
+        <item name="android:textColorHint">?attr/hint_color</item>
+        <item name="endIconTint">?attr/icon_tint</item>
+        <item name="hintTextColor">?attr/hint_color_foreground</item>
     </style>
 </resources>

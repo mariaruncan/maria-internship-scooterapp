@@ -37,11 +37,20 @@
             app:popUpToInclusive="true" />
 
         <action
-            android:id="@+id/action_loginFragment_to_map_graph"
+            android:id="@+id/action_loginFragment_to_home_graph"
             app:destination="@id/home_graph"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.internship.move.feature.authentication.ForgotPasswordFragment"
+        android:label="ForgotPasswordFragment"
+        tools:layout="@layout/fragment_forgot_password" />
 
     <include app:graph="@navigation/home_graph" />
 </navigation>
