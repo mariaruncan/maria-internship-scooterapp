@@ -53,8 +53,11 @@
     <string name="forgot_password_title">Forgot password</string>
     <string name="forgot_password_description">Enter the email address you’re using for your account bellow and we’ll send you a password reset link.</string>
     <string name="forgot_password_reset_link_button_text">Send Reset Link</string>
+
+    <!-- region ResetPassword -->
     <string name="reset_password_title">Reset password</string>
     <string name="reset_password_new_password_hint">New password</string>
     <string name="reset_password_confirm_password_hint">Confirm new password</string>
     <string name="reset_password_button_text">Reset password</string>
+    <string name="reset_password_do_not_match">Password doesn’t match</string>
 </resources>

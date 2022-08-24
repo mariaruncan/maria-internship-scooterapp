@@ -61,6 +61,8 @@
     </style>
 
     <style name="TextInputLayout" parent="TextAppearance">
+        <item name="errorTextColor">@color/red</item>
+        <item name="boxStrokeErrorColor">@color/red</item>
         <item name="boxStrokeColor">?attr/box_stoke_color</item>
         <item name="android:textColorHint">?attr/hint_color</item>
         <item name="endIconTint">?attr/icon_tint</item>
