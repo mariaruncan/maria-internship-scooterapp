@@ -34,7 +34,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailTIL"
-            style="@style/TextInputEditText"
+            style="@style/TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin_size"
@@ -52,7 +52,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordTIL"
-            style="@style/TextInputEditText"
+            style="@style/TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/medium_margin_size"
