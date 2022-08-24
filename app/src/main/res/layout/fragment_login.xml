@@ -1,116 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/purple">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        android:src="@drawable/bg_top_rectangle"
-        tools:ignore="ContentDescription" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|bottom"
-        android:src="@drawable/bg_bottom_rectangle"
-        tools:ignore="ContentDescription" />
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_authentication"
+        android:orientation="vertical"
+        android:padding="@dimen/medium_margin_size">
 
-        <LinearLayout
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_white_logo"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            style="@style/Heading1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_margin_size"
+            android:text="@string/login_title" />
+
+        <TextView
+            style="@style/Heading2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin_size"
+            android:text="@string/login_description" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailTIL"
+            style="@style/TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/medium_margin_size">
+            android:layout_marginTop="@dimen/small_margin_size"
+            android:hint="@string/login_email_hint"
+            app:endIconMode="clear_text">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_white_logo"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                style="@style/Heading1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/medium_margin_size"
-                android:text="@string/login_title" />
-
-            <TextView
-                style="@style/Heading2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/small_margin_size"
-                android:text="@string/login_description" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/emailTIL"
-                style="@style/TextInputEditText"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/emailTIET"
+                style="@style/TextAppearance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/small_margin_size"
-                android:hint="@string/login_email_hint"
-                app:endIconMode="clear_text">
+                android:background="@android:color/transparent"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/emailTIET"
-                    style="@style/TextAppearance"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordTIL"
+            style="@style/TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_margin_size"
+            android:hint="@string/login_password_hint"
+            app:endIconMode="password_toggle">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordTIL"
-                style="@style/TextInputEditText"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordTIET"
+                style="@style/TextAppearance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/medium_margin_size"
-                android:hint="@string/login_password_hint"
-                app:endIconMode="password_toggle">
+                android:background="@android:color/transparent"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/passwordTIET"
-                    style="@style/TextAppearance"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:inputType="textPassword" />
-            </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:id="@+id/forgotPasswordTV"
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_margin_size"
+            android:text="@string/login_forgot_password_text" />
 
-            <TextView
-                android:id="@+id/forgotPasswordTV"
-                style="@style/SmallText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/medium_margin_size"
-                android:text="@string/login_forgot_password_text" />
+        <Button
+            android:id="@+id/loginBtn"
+            style="@style/Button1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin_size"
+            android:enabled="false"
+            android:text="@string/login_button_text" />
 
-            <Button
-                android:id="@+id/loginBtn"
-                style="@style/Button1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/small_margin_size"
-                android:enabled="false"
-                android:text="@string/login_button_text" />
-
-            <TextView
-                android:id="@+id/registerTV"
-                style="@style/SmallText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/medium_margin_size"
-                android:text="@string/login_register_text" />
-        </LinearLayout>
-    </ScrollView>
-</FrameLayout>
+        <TextView
+            android:id="@+id/registerTV"
+            style="@style/SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/medium_margin_size"
+            android:text="@string/login_register_text" />
+    </LinearLayout>
+</ScrollView>
