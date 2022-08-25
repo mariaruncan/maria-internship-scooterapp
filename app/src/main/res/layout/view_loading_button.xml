@@ -18,5 +18,6 @@
         android:layout_gravity="center"
         android:elevation="10dp"
         android:indeterminate="true"
+        android:indeterminateTint="@color/white"
         android:visibility="invisible" />
 </merge>
