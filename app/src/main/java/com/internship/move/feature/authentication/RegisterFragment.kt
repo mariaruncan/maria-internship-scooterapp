@@ -2,6 +2,8 @@ package com.internship.move.feature.authentication
 
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
@@ -9,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentRegisterBinding
+import com.internship.move.util.Constants
 import com.internship.move.util.Constants.SharedPref.KEY_APP_PREFERENCES
 import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_AUTHENTICATION
 import com.internship.move.util.extension.addClickableText
@@ -65,13 +68,16 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
 
         binding.getStartedBtn.setOnClickListener {
-            updateSharedPreferences()
-            findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToHomeGraph())
+            binding.getStartedBtn.isLoading = true
+            Handler(Looper.getMainLooper()).postDelayed({
+                updateSharedPreferences()
+                findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToHomeGraph())
+            }, Constants.LOADING_DELAY)
         }
     }
 
     private fun changeGetStartedButtonState(emailIsEmpty: Boolean, usernameIsEmpty: Boolean, passwordIsEmpty: Boolean) {
-        binding.getStartedBtn.isEnabled = !emailIsEmpty and !usernameIsEmpty and !passwordIsEmpty
+        binding.getStartedBtn.setIsEnabled(!emailIsEmpty and !usernameIsEmpty and !passwordIsEmpty)
     }
 
     private fun updateSharedPreferences() {

@@ -2,12 +2,15 @@ package com.internship.move.feature.authentication
 
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentLoginBinding
+import com.internship.move.util.Constants
 import com.internship.move.util.Constants.SharedPref.KEY_APP_PREFERENCES
 import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_AUTHENTICATION
 import com.internship.move.util.extension.addClickableText
@@ -53,13 +56,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         binding.loginBtn.setOnClickListener {
-            updateSharedPreferences()
-            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeGraph())
+            binding.loginBtn.isLoading = true
+            Handler(Looper.getMainLooper()).postDelayed({
+                updateSharedPreferences()
+                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeGraph())
+            }, Constants.LOADING_DELAY)
         }
     }
 
     private fun changeLoginButtonState(emailIsEmpty: Boolean, passwordIsEmpty: Boolean) {
-        binding.loginBtn.isEnabled = !emailIsEmpty and !passwordIsEmpty
+        binding.loginBtn.setIsEnabled(!emailIsEmpty and !passwordIsEmpty)
     }
 
     private fun updateSharedPreferences() {

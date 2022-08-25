@@ -76,14 +76,13 @@
             android:layout_marginTop="@dimen/medium_margin_size"
             android:text="@string/login_forgot_password_text" />
 
-        <Button
+        <com.internship.move.customviews.LoadingButton
             android:id="@+id/loginBtn"
-            style="@style/Button1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin_size"
-            android:enabled="false"
-            android:text="@string/login_button_text" />
+            app:isEnabled="false"
+            app:text="@string/login_button_text" />
 
         <TextView
             android:id="@+id/registerTV"
