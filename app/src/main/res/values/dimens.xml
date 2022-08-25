@@ -20,4 +20,5 @@
     <dimen name="onboarding_dots_corner_radius">1.5dp</dimen>
     <dimen name="onboarding_dots_size">4dp</dimen>
     <dimen name="onboarding_dots_spacing">8dp</dimen>
+    <dimen name="forgot_password_dialog_width">320dp</dimen>
 </resources>

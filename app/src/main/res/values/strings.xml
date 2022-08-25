@@ -60,4 +60,7 @@
     <string name="reset_password_confirm_password_hint">Confirm new password</string>
     <string name="reset_password_button_text">Reset password</string>
     <string name="reset_password_do_not_match">Password doesn’t match</string>
+    <string name="forgot_password_dialog_title">Password reset link sent</string>
+    <string name="forgot_password_dialog_description">Please check your inbox or spam for the email containing the password reset link.</string>
+    <string name="forgot_password_dialog_ok_btn_text">Ok</string>
 </resources>
