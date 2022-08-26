@@ -43,32 +43,20 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun initListeners() {
-        binding.emailTIET.doOnTextChanged { text, _, _, _ ->
-            changeGetStartedButtonState(
-                text?.isEmpty() ?: false,
-                binding.usernameTIET.text?.isEmpty() ?: false,
-                binding.passwordTIET.text?.isEmpty() ?: false
-            )
+        binding.emailTIET.doOnTextChanged { _, _, _, _ ->
+            binding.getStartedBtn.setIsEnabled(areFieldsNotEmpty())
         }
 
-        binding.usernameTIET.doOnTextChanged { text, _, _, _ ->
-            changeGetStartedButtonState(
-                binding.emailTIET.text?.isEmpty() ?: false,
-                text?.isEmpty() ?: false,
-                binding.passwordTIET.text?.isEmpty() ?: false
-            )
+        binding.usernameTIET.doOnTextChanged { _, _, _, _ ->
+            binding.getStartedBtn.setIsEnabled(areFieldsNotEmpty())
         }
 
-        binding.passwordTIET.doOnTextChanged { text, _, _, _ ->
-            changeGetStartedButtonState(
-                binding.emailTIET.text?.isEmpty() ?: false,
-                binding.usernameTIET.text?.isEmpty() ?: false,
-                text?.isEmpty() ?: false
-            )
+        binding.passwordTIET.doOnTextChanged { _, _, _, _ ->
+            binding.getStartedBtn.setIsEnabled(areFieldsNotEmpty())
         }
 
         binding.getStartedBtn.setOnClickListener {
-            binding.getStartedBtn.isLoading = true
+            binding.getStartedBtn.setIsLoading(true)
             Handler(Looper.getMainLooper()).postDelayed({
                 updateSharedPreferences()
                 findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToHomeGraph())
@@ -76,9 +64,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
     }
 
-    private fun changeGetStartedButtonState(emailIsEmpty: Boolean, usernameIsEmpty: Boolean, passwordIsEmpty: Boolean) {
-        binding.getStartedBtn.setIsEnabled(!emailIsEmpty and !usernameIsEmpty and !passwordIsEmpty)
-    }
+    private fun areFieldsNotEmpty() =
+        !binding.emailTIET.text.isNullOrEmpty() and !binding.usernameTIET.text.isNullOrEmpty() and !binding.passwordTIET.text.isNullOrEmpty()
 
     private fun updateSharedPreferences() {
         requireActivity().getSharedPreferences(KEY_APP_PREFERENCES, MODE_PRIVATE).edit()

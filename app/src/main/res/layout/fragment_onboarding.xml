@@ -16,17 +16,13 @@
 
     <Button
         android:id="@+id/nextBtn"
-        style="@style/Button1"
+        style="@style/PrimaryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/medium_margin_size"
         android:layout_marginBottom="@dimen/medium_margin_size"
-        android:background="@drawable/ic_narrow_pink_rectangle"
         android:drawableEnd="@drawable/ic_arrow_right"
         android:text="@string/onboarding_next_btn_text"
-        android:textAllCaps="false"
-        android:textColor="?attr/text_color_light"
-        app:backgroundTint="?attr/accent_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -35,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium_margin_size"
-        app:dotsColor="?attr/text_color_secondary"
+        app:dotsColor="@color/dots_color"
         app:dotsCornerRadius="@dimen/onboarding_dots_corner_radius"
         app:dotsSize="@dimen/onboarding_dots_size"
         app:dotsSpacing="@dimen/onboarding_dots_spacing"
@@ -44,5 +40,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/nextBtn"
         app:progressMode="false"
-        app:selectedDotColor="?attr/text_color_dark" />
+        app:selectedDotColor="@color/selected_dot_color" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,8 @@
     <dimen name="small_margin_size">16dp</dimen>
     <dimen name="medium_margin_size">24dp</dimen>
     <dimen name="large_margin_size">32dp</dimen>
+    <dimen name="progress_bar_elevation">10dp</dimen>
+    <dimen name="dialog_width">320dp</dimen>
 
     <!-- styles -->
     <dimen name="h1_text_size">32sp</dimen>
@@ -20,7 +22,4 @@
     <dimen name="onboarding_dots_corner_radius">1.5dp</dimen>
     <dimen name="onboarding_dots_size">4dp</dimen>
     <dimen name="onboarding_dots_spacing">8dp</dimen>
-
-    <!-- region ForgotPassword -->
-    <dimen name="forgot_password_dialog_width">320dp</dimen>
 </resources>

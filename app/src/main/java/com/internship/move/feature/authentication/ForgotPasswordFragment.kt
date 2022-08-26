@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentForgotPasswordBinding
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
@@ -20,16 +21,24 @@ class ForgotPasswordFragment : Fragment(R.layout.fragment_forgot_password) {
 
     private fun initListeners() {
         binding.emailTIET.doOnTextChanged { text, _, _, _ ->
-            binding.sendResetLinkBtn.isEnabled = text?.isNotEmpty() ?: true
+            binding.sendResetLinkBtn.isEnabled = !text.isNullOrEmpty()
         }
 
         binding.sendResetLinkBtn.setOnClickListener {
-            ForgotPasswordDialog().show(parentFragmentManager, FORGOT_PASSWORD_DIALOG_TAG)
+            val dialog = CustomDialog.newInstance(
+                getString(R.string.forgot_password_dialog_title),
+                getString(R.string.forgot_password_dialog_description),
+                getString(R.string.forgot_password_dialog_ok_btn_text)
+            )
+            dialog.setFirstButtonClickListener {
+                dialog.dismiss()
+                findNavController().navigate(ForgotPasswordFragmentDirections.actionForgotPasswordFragmentToLoginFragment())
+            }
+            dialog.show(parentFragmentManager, FORGOT_PASSWORD_DIALOG_TAG)
         }
     }
 
     companion object {
-
         private const val FORGOT_PASSWORD_DIALOG_TAG = "FORGOT_PASSWORD_DIALOG_TAG"
     }
 }

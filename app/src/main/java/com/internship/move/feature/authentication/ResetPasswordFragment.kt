@@ -1,7 +1,6 @@
 package com.internship.move.feature.authentication
 
 import android.os.Bundle
-import android.text.Editable
 import android.view.View
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -24,25 +23,24 @@ class ResetPasswordFragment : Fragment(R.layout.fragment_reset_password) {
     }
 
     private fun initListeners() {
-        binding.newPassTIET.doOnTextChanged { text, _, _, _ ->
-            binding.resetPassBtn.isEnabled = (text?.isNotEmpty() ?: true) and
-                    (binding.confirmPassTIET.text?.isNotEmpty() ?: true)
+        binding.newPassTIET.doOnTextChanged { _, _, _, _ ->
+            binding.resetPassBtn.isEnabled = areFieldsNotEmpty()
         }
 
-        binding.confirmPassTIET.doOnTextChanged { text, _, _, _ ->
+        binding.confirmPassTIET.doOnTextChanged { _, _, _, _ ->
             binding.confirmPassTIL.isErrorEnabled = false
-            binding.resetPassBtn.isEnabled = (text?.isNotEmpty() ?: true) and
-                    (binding.confirmPassTIET.text?.isNotEmpty() ?: true)
+            binding.resetPassBtn.isEnabled = areFieldsNotEmpty()
         }
 
         binding.resetPassBtn.setOnClickListener {
-            if(binding.newPassTIET.text.toString() == binding.confirmPassTIET.text.toString()) {
+            if (binding.newPassTIET.text.contentEquals(binding.confirmPassTIET.text)) {
                 findNavController().navigate(ResetPasswordFragmentDirections.actionResetPasswordFragmentToLoginFragment())
-            }
-            else {
+            } else {
                 binding.confirmPassTIL.isErrorEnabled = true
                 binding.confirmPassTIL.error = requireContext().getString(R.string.reset_password_do_not_match)
             }
         }
     }
+
+    private fun areFieldsNotEmpty() = !binding.newPassTIET.text.isNullOrEmpty() and !binding.confirmPassTIET.text.isNullOrEmpty()
 }

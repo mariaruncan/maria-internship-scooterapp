@@ -3,12 +3,12 @@
 
     <style name="TextAppearance">
         <item name="android:fontFamily">@font/bai_jamjuree_regular</item>
-        <item name="android:textColor">?attr/text_color_light</item>
+        <item name="android:textColor">@color/text_color_light</item>
         <item name="android:textSize">@dimen/body1_text_size</item>
     </style>
 
     <style name="Heading1" parent="TextAppearance">
-        <item name="fontFamily">@font/bai_jamjuree_bold</item>
+        <item name="android:fontFamily">@font/bai_jamjuree_bold</item>
         <item name="android:textSize">@dimen/h1_text_size</item>
     </style>
 
@@ -18,7 +18,7 @@
     </style>
 
     <style name="Heading3" parent="TextAppearance">
-        <item name="fontFamily">@font/bai_jamjuree_semibold</item>
+        <item name="android:fontFamily">@font/bai_jamjuree_semibold</item>
         <item name="android:textSize">@dimen/h3_text_size</item>
     </style>
 
@@ -27,10 +27,7 @@
     </style>
 
     <style name="Button1" parent="TextAppearance">
-        <item name="fontFamily">@font/bai_jamjuree_bold</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:background">@drawable/ic_wide_pink_rectangle</item>
-        <item name="backgroundTint">?attr/accent_color</item>
+        <item name="android:fontFamily">@font/bai_jamjuree_bold</item>
     </style>
 
     <style name="Button2" parent="TextAppearance">
@@ -39,7 +36,7 @@
     </style>
 
     <style name="Caption1" parent="TextAppearance">
-        <item name="fontFamily">@font/bai_jamjuree_semibold</item>
+        <item name="android:fontFamily">@font/bai_jamjuree_semibold</item>
         <item name="android:textSize">@dimen/caption_text_size</item>
     </style>
 
@@ -63,9 +60,17 @@
     <style name="TextInputLayout" parent="TextAppearance">
         <item name="errorTextColor">@color/red</item>
         <item name="boxStrokeErrorColor">@color/red</item>
-        <item name="boxStrokeColor">?attr/box_stoke_color</item>
-        <item name="android:textColorHint">?attr/hint_color</item>
-        <item name="endIconTint">?attr/icon_tint</item>
-        <item name="hintTextColor">?attr/hint_color_foreground</item>
+        <item name="boxStrokeColor">@color/text_input_box_stroke_color</item>
+        <item name="android:textColorHint">@color/hint_color</item>
+        <item name="endIconTint">@color/icon_tint</item>
+        <item name="hintTextColor">@color/hint_color_foreground</item>
+    </style>
+
+    <style name="PrimaryButton" parent="TextAppearance.AppCompat.Widget.Button">
+        <item name="textAllCaps">false</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/bg_button</item>
+        <item name="android:textAppearance">@style/Button1</item>
+        <item name="backgroundTint">@color/pink</item>
     </style>
 </resources>

@@ -41,22 +41,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun initListeners() {
-        binding.emailTIET.doOnTextChanged { text, _, _, _ ->
-            changeLoginButtonState(
-                text?.isEmpty() ?: false,
-                binding.passwordTIET.text?.isEmpty() ?: false
-            )
+        binding.emailTIET.doOnTextChanged { _, _, _, _ ->
+            binding.loginBtn.setIsEnabled(areFieldsNotEmpty())
         }
 
-        binding.passwordTIET.doOnTextChanged { text, _, _, _ ->
-            changeLoginButtonState(
-                binding.emailTIET.text?.isEmpty() ?: false,
-                text?.isEmpty() ?: false
-            )
+        binding.passwordTIET.doOnTextChanged { _, _, _, _ ->
+            binding.loginBtn.setIsEnabled(areFieldsNotEmpty())
         }
 
         binding.loginBtn.setOnClickListener {
-            binding.loginBtn.isLoading = true
+            binding.loginBtn.setIsLoading(true)
             Handler(Looper.getMainLooper()).postDelayed({
                 updateSharedPreferences()
                 findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeGraph())
@@ -64,9 +58,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
-    private fun changeLoginButtonState(emailIsEmpty: Boolean, passwordIsEmpty: Boolean) {
-        binding.loginBtn.setIsEnabled(!emailIsEmpty and !passwordIsEmpty)
-    }
+    private fun areFieldsNotEmpty() = !binding.emailTIET.text.isNullOrEmpty() and !binding.passwordTIET.text.isNullOrEmpty()
 
     private fun updateSharedPreferences() {
         requireActivity().getSharedPreferences(KEY_APP_PREFERENCES, MODE_PRIVATE).edit()

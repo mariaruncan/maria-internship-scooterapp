@@ -6,7 +6,8 @@
 
     <Button
         android:id="@+id/loadingBtn"
-        style="@style/Button1"
+        style="@style/PrimaryButton"
+        android:textAppearance="@style/Button1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="Click!!" />
@@ -16,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:elevation="10dp"
+        android:elevation="@dimen/progress_bar_elevation"
         android:indeterminate="true"
         android:indeterminateTint="@color/white"
         android:visibility="invisible" />
