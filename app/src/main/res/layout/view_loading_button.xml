@@ -7,9 +7,9 @@
     <Button
         android:id="@+id/loadingBtn"
         style="@style/PrimaryButton"
-        android:textAppearance="@style/Button1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/Button1"
         tools:text="Click!!" />
 
     <ProgressBar

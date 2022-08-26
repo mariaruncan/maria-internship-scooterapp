@@ -23,6 +23,7 @@
         android:layout_marginBottom="@dimen/medium_margin_size"
         android:drawableEnd="@drawable/ic_arrow_right"
         android:text="@string/onboarding_next_btn_text"
+        android:textAppearance="@style/Button1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

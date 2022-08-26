@@ -27,7 +27,7 @@
     </style>
 
     <style name="Button1" parent="TextAppearance">
-        <item name="android:fontFamily">@font/bai_jamjuree_bold</item>
+        <item name="android:fontFamily">@font/bai_jamjuree_medium</item>
     </style>
 
     <style name="Button2" parent="TextAppearance">
@@ -64,13 +64,15 @@
         <item name="android:textColorHint">@color/hint_color</item>
         <item name="endIconTint">@color/icon_tint</item>
         <item name="hintTextColor">@color/hint_color_foreground</item>
+        <!-- TODO("custom end icon")-->
+        <!-- TODO("cursor color") -->
     </style>
 
     <style name="PrimaryButton" parent="TextAppearance.AppCompat.Widget.Button">
         <item name="textAllCaps">false</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/bg_button</item>
-        <item name="android:textAppearance">@style/Button1</item>
         <item name="backgroundTint">@color/pink</item>
+        <!-- TODO("ripple effect")-->
     </style>
 </resources>
