@@ -20,6 +20,10 @@ class ForgotPasswordFragment : Fragment(R.layout.fragment_forgot_password) {
     }
 
     private fun initListeners() {
+        binding.backBtn.setOnClickListener{
+            requireActivity().onBackPressed()
+        }
+
         binding.emailTIET.doOnTextChanged { text, _, _, _ ->
             binding.sendResetLinkBtn.isEnabled = !text.isNullOrEmpty()
         }

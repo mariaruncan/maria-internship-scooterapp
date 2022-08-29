@@ -23,6 +23,10 @@ class ResetPasswordFragment : Fragment(R.layout.fragment_reset_password) {
     }
 
     private fun initListeners() {
+        binding.backBtn.setOnClickListener{
+            requireActivity().onBackPressed()
+        }
+
         binding.newPassTIET.doOnTextChanged { _, _, _, _ ->
             binding.resetPassBtn.isEnabled = areFieldsNotEmpty()
         }

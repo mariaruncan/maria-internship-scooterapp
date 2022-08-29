@@ -25,4 +25,5 @@
     <color name="hint_color">@color/white</color>
     <color name="hint_color_foreground">@color/pastel_purple</color>
     <color name="icon_tint">@color/white</color>
+    <color name="progress_bar_color">@color/white</color>
 </resources>

@@ -19,6 +19,6 @@
         android:layout_gravity="center"
         android:elevation="@dimen/progress_bar_elevation"
         android:indeterminate="true"
-        android:indeterminateTint="@color/white"
+        android:indeterminateTint="@color/progress_bar_color"
         android:visibility="invisible" />
 </merge>
