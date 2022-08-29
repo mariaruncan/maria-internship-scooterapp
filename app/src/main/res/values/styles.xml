@@ -65,7 +65,12 @@
         <item name="endIconTint">@color/icon_tint</item>
         <item name="hintTextColor">@color/hint_color_foreground</item>
         <!-- TODO("custom end icon")-->
-        <!-- TODO("cursor color") -->
+    </style>
+
+    <style name="TextInputEditText" parent="TextAppearance">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textCursorDrawable">@null</item>
     </style>
 
     <style name="PrimaryButton" parent="TextAppearance.AppCompat.Widget.Button">
