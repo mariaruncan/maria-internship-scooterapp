@@ -8,4 +8,6 @@ object Constants {
         const val KEY_HAS_VISITED_AUTHENTICATION = "KEY_HAS_VISITED_AUTHENTICATION"
         const val KEY_HAS_VISITED_ONBOARDING = "KEY_HAS_VISITED_ONBOARDING"
     }
+
+    const val LOADING_DELAY = 1500L
 }

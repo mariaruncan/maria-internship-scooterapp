@@ -39,14 +39,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin_size"
             android:hint="@string/register_email_hint"
+            app:endIconDrawable="@drawable/ic_clear_text"
             app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/emailTIET"
-                style="@style/TextAppearance"
+                style="@style/TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,14 +57,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/medium_margin_size"
             android:hint="@string/register_username_hint"
+            app:endIconDrawable="@drawable/ic_clear_text"
             app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/usernameTIET"
-                style="@style/TextAppearance"
+                style="@style/TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,14 +75,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/medium_margin_size"
             android:hint="@string/register_password_hint"
+            app:endIconDrawable="@drawable/ic_toggle_password"
             app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordTIET"
-                style="@style/TextAppearance"
+                style="@style/TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -94,14 +94,13 @@
             android:layout_marginTop="@dimen/medium_margin_size"
             android:text="@string/register_terms_privacy_text" />
 
-        <Button
+        <com.internship.move.customviews.LoadingButton
             android:id="@+id/getStartedBtn"
-            style="@style/Button1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/small_margin_size"
-            android:enabled="false"
-            android:text="@string/register_get_started_button_text" />
+            app:isEnabled="false"
+            app:text="@string/register_get_started_button_text" />
 
         <TextView
             android:id="@+id/loginTV"

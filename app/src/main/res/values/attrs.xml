@@ -11,4 +11,9 @@
     <attr name="hint_color" format="color" />
     <attr name="hint_color_foreground" format="color" />
     <attr name="icon_tint" format="color" />
+
+    <declare-styleable name="LoadingButton">
+        <attr name="text" format="string" />
+        <attr name="isEnabled" format="boolean" />
+    </declare-styleable>
 </resources>
