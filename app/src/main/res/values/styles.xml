@@ -73,6 +73,6 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/bg_button</item>
         <item name="backgroundTint">@color/pink</item>
-        <!-- TODO("ripple effect")-->
+        <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
     </style>
 </resources>
