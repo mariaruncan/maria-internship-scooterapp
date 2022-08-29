@@ -1,6 +1,5 @@
-package com.internship.move.feature.authentication
+package com.internship.move.ui.main.view.authentication
 
-import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,15 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentLoginBinding
+import com.internship.move.ui.main.viewmodel.MainViewModel
 import com.internship.move.util.Constants
-import com.internship.move.util.Constants.SharedPref.KEY_APP_PREFERENCES
-import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_AUTHENTICATION
 import com.internship.move.util.extension.addClickableText
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private val binding by viewBinding(FragmentLoginBinding::bind)
+    private val viewModel by lazy { MainViewModel() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -66,8 +65,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun areFieldsNotEmpty() = !binding.emailTIET.text.isNullOrEmpty() and !binding.passwordTIET.text.isNullOrEmpty()
 
     private fun updateSharedPreferences() {
-        requireActivity().getSharedPreferences(KEY_APP_PREFERENCES, MODE_PRIVATE).edit()
-            .putBoolean(KEY_HAS_VISITED_AUTHENTICATION, true)
-            .apply()
+        viewModel.login("email", "pass")
     }
 }

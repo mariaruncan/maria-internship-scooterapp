@@ -1,22 +1,21 @@
-package com.internship.move.feature.onboarding
+package com.internship.move.ui.main.view.onboarding
 
-import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentOnboardingBinding
-import com.internship.move.feature.onboarding.adapter.OnboardingPageDetails
-import com.internship.move.feature.onboarding.adapter.PagesAdapter
-import com.internship.move.util.Constants.SharedPref.KEY_APP_PREFERENCES
-import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_ONBOARDING
+import com.internship.move.ui.main.view.onboarding.adapter.OnboardingPageDetails
+import com.internship.move.ui.main.view.onboarding.adapter.PagesAdapter
+import com.internship.move.ui.main.viewmodel.MainViewModel
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
 class OnboardingFragment : Fragment(R.layout.fragment_onboarding), SkipCallback {
 
     private val binding by viewBinding(FragmentOnboardingBinding::bind)
     private val adapter by lazy { PagesAdapter(this, getPagesDetails()) }
+    private val viewModel by lazy { MainViewModel() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,9 +47,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding), SkipCallback 
     }
 
     private fun updateSharedPreferences() {
-        requireActivity().getSharedPreferences(KEY_APP_PREFERENCES, MODE_PRIVATE).edit()
-            .putBoolean(KEY_HAS_VISITED_ONBOARDING, true)
-            .apply()
+        viewModel.notifyHasViewedOnboarding()
     }
 
     private fun getPagesDetails(): List<OnboardingPageDetails> = listOf(

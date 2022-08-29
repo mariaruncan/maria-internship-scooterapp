@@ -1,4 +1,4 @@
-package com.internship.move.feature.onboarding
+package com.internship.move.ui.main.view.onboarding
 
 interface SkipCallback {
 

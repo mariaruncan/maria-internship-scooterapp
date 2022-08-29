@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.TextView.BufferType.SPANNABLE
 import com.internship.move.R
-import com.internship.move.feature.authentication.ClickCallback
+import com.internship.move.ui.main.view.authentication.ClickCallback
 
 fun TextView.addClickableText(text: String, color: Int = context.getColor(R.color.pink), callback: ClickCallback) {
     val spannableString = SpannableString(this.text)

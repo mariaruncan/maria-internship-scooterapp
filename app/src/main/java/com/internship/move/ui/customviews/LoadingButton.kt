@@ -1,4 +1,4 @@
-package com.internship.move.customviews
+package com.internship.move.ui.customviews
 
 import android.content.Context
 import android.util.AttributeSet

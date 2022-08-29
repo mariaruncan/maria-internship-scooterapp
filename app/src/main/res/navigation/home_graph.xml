@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.internship.move.feature.home.MapFragment"
+        android:name="com.internship.move.ui.main.view.home.MapFragment"
         android:label="MapFragment"
         tools:layout="@layout/fragment_map">
 
@@ -24,13 +24,13 @@
 
     <fragment
         android:id="@+id/helpFragment"
-        android:name="com.internship.move.feature.home.HelpFragment"
+        android:name="com.internship.move.ui.main.view.home.HelpFragment"
         android:label="HelpFragment"
         tools:layout="@layout/fragment_help">
 
         <argument
             android:name="helpInfo"
-            app:argType="com.internship.move.feature.model.HelpInfo"
+            app:argType="com.internship.move.model.HelpInfo"
             app:nullable="true" />
     </fragment>
 </navigation>
