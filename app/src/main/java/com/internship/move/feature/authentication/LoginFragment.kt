@@ -45,6 +45,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             binding.loginBtn.setIsEnabled(areFieldsNotEmpty())
         }
 
+        binding.passwordTIL.isEndIconVisible = false
+        binding.passwordTIET.setOnFocusChangeListener { _, hasFocus ->
+            binding.passwordTIL.isEndIconVisible = hasFocus
+        }
+
         binding.passwordTIET.doOnTextChanged { _, _, _, _ ->
             binding.loginBtn.setIsEnabled(areFieldsNotEmpty())
         }

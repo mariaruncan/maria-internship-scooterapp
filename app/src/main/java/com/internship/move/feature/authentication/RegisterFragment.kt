@@ -51,6 +51,11 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             binding.getStartedBtn.setIsEnabled(areFieldsNotEmpty())
         }
 
+        binding.passwordTIL.isEndIconVisible = false
+        binding.passwordTIET.setOnFocusChangeListener { _, hasFocus ->
+            binding.passwordTIL.isEndIconVisible = hasFocus
+        }
+
         binding.passwordTIET.doOnTextChanged { _, _, _, _ ->
             binding.getStartedBtn.setIsEnabled(areFieldsNotEmpty())
         }

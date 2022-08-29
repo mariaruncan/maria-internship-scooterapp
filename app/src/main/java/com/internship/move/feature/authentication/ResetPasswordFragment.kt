@@ -27,8 +27,18 @@ class ResetPasswordFragment : Fragment(R.layout.fragment_reset_password) {
             requireActivity().onBackPressed()
         }
 
+        binding.newPassTIL.isEndIconVisible = false
+        binding.newPassTIET.setOnFocusChangeListener { _, hasFocus ->
+            binding.newPassTIL.isEndIconVisible = hasFocus
+        }
+
         binding.newPassTIET.doOnTextChanged { _, _, _, _ ->
             binding.resetPassBtn.isEnabled = areFieldsNotEmpty()
+        }
+
+        binding.confirmPassTIL.isEndIconVisible = false
+        binding.confirmPassTIET.setOnFocusChangeListener { _, hasFocus ->
+            binding.confirmPassTIL.isEndIconVisible = hasFocus
         }
 
         binding.confirmPassTIET.doOnTextChanged { _, _, _, _ ->
