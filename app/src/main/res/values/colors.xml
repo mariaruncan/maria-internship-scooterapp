@@ -10,6 +10,19 @@
     <color name="ivory">#F4F2F6</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    
+    <color name="red">#FF0000</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="dots_color">@color/pastel_purple</color>
+    <color name="selected_dot_color">@color/indigo</color>
     <color name="status_bar_color">@color/purple</color>
+    <color name="accent_color">@color/pink</color>
+    <color name="background_color">@color/purple</color>
+    <color name="text_color_light">@color/white</color>
+    <color name="text_color_secondary">@color/pastel_purple</color>
+    <color name="text_color_dark">@color/indigo</color>
+    <color name="box_stroke_color">@color/text_input_box_stroke_color</color>
+    <color name="hint_color">@color/white</color>
+    <color name="hint_color_foreground">@color/pastel_purple</color>
+    <color name="icon_tint">@color/white</color>
 </resources>
