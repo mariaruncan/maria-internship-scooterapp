@@ -1,15 +1,15 @@
-package com.internship.move.ui.main.viewmodel
+package com.internship.move.ui.viewmodel
 
 import android.content.Context.MODE_PRIVATE
 import androidx.lifecycle.ViewModel
-import com.internship.move.MainActivity
-import com.internship.move.util.Constants.SharedPref.KEY_APP_PREFERENCES
-import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_AUTHENTICATION
-import com.internship.move.util.Constants.SharedPref.KEY_HAS_VISITED_ONBOARDING
+import com.internship.move.MyApp
+import com.internship.move.utils.Constants.SharedPref.KEY_APP_PREFERENCES
+import com.internship.move.utils.Constants.SharedPref.KEY_HAS_VISITED_AUTHENTICATION
+import com.internship.move.utils.Constants.SharedPref.KEY_HAS_VISITED_ONBOARDING
 
 class MainViewModel : ViewModel() {
 
-    private val sharedPref by lazy { MainActivity.appContext.getSharedPreferences(KEY_APP_PREFERENCES, MODE_PRIVATE) }
+    private val sharedPref by lazy { MyApp.appContext.getSharedPreferences(KEY_APP_PREFERENCES, MODE_PRIVATE) }
     private var hasVisitedOnboarding: Boolean
         get() {
             return sharedPref.getBoolean(KEY_HAS_VISITED_ONBOARDING, false)

@@ -1,4 +1,4 @@
-package com.internship.move.ui.main.view.onboarding
+package com.internship.move.ui.onboarding
 
 import android.os.Bundle
 import android.view.View
@@ -6,9 +6,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentOnboardingBinding
-import com.internship.move.ui.main.view.onboarding.adapter.OnboardingPageDetails
-import com.internship.move.ui.main.view.onboarding.adapter.PagesAdapter
-import com.internship.move.ui.main.viewmodel.MainViewModel
+import com.internship.move.ui.onboarding.adapter.OnboardingPageDetails
+import com.internship.move.ui.onboarding.adapter.PagesAdapter
+import com.internship.move.ui.viewmodel.MainViewModel
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
 class OnboardingFragment : Fragment(R.layout.fragment_onboarding), SkipCallback {

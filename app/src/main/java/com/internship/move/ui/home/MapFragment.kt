@@ -1,4 +1,4 @@
-package com.internship.move.ui.main.view.home
+package com.internship.move.ui.home
 
 import android.os.Bundle
 import android.view.View
@@ -7,7 +7,7 @@ import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentMapBinding
 import com.internship.move.model.HelpInfo
-import com.internship.move.ui.main.viewmodel.MainViewModel
+import com.internship.move.ui.viewmodel.MainViewModel
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
 class MapFragment : Fragment(R.layout.fragment_map) {

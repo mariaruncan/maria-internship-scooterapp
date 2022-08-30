@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.internship.move.ui.main.view.home.MapFragment"
+        android:name="com.internship.move.ui.home.MapFragment"
         android:label="MapFragment"
         tools:layout="@layout/fragment_map">
 
@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/helpFragment"
-        android:name="com.internship.move.ui.main.view.home.HelpFragment"
+        android:name="com.internship.move.ui.home.HelpFragment"
         android:label="HelpFragment"
         tools:layout="@layout/fragment_help">
 

@@ -1,4 +1,4 @@
-package com.internship.move.ui.main.view.authentication
+package com.internship.move.ui.authentication.forgotpassword
 
 import android.os.Bundle
 import android.view.View

@@ -1,4 +1,4 @@
-package com.internship.move.util.extension
+package com.internship.move.utils.extensions
 
 import android.text.SpannableString
 import android.text.Spanned.SPAN_EXCLUSIVE_INCLUSIVE
@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.TextView.BufferType.SPANNABLE
 import com.internship.move.R
-import com.internship.move.ui.main.view.authentication.ClickCallback
+import com.internship.move.ui.authentication.ClickCallback
 
 fun TextView.addClickableText(text: String, color: Int = context.getColor(R.color.pink), callback: ClickCallback) {
     val spannableString = SpannableString(this.text)

@@ -1,11 +1,11 @@
-package com.internship.move.ui.main.view.splash
+package com.internship.move.ui.splash
 
 import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
-import com.internship.move.ui.main.viewmodel.MainViewModel
+import com.internship.move.ui.viewmodel.MainViewModel
 
 class SplashFragment : Fragment(R.layout.fragment_splash) {
 

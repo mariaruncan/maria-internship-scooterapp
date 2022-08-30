@@ -1,4 +1,4 @@
-package com.internship.move.util
+package com.internship.move.utils
 
 object Constants {
 

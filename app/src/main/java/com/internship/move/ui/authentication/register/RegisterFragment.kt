@@ -1,4 +1,4 @@
-package com.internship.move.ui.main.view.authentication
+package com.internship.move.ui.authentication.register
 
 import android.os.Bundle
 import android.os.Handler
@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentRegisterBinding
-import com.internship.move.ui.main.viewmodel.MainViewModel
-import com.internship.move.util.Constants
-import com.internship.move.util.extension.addClickableText
+import com.internship.move.ui.viewmodel.MainViewModel
+import com.internship.move.utils.Constants
+import com.internship.move.utils.extensions.addClickableText
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {

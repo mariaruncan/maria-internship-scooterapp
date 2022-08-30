@@ -1,4 +1,4 @@
-package com.internship.move.ui.main.view.home
+package com.internship.move.ui.home
 
 import android.os.Bundle
 import android.view.View

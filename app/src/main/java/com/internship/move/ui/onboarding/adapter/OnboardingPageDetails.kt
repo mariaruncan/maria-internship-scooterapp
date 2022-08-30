@@ -1,4 +1,4 @@
-package com.internship.move.ui.main.view.onboarding.adapter
+package com.internship.move.ui.onboarding.adapter
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes

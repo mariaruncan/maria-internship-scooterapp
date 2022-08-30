@@ -1,4 +1,4 @@
-package com.internship.move.ui.main.view.onboarding.adapter
+package com.internship.move.ui.onboarding.adapter
 
 import android.os.Bundle
 import android.view.View
@@ -7,7 +7,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.internship.move.R
 import com.internship.move.databinding.FragmentOnboardingPageBinding
-import com.internship.move.ui.main.view.onboarding.SkipCallback
+import com.internship.move.ui.onboarding.SkipCallback
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
 class OnboardingPageFragment : Fragment(R.layout.fragment_onboarding_page) {

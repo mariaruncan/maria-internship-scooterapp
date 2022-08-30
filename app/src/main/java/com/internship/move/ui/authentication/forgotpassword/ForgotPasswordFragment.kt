@@ -1,4 +1,4 @@
-package com.internship.move.ui.main.view.authentication
+package com.internship.move.ui.authentication.forgotpassword
 
 import android.os.Bundle
 import android.view.View
@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentForgotPasswordBinding
+import com.internship.move.ui.widgets.CustomDialog
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
 class ForgotPasswordFragment : Fragment(R.layout.fragment_forgot_password) {
