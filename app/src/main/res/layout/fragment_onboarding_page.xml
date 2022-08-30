@@ -43,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium_margin_size"
         android:layout_marginEnd="@dimen/medium_margin_size"
+        android:alpha="0.7"
         android:textAppearance="@style/Body1"
         android:textColor="@color/text_color_dark"
         app:layout_constraintTop_toBottomOf="@id/titleTV"

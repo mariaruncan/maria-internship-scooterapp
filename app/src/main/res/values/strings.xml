@@ -63,4 +63,10 @@
     <string name="reset_password_confirm_password_hint">Confirm new password</string>
     <string name="reset_password_button_text">Reset password</string>
     <string name="reset_password_do_not_match">Password doesn’t match</string>
+
+    <!-- region DrivingLicense -->
+    <string name="driving_license_toolbar_title">Driving license</string>
+    <string name="driving_license_button_text">Add driving license</string>
+    <string name="driving_license_description">Please take a photo or upload the front side of your driving license so we can make sure that it is valid.</string>
+    <string name="driving_license_title">Before you can start riding</string>
 </resources>

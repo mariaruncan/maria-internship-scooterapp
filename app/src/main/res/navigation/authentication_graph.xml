@@ -18,10 +18,8 @@
             app:popUpToInclusive="true" />
 
         <action
-            android:id="@+id/action_registerFragment_to_home_graph"
-            app:destination="@id/home_graph"
-            app:popUpTo="@id/registerFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_registerFragment_to_drivingLicenseFragment"
+            app:destination="@id/drivingLicenseFragment" />
     </fragment>
 
     <fragment
@@ -80,6 +78,19 @@
             android:id="@+id/action_resetPasswordFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/resetPasswordFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/drivingLicenseFragment"
+        android:name="com.internship.move.ui.main.view.authentication.DrivingLicenseFragment"
+        android:label="DrivingLicenseFragment"
+        tools:layout="@layout/fragment_driving_license">
+
+        <action
+            android:id="@+id/action_drivingLicenseFragment_to_home_graph"
+            app:destination="@id/home_graph"
+            app:popUpTo="@id/registerFragment"
             app:popUpToInclusive="true" />
     </fragment>
 

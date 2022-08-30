@@ -63,7 +63,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             binding.getStartedBtn.setIsLoading(true)
             Handler(Looper.getMainLooper()).postDelayed({
                 updateSharedPreferences()
-                findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToHomeGraph())
+                findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToDrivingLicenseFragment())
             }, Constants.LOADING_DELAY)
         }
     }
