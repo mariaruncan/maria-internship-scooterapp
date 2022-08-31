@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.internship.move.ui.main.view.authentication.RegisterFragment"
+        android:name="com.internship.move.ui.authentication.register.RegisterFragment"
         android:label="RegisterFragment"
         tools:layout="@layout/fragment_register">
 
@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.internship.move.ui.main.view.authentication.LoginFragment"
+        android:name="com.internship.move.ui.authentication.login.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
 
@@ -47,7 +47,7 @@
 
     <fragment
         android:id="@+id/forgotPasswordFragment"
-        android:name="com.internship.move.ui.main.view.authentication.ForgotPasswordFragment"
+        android:name="com.internship.move.ui.authentication.forgotpassword.ForgotPasswordFragment"
         android:label="ForgotPasswordFragment"
         tools:layout="@layout/fragment_forgot_password">
 
@@ -60,7 +60,7 @@
 
     <fragment
         android:id="@+id/resetPasswordFragment"
-        android:name="com.internship.move.ui.main.view.authentication.ResetPasswordFragment"
+        android:name="com.internship.move.ui.authentication.forgotpassword.ResetPasswordFragment"
         android:label="ResetPasswordFragment"
         tools:layout="@layout/fragment_reset_password">
 

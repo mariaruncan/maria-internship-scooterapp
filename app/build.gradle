@@ -55,4 +55,7 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     // Dots indicator
     implementation("com.tbuonomo:dotsindicator:4.3")
+    // Koin
+    implementation "io.insert-koin:koin-core:$koin_version"
+    implementation "io.insert-koin:koin-android:$koin_version"
 }
