@@ -9,9 +9,9 @@ import android.view.View
 import android.widget.TextView
 import android.widget.TextView.BufferType.SPANNABLE
 import com.internship.move.R
-import com.internship.move.ui.authentication.ClickCallback
+import com.internship.move.ui.authentication.OnTextSpanClickCallback
 
-fun TextView.addClickableText(text: String, color: Int = context.getColor(R.color.pink), callback: ClickCallback) {
+fun TextView.addClickableText(text: String, color: Int = context.getColor(R.color.pink), callback: OnTextSpanClickCallback) {
     val spannableString = SpannableString(this.text)
     val clickableSpan = object : ClickableSpan() {
         override fun updateDrawState(textPaint: TextPaint) {
