@@ -10,15 +10,16 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentRegisterBinding
-import com.internship.move.ui.viewmodel.MainViewModel
+import com.internship.move.ui.authentication.AuthenticationViewModel
 import com.internship.move.utils.Constants
 import com.internship.move.utils.extensions.addClickableText
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private val binding by viewBinding(FragmentRegisterBinding::bind)
-    private val viewModel by lazy { MainViewModel() }
+    private val viewModel: AuthenticationViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,7 +63,11 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         binding.getStartedBtn.setOnClickListener {
             binding.getStartedBtn.setIsLoading(true)
             Handler(Looper.getMainLooper()).postDelayed({
-                updateSharedPreferences()
+                viewModel.register(
+                    binding.emailTIET.text.toString(),
+                    binding.usernameTIET.text.toString(),
+                    binding.passwordTIET.text.toString()
+                )
                 findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToHomeGraph())
             }, Constants.LOADING_DELAY)
         }
@@ -70,8 +75,4 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private fun areFieldsNotEmpty() =
         !binding.emailTIET.text.isNullOrEmpty() and !binding.usernameTIET.text.isNullOrEmpty() and !binding.passwordTIET.text.isNullOrEmpty()
-
-    private fun updateSharedPreferences() {
-        viewModel.register("email", "username", "pass")
-    }
 }

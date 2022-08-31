@@ -8,12 +8,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.internship.move.R
 import com.internship.move.databinding.FragmentResetPasswordBinding
+import com.internship.move.ui.authentication.AuthenticationViewModel
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ResetPasswordFragment : Fragment(R.layout.fragment_reset_password) {
 
     private val binding by viewBinding(FragmentResetPasswordBinding::bind)
     private val args by navArgs<ResetPasswordFragmentArgs>()
+    private val viewModel: AuthenticationViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,6 +51,7 @@ class ResetPasswordFragment : Fragment(R.layout.fragment_reset_password) {
 
         binding.resetPassBtn.setOnClickListener {
             if (binding.newPassTIET.text.contentEquals(binding.confirmPassTIET.text)) {
+                viewModel.resetPassword(binding.newPassTIET.text.toString())
                 findNavController().navigate(ResetPasswordFragmentDirections.actionResetPasswordFragmentToLoginFragment())
             } else {
                 binding.confirmPassTIL.isErrorEnabled = true

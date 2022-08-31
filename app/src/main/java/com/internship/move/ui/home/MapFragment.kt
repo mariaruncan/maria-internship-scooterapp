@@ -7,13 +7,13 @@ import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentMapBinding
 import com.internship.move.model.HelpInfo
-import com.internship.move.ui.viewmodel.MainViewModel
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
     private val binding by viewBinding(FragmentMapBinding::bind)
-    private val viewModel by lazy { MainViewModel() }
+    private val viewModel: MainViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -23,7 +23,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun initListeners() {
         binding.logoutBtn.setOnClickListener {
-            viewModel.login("email", "pass")
+            viewModel.logout()
             findNavController().navigate(MapFragmentDirections.actionMapFragmentToSplashGraph())
         }
 

@@ -9,15 +9,16 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentLoginBinding
-import com.internship.move.ui.viewmodel.MainViewModel
+import com.internship.move.ui.authentication.AuthenticationViewModel
 import com.internship.move.utils.Constants
 import com.internship.move.utils.extensions.addClickableText
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private val binding by viewBinding(FragmentLoginBinding::bind)
-    private val viewModel by lazy { MainViewModel() }
+    private val viewModel: AuthenticationViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,15 +57,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding.loginBtn.setOnClickListener {
             binding.loginBtn.setIsLoading(true)
             Handler(Looper.getMainLooper()).postDelayed({
-                updateSharedPreferences()
+                viewModel.login(
+                    binding.emailTIET.text.toString(),
+                    binding.passwordTIET.text.toString()
+                )
                 findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeGraph())
             }, Constants.LOADING_DELAY)
         }
     }
 
     private fun areFieldsNotEmpty() = !binding.emailTIET.text.isNullOrEmpty() and !binding.passwordTIET.text.isNullOrEmpty()
-
-    private fun updateSharedPreferences() {
-        viewModel.login("email", "pass")
-    }
 }

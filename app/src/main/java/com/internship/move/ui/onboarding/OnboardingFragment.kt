@@ -8,14 +8,14 @@ import com.internship.move.R
 import com.internship.move.databinding.FragmentOnboardingBinding
 import com.internship.move.ui.onboarding.adapter.OnboardingPageDetails
 import com.internship.move.ui.onboarding.adapter.PagesAdapter
-import com.internship.move.ui.viewmodel.MainViewModel
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OnboardingFragment : Fragment(R.layout.fragment_onboarding), SkipCallback {
 
     private val binding by viewBinding(FragmentOnboardingBinding::bind)
     private val adapter by lazy { PagesAdapter(this, getPagesDetails()) }
-    private val viewModel by lazy { MainViewModel() }
+    private val viewModel: OnboardingViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,7 +30,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding), SkipCallback 
 
         binding.nextBtn.setOnClickListener {
             if (binding.viewPager.currentItem == adapter.itemCount - 1) {
-                updateSharedPreferences()
+                notifyHasViewedOnboarding()
                 findNavController().navigate(OnboardingFragmentDirections.actionOnboardingFragmentToAuthenticationGraph())
             } else {
                 binding.viewPager.currentItem += 1
@@ -42,11 +42,11 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding), SkipCallback 
     }
 
     override fun onSkipButtonClick() {
-        updateSharedPreferences()
+        notifyHasViewedOnboarding()
         findNavController().navigate(OnboardingFragmentDirections.actionOnboardingFragmentToAuthenticationGraph())
     }
 
-    private fun updateSharedPreferences() {
+    private fun notifyHasViewedOnboarding() {
         viewModel.notifyHasViewedOnboarding()
     }
 
