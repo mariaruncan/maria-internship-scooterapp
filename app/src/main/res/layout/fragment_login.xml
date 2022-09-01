@@ -76,7 +76,7 @@
             android:layout_marginTop="@dimen/medium_margin_size"
             android:text="@string/login_forgot_password_text" />
 
-        <com.internship.move.customviews.LoadingButton
+        <com.internship.move.ui.widgets.LoadingButton
             android:id="@+id/loginBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

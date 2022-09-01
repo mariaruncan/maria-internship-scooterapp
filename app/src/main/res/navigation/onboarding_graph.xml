@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/onboardingFragment"
-        android:name="com.internship.move.feature.onboarding.OnboardingFragment"
+        android:name="com.internship.move.ui.onboarding.OnboardingFragment"
         android:label="OnboardingFragment"
         tools:layout="@layout/fragment_onboarding_page">
 
