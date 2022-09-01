@@ -14,6 +14,7 @@ import com.internship.move.ui.authentication.AuthenticationViewModel
 import com.internship.move.utils.Constants
 import com.internship.move.utils.extensions.addClickableText
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
@@ -67,7 +68,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     binding.usernameTIET.text.toString(),
                     binding.passwordTIET.text.toString()
                 )
-                findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToHomeGraph())
+                findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToDrivingLicenseFragment())
             }, Constants.LOADING_DELAY)
         }
     }

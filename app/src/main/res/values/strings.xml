@@ -66,7 +66,11 @@
 
     <!-- region DrivingLicense -->
     <string name="driving_license_toolbar_title">Driving license</string>
-    <string name="driving_license_button_text">Add driving license</string>
+    <string name="driving_license_add_license_btn_text">Add driving license</string>
     <string name="driving_license_description">Please take a photo or upload the front side of your driving license so we can make sure that it is valid.</string>
     <string name="driving_license_title">Before you can start riding</string>
+    <string name="driving_license_fail_message">Could not take picture!</string>
+    <string name="driving_license_verify_status">We are currently verifying your driving license</string>
+    <string name="driving_license_find_scooters_btn_text">Find scooters</string>
+    <string name="driving_license_validated_status">We’ve successfully validated your driving license</string>
 </resources>

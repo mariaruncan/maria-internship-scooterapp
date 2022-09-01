@@ -5,7 +5,7 @@ import com.internship.move.repository.Repository
 
 class OnboardingViewModel(
     private val repo: Repository
-): ViewModel() {
+) : ViewModel() {
 
     fun notifyHasViewedOnboarding() {
         repo.setHasViewedOnboarding(true)

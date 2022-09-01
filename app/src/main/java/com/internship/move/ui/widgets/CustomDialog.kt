@@ -1,4 +1,4 @@
-package com.internship.move.ui.customviews
+package com.internship.move.ui.widgets
 
 import android.os.Bundle
 import android.view.View

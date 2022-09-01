@@ -28,6 +28,9 @@ class LoadingButton @JvmOverloads constructor(
 
     fun setIsEnabled(isEnabled: Boolean) {
         binding.loadingBtn.isEnabled = isEnabled
+        if(isEnabled) {
+            setIsLoading(false)
+        }
     }
 
     fun setIsLoading(isLoading: Boolean) {

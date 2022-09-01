@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentForgotPasswordBinding
+import com.internship.move.ui.widgets.CustomDialog
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
 class ForgotPasswordFragment : Fragment(R.layout.fragment_forgot_password) {
@@ -20,7 +21,7 @@ class ForgotPasswordFragment : Fragment(R.layout.fragment_forgot_password) {
     }
 
     private fun initListeners() {
-        binding.backBtn.setOnClickListener{
+        binding.backBtn.setOnClickListener {
             requireActivity().onBackPressed()
         }
 

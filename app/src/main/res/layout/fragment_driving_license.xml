@@ -62,7 +62,7 @@
         android:layout_height="@dimen/button_height"
         android:layout_marginHorizontal="@dimen/medium_margin_size"
         android:layout_marginBottom="@dimen/medium_margin_size"
-        android:text="@string/driving_license_button_text"
+        android:text="@string/driving_license_add_license_btn_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

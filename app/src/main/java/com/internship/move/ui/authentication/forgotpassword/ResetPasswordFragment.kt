@@ -26,7 +26,7 @@ class ResetPasswordFragment : Fragment(R.layout.fragment_reset_password) {
     }
 
     private fun initListeners() {
-        binding.backBtn.setOnClickListener{
+        binding.backBtn.setOnClickListener {
             requireActivity().onBackPressed()
         }
 

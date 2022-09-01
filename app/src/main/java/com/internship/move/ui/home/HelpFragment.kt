@@ -8,7 +8,7 @@ import com.internship.move.R
 import com.internship.move.databinding.FragmentHelpBinding
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
-class HelpFragment: Fragment(R.layout.fragment_help) {
+class HelpFragment : Fragment(R.layout.fragment_help) {
 
     private val binding by viewBinding(FragmentHelpBinding::bind)
     private val args by navArgs<HelpFragmentArgs>()
