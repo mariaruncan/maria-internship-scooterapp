@@ -7,7 +7,7 @@ class OnboardingViewModel(
     private val repo: Repository
 ) : ViewModel() {
 
-    fun notifyHasViewedOnboarding() {
+    fun setHasViewedOnboarding() {
         repo.setHasViewedOnboarding(true)
     }
 }

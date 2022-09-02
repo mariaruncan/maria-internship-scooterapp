@@ -4,8 +4,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -18,16 +21,22 @@ import java.io.File
 class DrivingLicenseFragment : Fragment(R.layout.fragment_driving_license) {
 
     private val binding by viewBinding(FragmentDrivingLicenseBinding::bind)
-    private val takeImageResult = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
-        if (isSuccess) {
-            latestTmpUri?.let { uri ->
-                findNavController().navigate(DrivingLicenseFragmentDirections.actionDrivingLicenseFragmentToViewLicenseFragment(uri.toString()))
+    private val takeImageLauncher: ActivityResultLauncher<Uri?>
+    private var latestLicensePhotoUri: Uri? = null
+
+    init {
+        takeImageLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
+            if (isSuccess && latestLicensePhotoUri != null) {
+                findNavController().navigate(
+                    DrivingLicenseFragmentDirections.actionDrivingLicenseFragmentToViewLicenseFragment(
+                        latestLicensePhotoUri.toString()
+                    )
+                )
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.driving_license_fail_message), LENGTH_SHORT).show()
             }
-        } else {
-            Toast.makeText(requireContext(), getString(R.string.driving_license_fail_message), Toast.LENGTH_SHORT).show()
         }
     }
-    private var latestTmpUri: Uri? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,10 +48,9 @@ class DrivingLicenseFragment : Fragment(R.layout.fragment_driving_license) {
     }
 
     private fun initToolbar() {
-        val customToolbar = binding.toolbar
-        customToolbar.titleTV.text = getString(R.string.driving_license_toolbar_title)
-        customToolbar.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-        customToolbar.toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+        binding.toolbar.setNavigationIconTint(ResourcesCompat.getColor(resources, R.color.text_color_dark, null))
+        binding.toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
     }
@@ -50,18 +58,23 @@ class DrivingLicenseFragment : Fragment(R.layout.fragment_driving_license) {
     private fun takePicture() {
         lifecycleScope.launchWhenStarted {
             getTmpFileUri().let { uri ->
-                latestTmpUri = uri
-                takeImageResult.launch(uri)
+                latestLicensePhotoUri = uri
+                takeImageLauncher.launch(uri)
             }
         }
     }
 
     private fun getTmpFileUri(): Uri {
-        val tmpFile = File.createTempFile("tmp_image_file", ".png").apply {
+        val tmpFile = File.createTempFile(IMAGE_NAME, IMAGE_EXTENSION).apply {
             createNewFile()
             deleteOnExit()
         }
 
         return FileProvider.getUriForFile(requireContext(), "${BuildConfig.APPLICATION_ID}.provider", tmpFile)
+    }
+
+    companion object {
+        private const val IMAGE_NAME = "tmp_image_file"
+        private const val IMAGE_EXTENSION = ".png"
     }
 }

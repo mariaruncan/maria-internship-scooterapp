@@ -12,7 +12,7 @@ class Repository(
         internalStorageManager.setIsLoggedIn(value)
     }
 
-    fun getHasViewdOnboarding() = internalStorageManager.getHasViewedOnboarding()
+    fun getHasViewedOnboarding() = internalStorageManager.getHasViewedOnboarding()
 
     fun setHasViewedOnboarding(value: Boolean) {
         internalStorageManager.setHasSeenOnboarding(value)

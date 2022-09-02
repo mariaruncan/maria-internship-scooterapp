@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.internship.move.R
 import com.internship.move.databinding.FragmentViewLicenseBinding
+import com.internship.move.utils.Constants
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
 class ViewLicenseFragment : Fragment(R.layout.fragment_view_license) {
@@ -31,6 +32,6 @@ class ViewLicenseFragment : Fragment(R.layout.fragment_view_license) {
             binding.statusTV.text = getString(R.string.driving_license_validated_status)
             binding.previewPictureIV.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_checked, null))
             binding.findScootersBtn.setIsEnabled(true)
-        }, 2000L)
+        }, Constants.LOADING_DELAY)
     }
 }

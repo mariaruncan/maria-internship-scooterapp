@@ -2,9 +2,6 @@ package com.internship.move.utils
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import com.internship.move.utils.Constants.SharedPref.KEY_APP_PREFERENCES
-import com.internship.move.utils.Constants.SharedPref.KEY_HAS_VISITED_AUTHENTICATION
-import com.internship.move.utils.Constants.SharedPref.KEY_HAS_VISITED_ONBOARDING
 
 class InternalStorageManager(context: Context) {
 
@@ -24,5 +21,11 @@ class InternalStorageManager(context: Context) {
         sharedPref.edit()
             .putBoolean(KEY_HAS_VISITED_ONBOARDING, value)
             .apply()
+    }
+
+    companion object {
+        private const val KEY_APP_PREFERENCES = "com.internship.move.KEY_APP_PREFERENCES"
+        private const val KEY_HAS_VISITED_AUTHENTICATION = "KEY_HAS_VISITED_AUTHENTICATION"
+        private const val KEY_HAS_VISITED_ONBOARDING = "KEY_HAS_VISITED_ONBOARDING"
     }
 }

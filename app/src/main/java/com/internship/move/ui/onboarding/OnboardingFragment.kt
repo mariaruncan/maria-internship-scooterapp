@@ -30,7 +30,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding), SkipCallback 
 
         binding.nextBtn.setOnClickListener {
             if (binding.viewPager.currentItem == adapter.itemCount - 1) {
-                notifyHasViewedOnboarding()
+                setHasViewedOnboarding()
                 findNavController().navigate(OnboardingFragmentDirections.actionOnboardingFragmentToAuthenticationGraph())
             } else {
                 binding.viewPager.currentItem += 1
@@ -42,12 +42,12 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding), SkipCallback 
     }
 
     override fun onSkipButtonClick() {
-        notifyHasViewedOnboarding()
+        setHasViewedOnboarding()
         findNavController().navigate(OnboardingFragmentDirections.actionOnboardingFragmentToAuthenticationGraph())
     }
 
-    private fun notifyHasViewedOnboarding() {
-        viewModel.notifyHasViewedOnboarding()
+    private fun setHasViewedOnboarding() {
+        viewModel.setHasViewedOnboarding()
     }
 
     private fun getPagesDetails(): List<OnboardingPageDetails> = listOf(

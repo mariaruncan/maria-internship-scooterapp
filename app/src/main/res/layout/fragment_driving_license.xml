@@ -1,69 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
 
-    <include
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
-        layout="@layout/custom_toolbar" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontalGL"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        app:titleTextAppearance="@style/Heading3"
+        app:titleTextColor="@color/text_color_dark"
+        app:titleCentered="true"
+        app:title="@string/driving_license_toolbar_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <ImageView
         android:id="@+id/backgroundIV"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:scaleType="centerCrop"
         android:src="@drawable/bg_driving_license"
-        app:layout_constraintBottom_toTopOf="@id/horizontalGL"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
         tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/titleTV"
         style="@style/Heading1"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/medium_margin_size"
         android:layout_marginTop="@dimen/small_margin_size"
         android:text="@string/driving_license_title"
-        android:textColor="@color/text_color_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backgroundIV" />
+        android:textColor="@color/text_color_dark" />
 
     <TextView
         android:id="@+id/descriptionTV"
         style="@style/Body1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/medium_margin_size"
         android:layout_marginTop="@dimen/small_margin_size"
         android:alpha="0.7"
+        android:layout_weight="1"
         android:text="@string/driving_license_description"
-        android:textColor="@color/text_color_dark"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleTV" />
+        android:textColor="@color/text_color_dark" />
 
     <Button
         android:id="@+id/addLicenseBtn"
         style="@style/PrimaryButton"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/button_height"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/medium_margin_size"
         android:layout_marginBottom="@dimen/medium_margin_size"
-        android:text="@string/driving_license_add_license_btn_text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="@string/driving_license_add_license_btn_text" />
+</LinearLayout>

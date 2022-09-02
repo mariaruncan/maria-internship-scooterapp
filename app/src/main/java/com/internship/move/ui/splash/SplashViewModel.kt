@@ -7,7 +7,9 @@ class SplashViewModel(
     private val repo: Repository
 ) : ViewModel() {
 
-    fun getIsLoggedIn() = repo.getIsLoggedIn()
+    val isLoggedIn: Boolean
+        get() = repo.getIsLoggedIn()
 
-    fun getHasViewedOnboarding() = repo.getHasViewdOnboarding()
+    val hasViewedOnboarding: Boolean
+        get() = repo.getHasViewedOnboarding()
 }

@@ -5,6 +5,7 @@ import android.os.Looper
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
+import com.internship.move.ui.authentication.register.RegisterFragmentDirections
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashFragment : Fragment(R.layout.fragment_splash) {
@@ -12,13 +13,16 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     private val viewModel: SplashViewModel by viewModel()
     private val navigationHandler: Handler = Handler(Looper.getMainLooper())
     private val navigationRunnableJob: Runnable = Runnable {
-        val hasVisitedOnboarding = viewModel.getHasViewedOnboarding()
-        val isLoggedIn = viewModel.getIsLoggedIn()
+        val hasVisitedOnboarding = viewModel.hasViewedOnboarding
+        val isLoggedIn = viewModel.isLoggedIn
 
         when {
-            hasVisitedOnboarding and isLoggedIn -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToHomeGraph())
-            hasVisitedOnboarding -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToAuthenticationGraph())
-            else -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnboardingGraph())
+            hasVisitedOnboarding and isLoggedIn ->
+                findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToHomeGraph())
+            hasVisitedOnboarding ->
+                findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToAuthenticationGraph())
+            else ->
+                findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnboardingGraph())
         }
     }
 

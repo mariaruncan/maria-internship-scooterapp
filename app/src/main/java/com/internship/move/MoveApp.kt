@@ -7,7 +7,7 @@ import com.internship.move.di.viewModels
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
-class MyApp : Application() {
+class MoveApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -16,13 +16,11 @@ class MyApp : Application() {
 
     private fun initKoin() {
         startKoin {
-            androidContext(this@MyApp)
+            androidContext(this@MoveApp)
             modules(
-                listOf(
-                    viewModels,
-                    repositories,
-                    storage
-                )
+                viewModels,
+                repositories,
+                storage
             )
         }
     }
