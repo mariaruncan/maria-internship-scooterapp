@@ -1,8 +1,6 @@
 package com.internship.move.ui.authentication.login
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -13,6 +11,10 @@ import com.internship.move.ui.authentication.AuthenticationViewModel
 import com.internship.move.utils.Constants
 import com.internship.move.utils.extensions.addClickableText
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -55,14 +57,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         binding.loginBtn.setOnClickListener {
-            binding.loginBtn.setIsLoading(true)
-            Handler(Looper.getMainLooper()).postDelayed({
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.loginBtn.setIsLoading(true)
+                delay(Constants.LOADING_DELAY)
                 viewModel.login(
                     binding.emailTIET.text.toString(),
                     binding.passwordTIET.text.toString()
                 )
                 findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeGraph())
-            }, Constants.LOADING_DELAY)
+            }
         }
     }
 
