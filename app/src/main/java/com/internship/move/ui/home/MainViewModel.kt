@@ -1,18 +1,18 @@
 package com.internship.move.ui.home
 
 import androidx.lifecycle.ViewModel
-import com.internship.move.repository.Repository
+import com.internship.move.utils.InternalStorageManager
 
 class MainViewModel(
-    private val repo: Repository
+    private val internalStorageManager: InternalStorageManager
 ) : ViewModel() {
 
     fun logout() {
-        repo.setIsLoggedIn(false)
+        internalStorageManager.setToken(null)
     }
 
     fun clearApp() {
-        repo.setIsLoggedIn(false)
-        repo.setHasViewedOnboarding(false)
+        internalStorageManager.setToken(null)
+        internalStorageManager.setHasSeenOnboarding(false)
     }
 }

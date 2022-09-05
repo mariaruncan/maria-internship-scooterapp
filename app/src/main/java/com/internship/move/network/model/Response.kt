@@ -2,7 +2,6 @@ package com.internship.move.network.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import java.time.LocalDateTime
 
 @JsonClass(generateAdapter = true)
 data class ErrorResponse(
@@ -27,9 +26,6 @@ data class User(
     @Json(name = "name") val name: String,
     @Json(name = "mail") val email: String,
     @Json(name = "status") val status: String,
-    @Json(name = "session_token") val session_token: String,
     @Json(name = "password") val encryptedPassword: String,
-    @Json(name = "createdAt") val createdAt: LocalDateTime,
-    @Json(name = "updatedAt") val updatedAt: LocalDateTime,
-    @Json(name = "__v") val __v: Int
+    @Json(name = "productImage") val drivingLicenseUri: String?
 )

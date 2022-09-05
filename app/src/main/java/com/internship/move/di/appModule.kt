@@ -1,7 +1,7 @@
 package com.internship.move.di
 
 import com.internship.move.network.ServiceApi
-import com.internship.move.repository.Repository
+import com.internship.move.repository.UserRepository
 import com.internship.move.ui.authentication.AuthenticationViewModel
 import com.internship.move.ui.home.MainViewModel
 import com.internship.move.ui.onboarding.OnboardingViewModel
@@ -18,14 +18,14 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 val viewModels = module {
-    viewModel { SplashViewModel(repo = get()) }
-    viewModel { OnboardingViewModel(repo = get()) }
-    viewModel { AuthenticationViewModel(repo = get()) }
-    viewModel { MainViewModel(repo = get()) }
+    viewModel { SplashViewModel(internalStorageManager = get()) }
+    viewModel { OnboardingViewModel(internalStorageManager = get()) }
+    viewModel { AuthenticationViewModel(repo = get(), internalStorageManager = get()) }
+    viewModel { MainViewModel(internalStorageManager = get()) }
 }
 
 val repositories = module {
-    single { Repository(internalStorageManager = get(), service = get()) }
+    single { UserRepository(api = get()) }
 }
 
 val services = module {

@@ -20,12 +20,16 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
         job = CoroutineScope(Dispatchers.Main).launch {
             delay(SPLASH_FRAGMENT_DELAY)
             val hasVisitedOnboarding = viewModel.hasViewedOnboarding
-            val isLoggedIn = viewModel.isLoggedIn
+            val sessionToken = viewModel.sessionToken
+            val hasDrivingLicense = viewModel.hasDrivingLicense
 
             when {
-                hasVisitedOnboarding and isLoggedIn -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToHomeGraph())
-                hasVisitedOnboarding -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToAuthenticationGraph())
-                else -> findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnboardingGraph())
+                hasVisitedOnboarding and (sessionToken != null) and hasDrivingLicense ->
+                    findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToHomeGraph())
+                hasVisitedOnboarding ->
+                    findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToAuthenticationGraph())
+                else ->
+                    findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToOnboardingGraph())
             }
         }
     }

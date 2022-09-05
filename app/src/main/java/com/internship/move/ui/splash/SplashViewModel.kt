@@ -1,15 +1,18 @@
 package com.internship.move.ui.splash
 
 import androidx.lifecycle.ViewModel
-import com.internship.move.repository.Repository
+import com.internship.move.utils.InternalStorageManager
 
 class SplashViewModel(
-    private val repo: Repository
+    private val internalStorageManager: InternalStorageManager
 ) : ViewModel() {
 
-    val isLoggedIn: Boolean
-        get() = repo.getIsLoggedIn()
+    val sessionToken: String?
+        get() = internalStorageManager.getToken()
 
     val hasViewedOnboarding: Boolean
-        get() = repo.getHasViewedOnboarding()
+        get() = internalStorageManager.getHasViewedOnboarding()
+
+    val hasDrivingLicense: Boolean
+        get() = internalStorageManager.getHasDrivingLicense()
 }

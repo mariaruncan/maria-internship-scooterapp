@@ -2,12 +2,14 @@ package com.internship.move.ui.authentication.login
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentLoginBinding
+import com.internship.move.network.model.LoginResponse
 import com.internship.move.ui.authentication.AuthenticationViewModel
 import com.internship.move.utils.Constants
 import com.internship.move.utils.extensions.addClickableText
@@ -28,6 +30,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         initClickableText()
         initListeners()
+        initObservers()
+    }
+
+    private fun initObservers() {
+        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.loginBtn.setIsLoading(isLoading)
+        }
     }
 
     private fun initClickableText() {
@@ -58,14 +70,17 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         binding.loginBtn.setOnClickListener {
-            binding.loginBtn.setIsLoading(true)
             viewLifecycleOwner.lifecycleScope.launch {
-                delay(Constants.LOADING_DELAY)
-                viewModel.login(
+                val response = viewModel.login(
                     binding.emailTIET.text.toString(),
                     binding.passwordTIET.text.toString()
-                )
-                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeGraph())
+                ) ?: return@launch
+
+                if (response.user.drivingLicenseUri != null) {
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeGraph())
+                } else {
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToDrivingLicenseFragment())
+                }
             }
         }
     }
