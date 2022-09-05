@@ -5,11 +5,7 @@ import com.internship.move.repository.Repository
 
 class AuthenticationViewModel(
     private val repo: Repository
-): ViewModel() {
-
-    fun notifyIsLoggedIn() {
-        repo.setIsLoggedIn(true)
-    }
+) : ViewModel() {
 
     fun register(email: String, username: String, password: String) {
         //api call

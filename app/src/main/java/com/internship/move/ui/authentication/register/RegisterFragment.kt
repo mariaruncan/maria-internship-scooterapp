@@ -1,8 +1,6 @@
 package com.internship.move.ui.authentication.register
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
@@ -14,6 +12,10 @@ import com.internship.move.ui.authentication.AuthenticationViewModel
 import com.internship.move.utils.Constants
 import com.internship.move.utils.extensions.addClickableText
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
@@ -61,15 +63,16 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
 
         binding.getStartedBtn.setOnClickListener {
-            binding.getStartedBtn.setIsLoading(true)
-            Handler(Looper.getMainLooper()).postDelayed({
+            CoroutineScope(Dispatchers.Main).launch {
+                binding.getStartedBtn.setIsLoading(true)
+                delay(Constants.LOADING_DELAY)
                 viewModel.register(
                     binding.emailTIET.text.toString(),
                     binding.usernameTIET.text.toString(),
                     binding.passwordTIET.text.toString()
                 )
-                findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToHomeGraph())
-            }, Constants.LOADING_DELAY)
+                findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToDrivingLicenseFragment())
+            }
         }
     }
 

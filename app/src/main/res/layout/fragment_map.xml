@@ -13,12 +13,14 @@
 
     <Button
         android:id="@+id/logoutBtn"
+        style="@style/PrimaryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/map_log_out_btn_text" />
 
     <Button
         android:id="@+id/clearAppBtn"
+        style="@style/PrimaryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/map_clear_app_btn_text" />
@@ -35,6 +37,7 @@
 
     <Button
         android:id="@+id/helpBtn"
+        style="@style/PrimaryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/help_btn_text" />

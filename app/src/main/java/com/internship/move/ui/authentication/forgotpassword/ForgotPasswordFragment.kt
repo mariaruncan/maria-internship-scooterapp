@@ -21,7 +21,7 @@ class ForgotPasswordFragment : Fragment(R.layout.fragment_forgot_password) {
     }
 
     private fun initListeners() {
-        binding.backBtn.setOnClickListener{
+        binding.backBtn.setOnClickListener {
             requireActivity().onBackPressed()
         }
 
