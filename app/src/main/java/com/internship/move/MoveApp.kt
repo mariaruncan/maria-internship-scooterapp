@@ -2,6 +2,7 @@ package com.internship.move
 
 import android.app.Application
 import com.internship.move.di.repositories
+import com.internship.move.di.services
 import com.internship.move.di.storage
 import com.internship.move.di.viewModels
 import org.koin.android.ext.koin.androidContext
@@ -20,6 +21,7 @@ class MoveApp : Application() {
             modules(
                 viewModels,
                 repositories,
+                services,
                 storage
             )
         }

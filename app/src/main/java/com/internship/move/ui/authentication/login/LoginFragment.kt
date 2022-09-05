@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentLoginBinding
@@ -57,8 +58,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         binding.loginBtn.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                binding.loginBtn.setIsLoading(true)
+            binding.loginBtn.setIsLoading(true)
+            viewLifecycleOwner.lifecycleScope.launch {
                 delay(Constants.LOADING_DELAY)
                 viewModel.login(
                     binding.emailTIET.text.toString(),

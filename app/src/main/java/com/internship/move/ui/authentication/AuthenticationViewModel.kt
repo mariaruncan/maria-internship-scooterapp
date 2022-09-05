@@ -12,9 +12,8 @@ class AuthenticationViewModel(
         repo.setIsLoggedIn(true)
     }
 
-    fun login(email: String, password: String) {
-        // api call
-        repo.setIsLoggedIn(true)
+    suspend fun login(email: String, password: String) {
+        repo.login(email, password)
     }
 
     fun resetPassword(newPassword: String) {
