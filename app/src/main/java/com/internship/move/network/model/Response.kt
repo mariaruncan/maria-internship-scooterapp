@@ -21,6 +21,11 @@ data class LoginResponse(
 )
 
 @JsonClass(generateAdapter = true)
+data class AddLicenseResponse(
+    @Json(name = "existing_user") val user: User
+)
+
+@JsonClass(generateAdapter = true)
 data class User(
     @Json(name = "_id") val id: String,
     @Json(name = "name") val name: String,

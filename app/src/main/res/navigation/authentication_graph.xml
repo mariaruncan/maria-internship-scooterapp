@@ -109,7 +109,7 @@
         tools:layout="@layout/fragment_view_license">
 
         <argument
-            android:name="imageUri"
+            android:name="imagePath"
             app:argType="string"
             app:nullable="false" />
 

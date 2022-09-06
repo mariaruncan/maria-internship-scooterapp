@@ -1,5 +1,6 @@
 package com.internship.move.di
 
+import com.internship.move.BuildConfig
 import com.internship.move.network.ServiceApi
 import com.internship.move.repository.UserRepository
 import com.internship.move.ui.authentication.AuthenticationViewModel
@@ -54,7 +55,7 @@ fun getOkHttpClient(): OkHttpClient {
 
 fun getRetrofit(moshi: Moshi, httpClient: OkHttpClient): Retrofit =
     Retrofit.Builder()
-        .baseUrl("https://move-scooters.herokuapp.com/")
+        .baseUrl(BuildConfig.BASE_URL)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .client(httpClient)
         .build()

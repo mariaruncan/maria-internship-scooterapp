@@ -23,13 +23,14 @@ class DrivingLicenseFragment : Fragment(R.layout.fragment_driving_license) {
     private val binding by viewBinding(FragmentDrivingLicenseBinding::bind)
     private val takeImageLauncher: ActivityResultLauncher<Uri?>
     private var latestLicensePhotoUri: Uri? = null
+    private var licenseAbsolutePath: String? = null
 
     init {
         takeImageLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
             if (isSuccess && latestLicensePhotoUri != null) {
                 findNavController().navigate(
                     DrivingLicenseFragmentDirections.actionDrivingLicenseFragmentToViewLicenseFragment(
-                        latestLicensePhotoUri.toString()
+                        licenseAbsolutePath.toString()
                     )
                 )
             } else {
@@ -69,12 +70,12 @@ class DrivingLicenseFragment : Fragment(R.layout.fragment_driving_license) {
             createNewFile()
             deleteOnExit()
         }
-
+        licenseAbsolutePath = tmpFile.absolutePath
         return FileProvider.getUriForFile(requireContext(), "${BuildConfig.APPLICATION_ID}.provider", tmpFile)
     }
 
     companion object {
         private const val IMAGE_NAME = "tmp_image_file"
-        private const val IMAGE_EXTENSION = ".png"
+        private const val IMAGE_EXTENSION = ".jpeg"
     }
 }

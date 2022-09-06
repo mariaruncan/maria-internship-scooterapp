@@ -1,6 +1,7 @@
 package com.internship.move
 
 import android.app.Application
+import android.content.Context
 import com.internship.move.di.repositories
 import com.internship.move.di.services
 import com.internship.move.di.storage
@@ -13,6 +14,7 @@ class MoveApp : Application() {
     override fun onCreate() {
         super.onCreate()
         initKoin()
+        appContext = applicationContext
     }
 
     private fun initKoin() {
@@ -25,5 +27,11 @@ class MoveApp : Application() {
                 storage
             )
         }
+    }
+
+    companion object {
+        private lateinit var appContext: Context
+
+        fun getAppContext() = appContext
     }
 }
