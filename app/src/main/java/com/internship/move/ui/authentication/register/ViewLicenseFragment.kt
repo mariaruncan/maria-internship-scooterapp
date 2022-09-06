@@ -34,11 +34,7 @@ class ViewLicenseFragment : Fragment(R.layout.fragment_view_license) {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            val response = viewModel.addDrivingLicense(args.imagePath)
-            if (response == null) {
-                Toast.makeText(requireContext(), "Something went wrong...", Toast.LENGTH_SHORT).show()
-                return@launch
-            }
+            viewModel.addDrivingLicense(args.imagePath) ?: return@launch
             binding.statusTV.text = getString(R.string.driving_license_validated_status)
             binding.previewPictureIV.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_checked, null))
             binding.findScootersBtn.setIsEnabled(true)

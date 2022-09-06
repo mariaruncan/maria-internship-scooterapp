@@ -19,12 +19,16 @@ class UserRepository(
 
     suspend fun login(email: String, password: String) = api.login(LoginRequest(email, password))
 
-    suspend fun addLicense(token: String, imagePath: String): AddLicenseResponse {
+    suspend fun addLicense(tokenString: String, imagePath: String): AddLicenseResponse {
         val file = Compressor.compress(MoveApp.getAppContext(), File(imagePath))
-        val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-        val body = MultipartBody.Part.createFormData("productImage", file.name, requestFile)
-        val requestToken = RequestBody.create(MediaType.parse("multipart/form-data"), token)
+        val requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file)
+        val filePart = MultipartBody.Part.createFormData(KEY_FILE, file.name, requestFile)
+        val requestToken = RequestBody.create(MultipartBody.FORM, tokenString)
 
-        return api.addDrivingLicense(requestToken, body)
+        return api.addDrivingLicense(requestToken, filePart)
+    }
+
+    companion object {
+        private const val KEY_FILE = "productImage"
     }
 }

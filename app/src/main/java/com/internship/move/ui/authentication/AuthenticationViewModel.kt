@@ -20,70 +20,57 @@ class AuthenticationViewModel(
 ) : ViewModel() {
 
     private val moshi: Moshi by inject(Moshi::class.java)
-    var errorMessage: MutableLiveData<String> = MutableLiveData()
-    var isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+    val errorMessage: MutableLiveData<String> = MutableLiveData()
+    val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    suspend fun register(name: String, email: String, password: String): RegisterResponse? {
+    suspend fun register(name: String, email: String, password: String): RegisterResponse? =
         try {
             isLoading.value = true
             delay(LOADING_DELAY)
             val response = repo.register(name, email, password)
             internalStorageManager.setToken(response.token)
-            return response
+            response
         } catch (e: Exception) {
-            when (e) {
-                is HttpException -> {
-                    val errorResponse = e.response()?.errorBody()?.source()?.let { moshi.adapter(ErrorResponse::class.java).fromJson(it) }
-                    errorMessage.value = errorResponse?.message
-                }
-                else -> errorMessage.value = "Something went wrong..."
-            }
-            isLoading.value = false
+            handleException(e)
+            null
         }
-        return null
-    }
 
-    suspend fun addDrivingLicense(imagePath: String): AddLicenseResponse? {
+    suspend fun addDrivingLicense(imagePath: String): AddLicenseResponse? =
         try {
             isLoading.value = true
             delay(LOADING_DELAY)
             val response = repo.addLicense(internalStorageManager.getToken() ?: "", imagePath)
             internalStorageManager.setHasDrivingLicense(true)
-            return response
+            response
         } catch (e: Exception) {
-            when (e) {
-                is HttpException -> {
-                    val errorResponse = e.response()?.errorBody()?.source()?.let { moshi.adapter(ErrorResponse::class.java).fromJson(it) }
-                    errorMessage.value = errorResponse?.message
-                }
-                else -> errorMessage.value = "Something went wrong..."
-            }
-            isLoading.value = false
+            handleException(e)
+            null
         }
-        return null
-    }
 
-    suspend fun login(email: String, password: String): LoginResponse? {
+    suspend fun login(email: String, password: String): LoginResponse? =
         try {
             isLoading.value = true
             delay(LOADING_DELAY)
             val response = repo.login(email, password)
             internalStorageManager.setToken(response.token)
-            return response
+            response
         } catch (e: Exception) {
-            when (e) {
-                is HttpException -> {
-                    val errorResponse = e.response()?.errorBody()?.source()?.let { moshi.adapter(ErrorResponse::class.java).fromJson(it) }
-                    errorMessage.value = errorResponse?.message
-                }
-                else -> errorMessage.value = "Something went wrong..."
-            }
-            isLoading.value = false
+            handleException(e)
+            null
         }
-        return null
-    }
 
     fun resetPassword(newPassword: String) {
         // api call
+    }
+
+    private fun handleException(e: Exception) {
+        when (e) {
+            is HttpException -> {
+                val errorResponse = e.response()?.errorBody()?.source()?.let { moshi.adapter(ErrorResponse::class.java).fromJson(it) }
+                errorMessage.value = errorResponse?.message
+            }
+            else -> errorMessage.value = e.message
+        }
+        isLoading.value = false
     }
 }
