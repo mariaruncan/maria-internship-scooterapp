@@ -1,32 +1,32 @@
-package com.internship.move.network.model
+package com.internship.move.network.dto
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class ErrorResponse(
+data class ErrorResponseDTO(
     @Json(name = "message") val message: String
 )
 
 @JsonClass(generateAdapter = true)
-data class RegisterResponse(
-    @Json(name = "registered_user") val user: User,
+data class RegisterResponseDTO(
+    @Json(name = "registered_user") val user: UserDTO,
     @Json(name = "token") val token: String
 )
 
 @JsonClass(generateAdapter = true)
-data class LoginResponse(
-    @Json(name = "user") val user: User,
+data class LoginResponseDTO(
+    @Json(name = "user") val user: UserDTO,
     @Json(name = "token") val token: String
 )
 
 @JsonClass(generateAdapter = true)
-data class AddLicenseResponse(
-    @Json(name = "existing_user") val user: User
+data class AddLicenseResponseDTO(
+    @Json(name = "existing_user") val user: UserDTO
 )
 
 @JsonClass(generateAdapter = true)
-data class User(
+data class UserDTO(
     @Json(name = "_id") val id: String,
     @Json(name = "name") val name: String,
     @Json(name = "mail") val email: String,

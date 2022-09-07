@@ -49,30 +49,39 @@ dependencies {
 
     // View binding
     implementation 'com.github.Zhuinden:fragmentviewbindingdelegate-kt:1.0.0'
+
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+
     // ViewPager2
     implementation("androidx.viewpager2:viewpager2:1.0.0")
+
     // Dots indicator
     implementation("com.tbuonomo:dotsindicator:4.3")
+
     // Koin
     implementation "io.insert-koin:koin-core:$koin_version"
     implementation "io.insert-koin:koin-android:$koin_version"
+
     // Camera
     implementation "androidx.activity:activity-ktx:1.5.1"
     implementation "androidx.fragment:fragment-ktx:1.5.2"
+
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+
     // Retrofit 2
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+
     // Moshi
     implementation 'com.squareup.moshi:moshi:1.13.0'
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.13.0'
     implementation("com.squareup.moshi:moshi-adapters:1.8.0")
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+
     // Compressor
     implementation 'id.zelory:compressor:3.0.1'
 }

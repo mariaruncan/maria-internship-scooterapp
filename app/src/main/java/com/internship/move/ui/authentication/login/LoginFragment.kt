@@ -5,14 +5,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentLoginBinding
 import com.internship.move.ui.authentication.AuthenticationViewModel
 import com.internship.move.utils.extensions.addClickableText
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -32,8 +30,17 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
+
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.loginBtn.setIsLoading(isLoading)
+        }
+
+        viewModel.user.observe(viewLifecycleOwner) { user ->
+            if (user.drivingLicense != null) {
+                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeGraph())
+            } else {
+                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToDrivingLicenseFragment())
+            }
         }
     }
 
@@ -65,18 +72,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         binding.loginBtn.setOnClickListener {
-            viewLifecycleOwner.lifecycleScope.launch {
-                val response = viewModel.login(
-                    binding.emailTIET.text.toString(),
-                    binding.passwordTIET.text.toString()
-                ) ?: return@launch
-
-                if (response.user.drivingLicense != null) {
-                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeGraph())
-                } else {
-                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToDrivingLicenseFragment())
-                }
-            }
+            viewModel.login(
+                binding.emailTIET.text.toString(),
+                binding.passwordTIET.text.toString()
+            )
         }
     }
 
