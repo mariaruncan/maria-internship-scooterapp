@@ -9,13 +9,8 @@ import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentRegisterBinding
 import com.internship.move.ui.authentication.AuthenticationViewModel
-import com.internship.move.utils.Constants
 import com.internship.move.utils.extensions.addClickableText
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
@@ -28,6 +23,21 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         initClickableText()
         initListeners()
+        initObservers()
+    }
+
+    private fun initObservers() {
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.getStartedBtn.setIsLoading(isLoading)
+        }
+
+        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
+
+        viewModel.user.observe(viewLifecycleOwner) {
+            findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToDrivingLicenseFragment())
+        }
     }
 
     private fun initClickableText() {
@@ -63,16 +73,11 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
 
         binding.getStartedBtn.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                binding.getStartedBtn.setIsLoading(true)
-                delay(Constants.LOADING_DELAY)
-                viewModel.register(
-                    binding.emailTIET.text.toString(),
-                    binding.usernameTIET.text.toString(),
-                    binding.passwordTIET.text.toString()
-                )
-                findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToDrivingLicenseFragment())
-            }
+            viewModel.register(
+                binding.usernameTIET.text.toString(),
+                binding.emailTIET.text.toString(),
+                binding.passwordTIET.text.toString()
+            )
         }
     }
 
