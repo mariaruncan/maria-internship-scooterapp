@@ -25,7 +25,7 @@ class InternalStorageManager(context: Context) {
 
     fun getHasDrivingLicense(): Boolean {
         val hasDrivingLicense = sharedPref.getBoolean(KEY_HAS_DRIVING_LICENSE, false)
-        if(!hasDrivingLicense) setToken(null)
+        if (!hasDrivingLicense) setToken(null)
         return hasDrivingLicense
     }
 
