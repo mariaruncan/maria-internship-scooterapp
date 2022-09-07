@@ -1,5 +1,6 @@
 package com.internship.move.repository
 
+import android.content.Context
 import com.internship.move.MoveApp
 import com.internship.move.network.ServiceApi
 import com.internship.move.network.dto.AddLicenseResponseDTO
@@ -13,7 +14,8 @@ import java.io.File
 
 class UserRepository(
     private val api: ServiceApi,
-    private val compressor: Compressor
+    private val compressor: Compressor,
+    private val context: Context
 ) {
 
     suspend fun register(name: String, email: String, password: String) = api.register(RegisterRequestDTO(name, email, password))
@@ -21,7 +23,7 @@ class UserRepository(
     suspend fun login(email: String, password: String) = api.login(LoginRequestDTO(email, password))
 
     suspend fun addLicense(tokenString: String, imagePath: String): AddLicenseResponseDTO {
-        val file = compressor.compress(MoveApp.getAppContext(), File(imagePath))
+        val file = compressor.compress(context, File(imagePath))
         val requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file)
         val filePart = MultipartBody.Part.createFormData(KEY_JSON_IMAGE, file.name, requestFile)
         val requestToken = RequestBody.create(MultipartBody.FORM, tokenString)

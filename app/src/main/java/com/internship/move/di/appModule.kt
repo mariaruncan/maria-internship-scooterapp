@@ -30,7 +30,7 @@ val viewModels = module {
 }
 
 val repositories = module {
-    single { UserRepository(api = get(), compressor = get()) }
+    single { UserRepository(api = get(), compressor = get(), context = androidContext()) }
 }
 
 val services = module {
