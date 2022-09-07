@@ -32,5 +32,5 @@ data class User(
     @Json(name = "mail") val email: String,
     @Json(name = "status") val status: String,
     @Json(name = "password") val encryptedPassword: String,
-    @Json(name = "productImage") val drivingLicenseUri: String?
+    @Json(name = "productImage") val drivingLicense: String?
 )

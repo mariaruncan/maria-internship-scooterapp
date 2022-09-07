@@ -53,6 +53,9 @@ class AuthenticationViewModel(
             delay(LOADING_DELAY)
             val response = repo.login(email, password)
             internalStorageManager.setToken(response.token)
+            if (response.user.drivingLicense != null) {
+                internalStorageManager.setHasDrivingLicense(true)
+            }
             response
         } catch (e: Exception) {
             handleException(e)

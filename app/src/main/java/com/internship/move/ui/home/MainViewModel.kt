@@ -9,10 +9,11 @@ class MainViewModel(
 
     fun logout() {
         internalStorageManager.setToken(null)
+        internalStorageManager.setHasDrivingLicense(false)
     }
 
     fun clearApp() {
-        internalStorageManager.setToken(null)
+        logout()
         internalStorageManager.setHasSeenOnboarding(false)
     }
 }

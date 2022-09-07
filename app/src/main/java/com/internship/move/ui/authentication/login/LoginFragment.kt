@@ -71,7 +71,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     binding.passwordTIET.text.toString()
                 ) ?: return@launch
 
-                if (response.user.drivingLicenseUri != null) {
+                if (response.user.drivingLicense != null) {
                     findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeGraph())
                 } else {
                     findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToDrivingLicenseFragment())
