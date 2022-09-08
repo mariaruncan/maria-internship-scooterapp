@@ -22,6 +22,6 @@ interface UserApi {
     suspend fun login(@Body loginRequest: LoginRequestDTO): LoginResponseDTO
 
     @Multipart
-    @PUT("users/login")
-    suspend fun addDrivingLicense(@Part("token") token: RequestBody, @Part productImage: MultipartBody.Part): AddLicenseResponseDTO
+    @PUT("users/addImage")
+    suspend fun addDrivingLicense(@Part productImage: MultipartBody.Part): AddLicenseResponseDTO
 }

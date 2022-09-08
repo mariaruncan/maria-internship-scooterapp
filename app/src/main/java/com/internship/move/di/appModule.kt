@@ -3,6 +3,7 @@ package com.internship.move.di
 import com.internship.move.BuildConfig
 import com.internship.move.network.ScooterApi
 import com.internship.move.network.UserApi
+import com.internship.move.network.interceptors.TokenInterceptor
 import com.internship.move.repository.ScooterRepository
 import com.internship.move.repository.UserRepository
 import com.internship.move.ui.authentication.AuthenticationViewModel
@@ -39,7 +40,8 @@ val repositories = module {
 val services = module {
     single { getFileCompressor() }
     single { getMoshi() }
-    single { getOkHttpClient() }
+    single { getTokenInterceptor(internalStorageManager = get()) }
+    single { getOkHttpClient(tokenInterceptor = get()) }
     single { getRetrofit(moshi = get(), httpClient = get()) }
     single { getUserService(retrofit = get()) }
     single { getScooterService(retrofit = get()) }
@@ -49,11 +51,13 @@ val storage = module {
     single { InternalStorageManager(androidContext()) }
 }
 
+fun getTokenInterceptor(internalStorageManager: InternalStorageManager) = TokenInterceptor(internalStorageManager)
+
 fun getFileCompressor(): Compressor = Compressor
 
 fun getMoshi(): Moshi = Moshi.Builder().build()
 
-fun getOkHttpClient(): OkHttpClient {
+fun getOkHttpClient(tokenInterceptor: TokenInterceptor): OkHttpClient {
     val httpClient = OkHttpClient.Builder()
 
     if (BuildConfig.DEBUG) {
@@ -62,6 +66,7 @@ fun getOkHttpClient(): OkHttpClient {
         httpClient.addInterceptor(logging)
     }
 
+    httpClient.addInterceptor(tokenInterceptor)
     return httpClient
         .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
         .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)

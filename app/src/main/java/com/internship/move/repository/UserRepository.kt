@@ -21,13 +21,12 @@ class UserRepository(
 
     suspend fun login(email: String, password: String) = api.login(LoginRequestDTO(email, password))
 
-    suspend fun addLicense(tokenString: String, imagePath: String): AddLicenseResponseDTO {
+    suspend fun addLicense(imagePath: String): AddLicenseResponseDTO {
         val file = compressor.compress(context, File(imagePath))
         val requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file)
         val filePart = MultipartBody.Part.createFormData(KEY_JSON_IMAGE, file.name, requestFile)
-        val requestToken = RequestBody.create(MultipartBody.FORM, tokenString)
 
-        return api.addDrivingLicense(requestToken, filePart)
+        return api.addDrivingLicense(filePart)
     }
 
     companion object {

@@ -54,7 +54,7 @@ class AuthenticationViewModel(
         viewModelScope.launch {
             try {
                 isLoading.value = true
-                val response = repo.addLicense(internalStorageManager.getToken() ?: "", imagePath)
+                val response = repo.addLicense(imagePath)
                 internalStorageManager.setHasDrivingLicense(true)
                 isLoading.value = false
                 user.value = response.user
