@@ -1,32 +1,49 @@
 package com.internship.move.ui.home
 
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.internship.move.R
+import com.internship.move.data.model.Scooter
 import com.internship.move.databinding.FragmentMapBinding
-import com.internship.move.model.HelpInfo
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.jar.Manifest
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
     private val binding by viewBinding(FragmentMapBinding::bind)
     private val viewModel: MainViewModel by viewModel()
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var locationGranted: Boolean = true
+    private lateinit var supportMapFragment: SupportMapFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        checkPermissions()
+        checkLocationPermissions()
+        if (locationGranted) {
+            initObservers()
+            supportMapFragment = childFragmentManager.findFragmentById(R.id.googleMap) as SupportMapFragment
+            viewModel.getAllScooters()
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+            displayCurrentLocation()
+        } else {
+            // TODO("permission denied case")
+        }
     }
 
-    private fun checkPermissions() {
+    private fun checkLocationPermissions() {
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -37,32 +54,40 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-                val allAreGranted = result.map { it.value }.reduce { acc, other -> acc and other }
-                if (allAreGranted) {
-                    initListeners()
-                }
+                locationGranted = result.map { it.value }.reduce { acc, other -> acc and other }
             }.launch(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION))
-        } else {
-            // permissions already granted
-            initListeners()
         }
     }
 
-    private fun initListeners() {
-        binding.logoutBtn.setOnClickListener {
-            viewModel.logout()
-            findNavController().navigate(MapFragmentDirections.actionMapFragmentToSplashGraph())
+    private fun initObservers() {
+        viewModel.scootersList.observe(viewLifecycleOwner) { scootersList ->
+            displayScooters(scootersList)
         }
+    }
 
-        binding.clearAppBtn.setOnClickListener {
-            viewModel.clearApp()
-            findNavController().navigate(MapFragmentDirections.actionMapFragmentToSplashGraph())
+    private fun displayScooters(scooters: List<Scooter>) {
+        supportMapFragment.getMapAsync { map ->
+            map.clear()
+            scooters.forEach { scooter ->
+                map.addMarker(
+                    MarkerOptions()
+                        .title(scooter.number.toString() + " battery: " + scooter.batteryLevel + "%")
+                        .position(scooter.latLng)
+                )
+            }
         }
+    }
 
-        binding.helpBtn.setOnClickListener {
-            val message = binding.helpMessageTIET.text.toString()
-            val helpInfo = HelpInfo(message)
-            findNavController().navigate(MapFragmentDirections.actionMapFragmentToHelpFragment(helpInfo))
+    @SuppressLint("MissingPermission")
+    private fun displayCurrentLocation() {
+        fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener {
+            val position = LatLng(it.latitude, it.longitude)
+            supportMapFragment.getMapAsync { map ->
+                map.addMarker(
+                    MarkerOptions().position(position).title("current position")
+                )
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 10F))
+            }
         }
     }
 }

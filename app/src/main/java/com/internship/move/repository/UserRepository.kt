@@ -1,11 +1,10 @@
 package com.internship.move.repository
 
 import android.content.Context
-import com.internship.move.MoveApp
-import com.internship.move.network.ServiceApi
-import com.internship.move.network.dto.AddLicenseResponseDTO
-import com.internship.move.network.dto.LoginRequestDTO
-import com.internship.move.network.dto.RegisterRequestDTO
+import com.internship.move.network.UserApi
+import com.internship.move.data.dto.AddLicenseResponseDTO
+import com.internship.move.data.dto.LoginRequestDTO
+import com.internship.move.data.dto.RegisterRequestDTO
 import id.zelory.compressor.Compressor
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -13,7 +12,7 @@ import okhttp3.RequestBody
 import java.io.File
 
 class UserRepository(
-    private val api: ServiceApi,
+    private val api: UserApi,
     private val compressor: Compressor,
     private val context: Context
 ) {

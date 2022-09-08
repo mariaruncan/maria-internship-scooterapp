@@ -1,7 +1,9 @@
 package com.internship.move.di
 
 import com.internship.move.BuildConfig
-import com.internship.move.network.ServiceApi
+import com.internship.move.network.ScooterApi
+import com.internship.move.network.UserApi
+import com.internship.move.repository.ScooterRepository
 import com.internship.move.repository.UserRepository
 import com.internship.move.ui.authentication.AuthenticationViewModel
 import com.internship.move.ui.home.MainViewModel
@@ -26,11 +28,12 @@ val viewModels = module {
     viewModel { SplashViewModel(internalStorageManager = get()) }
     viewModel { OnboardingViewModel(internalStorageManager = get()) }
     viewModel { AuthenticationViewModel(repo = get(), internalStorageManager = get(), moshi = get()) }
-    viewModel { MainViewModel(internalStorageManager = get()) }
+    viewModel { MainViewModel(repo = get(), internalStorageManager = get()) }
 }
 
 val repositories = module {
     single { UserRepository(api = get(), compressor = get(), context = androidContext()) }
+    single { ScooterRepository(api = get()) }
 }
 
 val services = module {
@@ -38,7 +41,8 @@ val services = module {
     single { getMoshi() }
     single { getOkHttpClient() }
     single { getRetrofit(moshi = get(), httpClient = get()) }
-    single { getService(retrofit = get()) }
+    single { getUserService(retrofit = get()) }
+    single { getScooterService(retrofit = get()) }
 }
 
 val storage = module {
@@ -52,7 +56,7 @@ fun getMoshi(): Moshi = Moshi.Builder().build()
 fun getOkHttpClient(): OkHttpClient {
     val httpClient = OkHttpClient.Builder()
 
-    if(BuildConfig.DEBUG) {
+    if (BuildConfig.DEBUG) {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
         httpClient.addInterceptor(logging)
@@ -72,5 +76,8 @@ fun getRetrofit(moshi: Moshi, httpClient: OkHttpClient): Retrofit =
         .client(httpClient)
         .build()
 
-fun getService(retrofit: Retrofit): ServiceApi =
-    retrofit.create(ServiceApi::class.java)
+fun getUserService(retrofit: Retrofit): UserApi =
+    retrofit.create(UserApi::class.java)
+
+fun getScooterService(retrofit: Retrofit): ScooterApi =
+    retrofit.create(ScooterApi::class.java)
