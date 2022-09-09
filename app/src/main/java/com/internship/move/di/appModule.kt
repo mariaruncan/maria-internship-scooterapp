@@ -20,6 +20,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -59,14 +60,13 @@ fun getMoshi(): Moshi = Moshi.Builder().build()
 
 fun getOkHttpClient(tokenInterceptor: TokenInterceptor): OkHttpClient {
     val httpClient = OkHttpClient.Builder()
-
     if (BuildConfig.DEBUG) {
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
         httpClient.addInterceptor(logging)
     }
-
     httpClient.addInterceptor(tokenInterceptor)
+
     return httpClient
         .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
         .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
@@ -81,8 +81,6 @@ fun getRetrofit(moshi: Moshi, httpClient: OkHttpClient): Retrofit =
         .client(httpClient)
         .build()
 
-fun getUserService(retrofit: Retrofit): UserApi =
-    retrofit.create(UserApi::class.java)
+fun getUserService(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
 
-fun getScooterService(retrofit: Retrofit): ScooterApi =
-    retrofit.create(ScooterApi::class.java)
+fun getScooterService(retrofit: Retrofit): ScooterApi = retrofit.create(ScooterApi::class.java)

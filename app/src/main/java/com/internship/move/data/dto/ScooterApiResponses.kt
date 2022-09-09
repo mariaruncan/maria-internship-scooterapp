@@ -6,7 +6,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class GetScootersResponseDTO(
+data class ScootersResponseDTO(
     @Json(name = "scooters") val scooters: List<ScooterDTO>
 )
 
@@ -20,11 +20,11 @@ data class ScooterDTO(
     @Json(name = "locked_status") val lockedStatus: String,
 ) {
 
-    fun fromDtoToScooter(): Scooter =
+    fun toScooter(): Scooter =
         Scooter(
             this.scooterId,
             this.scooterNumber,
-            LatLng(this.location.coordinates[0], this.location.coordinates[1]),
+            LatLng(this.location.coordinates[1], this.location.coordinates[0]),
             this.batteryLevel,
             this.bookedStatus,
             this.lockedStatus

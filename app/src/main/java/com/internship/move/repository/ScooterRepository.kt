@@ -7,5 +7,5 @@ class ScooterRepository(
     private val api: ScooterApi
 ) {
 
-    suspend fun getAllScooters(): List<Scooter> = api.getAllScooters().scooters.map { scooterDTO -> scooterDTO.fromDtoToScooter() }
+    suspend fun getAllScooters(): List<Scooter> = api.getAllScooters().scooters.map { scooterDTO -> scooterDTO.toScooter() }
 }
