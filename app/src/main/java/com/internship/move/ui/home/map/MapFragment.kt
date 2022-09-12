@@ -1,7 +1,9 @@
-package com.internship.move.ui.home
+package com.internship.move.ui.home.map
 
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -12,12 +14,15 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.clustering.ClusterManager
 import com.internship.move.R
 import com.internship.move.data.model.Scooter
 import com.internship.move.databinding.FragmentMapBinding
+import com.internship.move.ui.home.MainViewModel
 import com.internship.move.utils.BitmapHelper
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -29,14 +34,17 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var locationGranted: Boolean = true
     private lateinit var supportMapFragment: SupportMapFragment
+    private lateinit var geocoder: Geocoder
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         checkLocationPermissions()
+
         if (locationGranted) {
             initObservers()
             supportMapFragment = childFragmentManager.findFragmentById(R.id.googleMap) as SupportMapFragment
+            initMap()
             viewModel.getAllScooters()
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
             displayCurrentLocation()
@@ -63,17 +71,28 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun initObservers() {
         viewModel.scootersList.observe(viewLifecycleOwner) { scootersList ->
-            displayScooters(scootersList)
+            //displayScooters(scootersList)
+            addClusteredMarkers(scootersList)
         }
     }
 
-    private fun displayScooters(scooters: List<Scooter>) {
+    private fun initMap() {
         supportMapFragment.getMapAsync { map ->
             map.setOnInfoWindowCloseListener { marker ->
                 marker.setIcon(BitmapHelper.vectorToBitmap(requireContext(), R.drawable.ic_scooter))
             }
+            map.setInfoWindowAdapter(ScooterInfoWindowAdapter(requireContext()))
+        }
+
+        geocoder = Geocoder(requireContext())
+    }
+
+    private fun displayScooters(scooters: List<Scooter>) {
+        supportMapFragment.getMapAsync { map ->
             map.clear()
             scooters.forEach { scooter ->
+                val address: Address = geocoder.getFromLocation(scooter.latLng.latitude, scooter.latLng.longitude, 1)[0]
+                scooter.address = "${address.thoroughfare} ${address.subThoroughfare}"
                 map.addMarker(
                     MarkerOptions()
                         .position(scooter.latLng)
@@ -90,10 +109,34 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             val position = LatLng(it.latitude, it.longitude)
             supportMapFragment.getMapAsync { map ->
                 map.addMarker(
-                    MarkerOptions().position(position).title("current position")
+                    MarkerOptions()
+                        .position(position)
+                        .title("current position")
+                        .icon(BitmapHelper.vectorToBitmap(requireContext(), R.drawable.ic_current_location))
                 )
                     ?.tag = null
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 10F))
+            }
+        }
+    }
+
+    private fun addClusteredMarkers(scooters: List<Scooter>) {
+        supportMapFragment.getMapAsync { map ->
+            val clusterManager = ClusterManager<Scooter>(requireContext(), map)
+            clusterManager.renderer =
+                ScooterRenderer(
+                    requireContext(),
+                    map,
+                    clusterManager
+                )
+
+            clusterManager.markerCollection.setInfoWindowAdapter(ScooterInfoWindowAdapter(requireContext()))
+
+            clusterManager.addItems(scooters)
+            clusterManager.cluster()
+
+            map.setOnCameraIdleListener {
+                clusterManager.onCameraIdle()
             }
         }
     }

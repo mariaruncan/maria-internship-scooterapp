@@ -3,7 +3,6 @@ package com.internship.move.ui.home
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.maps.model.LatLng
 import com.internship.move.data.model.Scooter
 import com.internship.move.repository.ScooterRepository
 import com.internship.move.utils.InternalStorageManager
@@ -14,7 +13,7 @@ class MainViewModel(
     private val internalStorageManager: InternalStorageManager
 ) : ViewModel() {
 
-    val scootersList: MutableLiveData<List<Scooter>> = MutableLiveData()
+    val scootersList: MutableLiveData<List<Scooter>> = MutableLiveData(listOf())
 
     fun logOut() {
         internalStorageManager.setToken(null)
