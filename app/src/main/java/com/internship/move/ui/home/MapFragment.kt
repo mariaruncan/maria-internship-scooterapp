@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.internship.move.R
 import com.internship.move.data.model.Scooter
 import com.internship.move.databinding.FragmentMapBinding
+import com.internship.move.utils.BitmapHelper
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -68,13 +69,17 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun displayScooters(scooters: List<Scooter>) {
         supportMapFragment.getMapAsync { map ->
+            map.setOnInfoWindowCloseListener { marker ->
+                marker.setIcon(BitmapHelper.vectorToBitmap(requireContext(), R.drawable.ic_scooter))
+            }
             map.clear()
             scooters.forEach { scooter ->
                 map.addMarker(
                     MarkerOptions()
-                        .title(scooter.number.toString() + " battery: " + scooter.batteryLevel + "%")
                         .position(scooter.latLng)
+                        .icon(BitmapHelper.vectorToBitmap(requireContext(), R.drawable.ic_scooter))
                 )
+                    ?.tag = scooter
             }
         }
     }
@@ -87,6 +92,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 map.addMarker(
                     MarkerOptions().position(position).title("current position")
                 )
+                    ?.tag = null
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 10F))
             }
         }

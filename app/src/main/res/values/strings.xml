@@ -22,10 +22,6 @@
     <string name="onboarding_description_third_page">If convenient, park at a bike rack. If not, park close to the edge of the sidewalk closest to the street. Do not block sidewalks, doors or ramps.</string>
     <string name="onboarding_description_fourth_page">You must be 18 years or and older with a valid driving licence to operate a scooter. Please follow all street signs, signals and markings, and obey local traffic laws.</string>
 
-    <!-- region MapFragment -->
-    <string name="map_log_out_btn_text">Log out</string>
-    <string name="map_clear_app_btn_text">Clear App</string>
-
     <!-- region Register -->
     <string name="register_title">Let\'s get started</string>
     <string name="register_description">Sign up or login and start riding right away</string>
@@ -73,4 +69,12 @@
     <string name="driving_license_verify_status">We are currently verifying your driving license</string>
     <string name="driving_license_find_scooters_btn_text">Find scooters</string>
     <string name="driving_license_validated_status">We’ve successfully validated your driving license</string>
+
+    <!-- region MapFragment -->
+    <string name="map_log_out_btn_text">Log out</string>
+    <string name="map_clear_app_btn_text">Clear App</string>
+
+    <!-- region ViewScooterInfo -->
+    <string name="view_scooter_info_title">Scooter</string>
+    <string name="view_scooter_info_unlock_btn_text">Unlock</string>
 </resources>
