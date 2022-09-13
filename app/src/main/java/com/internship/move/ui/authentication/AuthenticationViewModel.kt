@@ -3,8 +3,8 @@ package com.internship.move.ui.authentication
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.internship.move.network.dto.ErrorResponseDTO
-import com.internship.move.network.dto.UserDTO
+import com.internship.move.data.dto.ErrorResponseDTO
+import com.internship.move.data.dto.UserDTO
 import com.internship.move.repository.UserRepository
 import com.internship.move.utils.InternalStorageManager
 import com.squareup.moshi.Moshi
@@ -27,6 +27,7 @@ class AuthenticationViewModel(
                 isLoading.value = true
                 val response = repo.login(email, password)
                 internalStorageManager.setToken(response.token)
+                internalStorageManager.setHasDrivingLicense(response.user.drivingLicense != null)
                 isLoading.value = false
                 user.value = response.user
             } catch (e: Exception) {
@@ -53,7 +54,7 @@ class AuthenticationViewModel(
         viewModelScope.launch {
             try {
                 isLoading.value = true
-                val response = repo.addLicense(internalStorageManager.getToken() ?: "", imagePath)
+                val response = repo.addLicense(imagePath)
                 internalStorageManager.setHasDrivingLicense(true)
                 isLoading.value = false
                 user.value = response.user

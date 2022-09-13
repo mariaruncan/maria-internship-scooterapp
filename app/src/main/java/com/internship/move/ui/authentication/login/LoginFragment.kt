@@ -36,7 +36,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         viewModel.user.observe(viewLifecycleOwner) { user ->
-            if (user.drivingLicenseUri != null) {
+            if (user.drivingLicense != null) {
                 findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeGraph())
             } else {
                 findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToDrivingLicenseFragment())
