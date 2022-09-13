@@ -2,52 +2,62 @@ package com.internship.move.ui.home.map
 
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.location.Address
+import android.content.res.Resources
 import android.location.Geocoder
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.clustering.ClusterManager.OnClusterClickListener
+import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.internship.move.R
 import com.internship.move.data.model.Scooter
 import com.internship.move.databinding.FragmentMapBinding
 import com.internship.move.ui.home.MainViewModel
 import com.internship.move.utils.BitmapHelper
+import com.internship.move.utils.extensions.setBatteryIcon
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MapFragment : Fragment(R.layout.fragment_map) {
+
+class MapFragment : Fragment(R.layout.fragment_map), GoogleMap.OnMapClickListener, OnClusterClickListener<Scooter>,
+    ClusterManager.OnClusterItemClickListener<Scooter>, OnMapReadyCallback {
 
     private val binding by viewBinding(FragmentMapBinding::bind)
     private val viewModel: MainViewModel by viewModel()
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     private var locationGranted: Boolean = true
-    private lateinit var supportMapFragment: SupportMapFragment
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var geocoder: Geocoder
+
+    private lateinit var mapView: MapView
+    private lateinit var map: GoogleMap
+    private lateinit var clusterManager: ClusterManager<Scooter>
+
+    private var selectedMarker: Marker? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         checkLocationPermissions()
-
         if (locationGranted) {
-            initObservers()
-            supportMapFragment = childFragmentManager.findFragmentById(R.id.googleMap) as SupportMapFragment
-            initMap()
-            viewModel.getAllScooters()
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-            displayCurrentLocation()
+            initMap(savedInstanceState)
         } else {
             Toast.makeText(requireContext(), "Location permission denied!", Toast.LENGTH_SHORT).show()
         }
@@ -69,37 +79,29 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
     }
 
-    private fun initObservers() {
-        viewModel.scootersList.observe(viewLifecycleOwner) { scootersList ->
-            //displayScooters(scootersList)
-            addClusteredMarkers(scootersList)
-        }
-    }
-
-    private fun initMap() {
-        supportMapFragment.getMapAsync { map ->
-            map.setOnInfoWindowCloseListener { marker ->
-                marker.setIcon(BitmapHelper.vectorToBitmap(requireContext(), R.drawable.ic_scooter))
-            }
-            map.setInfoWindowAdapter(ScooterInfoWindowAdapter(requireContext()))
-        }
+    private fun initMap(savedInstanceState: Bundle?) {
+        mapView = binding.map
+        mapView.onCreate(savedInstanceState)
+        mapView.onResume()
+        mapView.getMapAsync(this)
 
         geocoder = Geocoder(requireContext())
     }
 
-    private fun displayScooters(scooters: List<Scooter>) {
-        supportMapFragment.getMapAsync { map ->
-            map.clear()
-            scooters.forEach { scooter ->
-                val address: Address = geocoder.getFromLocation(scooter.latLng.latitude, scooter.latLng.longitude, 1)[0]
-                scooter.address = "${address.thoroughfare} ${address.subThoroughfare}"
-                map.addMarker(
-                    MarkerOptions()
-                        .position(scooter.latLng)
-                        .icon(BitmapHelper.vectorToBitmap(requireContext(), R.drawable.ic_scooter))
-                )
-                    ?.tag = scooter
-            }
+    private fun initObservers() {
+        viewModel.scootersList.observe(viewLifecycleOwner) { scootersList ->
+            displayScooters(scootersList)
+        }
+    }
+
+    private fun initClustering() {
+        clusterManager = ClusterManager<Scooter>(requireContext(), map)
+        clusterManager.setOnClusterClickListener(this)
+        clusterManager.setOnClusterItemClickListener(this)
+        clusterManager.renderer = ScooterRenderer(requireContext(), map, clusterManager)
+
+        map.setOnCameraIdleListener {
+            clusterManager.onCameraIdle()
         }
     }
 
@@ -107,37 +109,101 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private fun displayCurrentLocation() {
         fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener {
             val position = LatLng(it.latitude, it.longitude)
-            supportMapFragment.getMapAsync { map ->
-                map.addMarker(
-                    MarkerOptions()
-                        .position(position)
-                        .title("current position")
-                        .icon(BitmapHelper.vectorToBitmap(requireContext(), R.drawable.ic_current_location))
-                )
-                    ?.tag = null
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 10F))
-            }
+            binding.toolbar.title = geocoder.getFromLocation(it.latitude, it.longitude, 1)[0].locality
+            map.addMarker(
+                MarkerOptions()
+                    .position(position)
+                    .icon(BitmapHelper.vectorToBitmap(requireContext(), R.drawable.ic_current_location))
+            )
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM_VALUE))
         }
     }
 
-    private fun addClusteredMarkers(scooters: List<Scooter>) {
-        supportMapFragment.getMapAsync { map ->
-            val clusterManager = ClusterManager<Scooter>(requireContext(), map)
-            clusterManager.renderer =
-                ScooterRenderer(
-                    requireContext(),
-                    map,
-                    clusterManager
-                )
+    private fun displayScooters(scooters: List<Scooter>) {
+        clusterManager.clearItems()
+        clusterManager.addItems(scooters)
+        clusterManager.cluster()
+    }
 
-            clusterManager.markerCollection.setInfoWindowAdapter(ScooterInfoWindowAdapter(requireContext()))
+    private fun displayInfoWindow(scooter: Scooter) {
+        val infoWindow = binding.scooterInfoWindow
+        infoWindow.root.isVisible = true
+        infoWindow.scooterNumberTV.text = SCOOTER_NUMBER_TEMPLATE.format(scooter.number)
+        infoWindow.batteryIV.setBatteryIcon(scooter.batteryLevel)
 
-            clusterManager.addItems(scooters)
-            clusterManager.cluster()
+        infoWindow.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
-            map.setOnCameraIdleListener {
-                clusterManager.onCameraIdle()
+        val address = geocoder.getFromLocation(scooter.latLng.latitude, scooter.latLng.longitude, 1)[0]
+        infoWindow.addressTV.text = SCOOTER_ADDRESS_TEMPLATE.format(address.thoroughfare, address.subThoroughfare)
+
+        // setButtonsListeners listeners
+    }
+
+    private fun hideInfoWindow() {
+        binding.scooterInfoWindow.root.isVisible = false
+    }
+
+    override fun onClusterClick(cluster: Cluster<Scooter>?): Boolean {
+        if (cluster != null) {
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.position, ZOOM_VALUE))
+        }
+        return true
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+        map.setOnMarkerClickListener { marker ->
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.position, ZOOM_VALUE))
+            true
+        }
+        try {
+            googleMap.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.style_json)
+            )
+        } catch (e: Resources.NotFoundException) {
+        }
+        map.setOnMapClickListener(this)
+        initClustering()
+        initObservers()
+        viewModel.getAllScooters()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        displayCurrentLocation()
+    }
+
+    override fun onClusterItemClick(item: Scooter?): Boolean {
+        if (selectedMarker != null) {
+            selectedMarker?.setIcon(BitmapHelper.vectorToBitmap(requireContext(), R.drawable.ic_scooter))
+        }
+
+        selectedMarker = (clusterManager.renderer as DefaultClusterRenderer<Scooter>).getMarker(item)
+        if (selectedMarker != null) {
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(selectedMarker!!.position, ZOOM_VALUE))
+            selectedMarker?.setIcon(BitmapHelper.vectorToBitmap(requireContext(), R.drawable.ic_scooter_selected))
+
+            if (item != null) {
+                displayInfoWindow(item)
             }
         }
+        return true
+    }
+
+    override fun onMapClick(p0: LatLng) {
+        if (selectedMarker != null) {
+            try {
+                selectedMarker?.setIcon(BitmapHelper.vectorToBitmap(requireContext(), R.drawable.ic_scooter))
+            } catch (ex: IllegalArgumentException) {
+                // throws when infoWindow is visible, but the marker is in a cluster(no longer visible)
+            }
+            hideInfoWindow()
+        }
+        selectedMarker = null
+    }
+
+    companion object {
+        private const val SCOOTER_NUMBER_TEMPLATE = "#%d"
+        private const val SCOOTER_BATTERY_TEMPLATE = "%d%%"
+        private const val SCOOTER_ADDRESS_TEMPLATE = "%s %s"
+
+        private const val ZOOM_VALUE = 15F
     }
 }

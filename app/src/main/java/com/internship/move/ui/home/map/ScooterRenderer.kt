@@ -1,7 +1,6 @@
 package com.internship.move.ui.home.map
 
 import android.content.Context
-import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.Marker
@@ -27,4 +26,6 @@ class ScooterRenderer(
     override fun onClusterItemRendered(clusterItem: Scooter, marker: Marker) {
         marker.tag = clusterItem
     }
+
+    override fun getColor(clusterSize: Int): Int = context.getColor(R.color.indigo)
 }
