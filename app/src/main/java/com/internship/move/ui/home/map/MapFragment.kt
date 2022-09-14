@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -193,6 +194,7 @@ class MapFragment : Fragment(R.layout.fragment_map), GoogleMap.OnMapClickListene
                 selectedMarker?.setIcon(BitmapHelper.vectorToBitmap(requireContext(), R.drawable.ic_scooter))
             } catch (ex: IllegalArgumentException) {
                 // throws when infoWindow is visible, but the marker is in a cluster(no longer visible)
+                Log.d("", ex.message, ex)
             }
             hideInfoWindow()
         }

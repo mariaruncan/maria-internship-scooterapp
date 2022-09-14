@@ -77,4 +77,12 @@
     <!-- region ViewScooterInfo -->
     <string name="view_scooter_info_title">Scooter</string>
     <string name="view_scooter_info_unlock_btn_text">Unlock</string>
+
+    <!-- region UnlockScooter -->
+    <string name="unlock_dialog_title">You can unlock this scooter\nthrough these methods:</string>
+    <string name="unlock_dialog_ring_btn_label">Ring</string>
+    <string name="unlock_dialog_missing_btn_label">Missing</string>
+    <string name="unlock_dialog_nfc_btn_text">NFC</string>
+    <string name="unlock_dialog_qr_btn_text">QR</string>
+    <string name="unlock_dialog_code_btn_text">123</string>
 </resources>
