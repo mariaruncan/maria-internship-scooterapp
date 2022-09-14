@@ -126,6 +126,7 @@
             tools:text="Str. Avram Iancu nr. 26\nCladirea 2" />
 
         <Button
+            android:id="@+id/unlockBtn"
             style="@style/PrimaryButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

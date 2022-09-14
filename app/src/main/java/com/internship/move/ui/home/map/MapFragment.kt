@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.maps.android.clustering.Cluster
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.ClusterManager.OnClusterClickListener
@@ -30,6 +31,7 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.internship.move.R
 import com.internship.move.data.model.Scooter
 import com.internship.move.databinding.FragmentMapBinding
+import com.internship.move.databinding.ViewUnlockDialogBinding
 import com.internship.move.ui.home.MainViewModel
 import com.internship.move.utils.BitmapHelper
 import com.internship.move.utils.extensions.setBatteryIcon
@@ -138,10 +140,32 @@ class MapFragment : Fragment(R.layout.fragment_map), GoogleMap.OnMapClickListene
         infoWindow.addressTV.text = SCOOTER_ADDRESS_TEMPLATE.format(address.thoroughfare, address.subThoroughfare)
 
         // setButtonsListeners listeners
+        infoWindow.unlockBtn.setOnClickListener {
+            showUnlockDialog(scooter)
+            hideInfoWindow()
+        }
     }
 
     private fun hideInfoWindow() {
+        binding.scooterInfoWindow.unlockBtn.setOnClickListener { }
         binding.scooterInfoWindow.root.isVisible = false
+    }
+
+    private fun showUnlockDialog(scooter: Scooter) {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        bottomSheetDialog.setOnDismissListener {
+            selectedMarker?.setIcon(BitmapHelper.vectorToBitmap(requireContext(), R.drawable.ic_scooter))
+        }
+
+        val dialogBinding = ViewUnlockDialogBinding.inflate(layoutInflater, null, false)
+        dialogBinding.scooterNumberTV.text = SCOOTER_NUMBER_TEMPLATE.format(scooter.number)
+        dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
+        dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
+
+        // set click listeners
+
+        bottomSheetDialog.setContentView(dialogBinding.root)
+        bottomSheetDialog.show()
     }
 
     override fun onClusterClick(cluster: Cluster<Scooter>?): Boolean {
