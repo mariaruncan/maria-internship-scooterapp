@@ -71,8 +71,8 @@
     <string name="driving_license_validated_status">We’ve successfully validated your driving license</string>
 
     <!-- region MapFragment -->
-    <string name="map_log_out_btn_text">Log out</string>
-    <string name="map_clear_app_btn_text">Clear App</string>
+    <string name="map_toolbar_default_title">Allow location</string>
+    <string name="map_location_denied_message">Location permission denied!</string>
 
     <!-- region ViewScooterInfo -->
     <string name="view_scooter_info_title">Scooter</string>

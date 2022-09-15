@@ -6,27 +6,33 @@ import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.content.res.Resources
 import android.location.Geocoder
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.maps.android.clustering.ClusterManager
-import com.google.maps.android.clustering.ClusterManager.OnClusterItemClickListener
 import com.google.maps.android.clustering.ClusterManager.OnClusterClickListener
+import com.google.maps.android.clustering.ClusterManager.OnClusterItemClickListener
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.internship.move.R
 import com.internship.move.data.model.Scooter
@@ -50,11 +56,13 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private var map: GoogleMap? = null
     private var clusterManager: ClusterManager<Scooter>? = null
     private var selectedMarker: Marker? = null
+    private val currentLocationData = CurrentLocationData()
 
     private val onClusterItemClickListener by lazy { initOnClusterItemClickListener() }
     private val onClusterClickListener by lazy { initOnClusterClickListener() }
     private val onMapReadyCallback by lazy { initOnMapReadyCallback() }
     private val onMapClickListener by lazy { initOnMapClickListener() }
+    private val locationCallback by lazy { initLocationCallback() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -91,11 +99,13 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.style_json)
             )
         } catch (e: Resources.NotFoundException) {
+            Log.d("", e.message, e)
         }
-        map!!.setOnMapClickListener(onMapClickListener)
-        initClustering()
-        initObservers()
+
         if (locationGranted) {
+            map!!.setOnMapClickListener(onMapClickListener)
+            initClustering()
+            initObservers()
             viewModel.getAllScooters()
         }
         displayCurrentLocation()
@@ -166,22 +176,62 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 MarkerOptions()
                     .position(DEFAULT_LOCATION)
                     .icon(requireContext().getDrawableToBitmapDescriptor(R.drawable.ic_default_location))
+                    .anchor(.5f, .5f)
             )
+            map?.addCircle(
+                CircleOptions()
+                    .center(DEFAULT_LOCATION)
+                    .radius(CIRCLE_RADIUS_DEFAULT)
+                    .fillColor(ColorUtils.setAlphaComponent(resources.getColor(R.color.indigo, null), CIRCLE_ALPHA))
+                    .strokeWidth(0f)
+            )
+
             map?.animateCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, ZOOM_VALUE))
-            Toast.makeText(requireContext(), "Location permission denied!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), resources.getString(R.string.map_location_denied_message), Toast.LENGTH_SHORT).show()
+            binding.toolbar.title = resources.getString(R.string.map_toolbar_default_title)
         } else {
-            fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null).addOnSuccessListener {
-                val position = LatLng(it.latitude, it.longitude)
-                binding.toolbar.title = geocoder.getFromLocation(it.latitude, it.longitude, 1)[0].locality
-                map?.addMarker(
-                    MarkerOptions()
-                        .position(position)
-                        .icon(requireContext().getDrawableToBitmapDescriptor(R.drawable.ic_current_location))
-                )
-                map?.animateCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM_VALUE))
-            }
+            fusedLocationClient.requestLocationUpdates(createLocationRequest(), locationCallback, Looper.getMainLooper())
         }
     }
+
+    private fun initLocationCallback() = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            val location = locationResult.lastLocation ?: return
+            val position = LatLng(location.latitude, location.longitude)
+
+            if (currentLocationData.location == null) {
+                map?.animateCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM_VALUE))
+            }
+
+            currentLocationData.marker?.remove()
+            currentLocationData.circle?.remove()
+
+            binding.toolbar.title = geocoder.getFromLocation(location.latitude, location.longitude, 1).firstOrNull()?.locality
+            currentLocationData.marker = map?.addMarker(
+                MarkerOptions()
+                    .position(position)
+                    .icon(requireContext().getDrawableToBitmapDescriptor(R.drawable.ic_current_location))
+                    .anchor(.5f, .5f)
+            )
+
+            currentLocationData.circle = map?.addCircle(
+                CircleOptions()
+                    .center(position)
+                    .radius(CIRCLE_RADIUS)
+                    .fillColor(ColorUtils.setAlphaComponent(resources.getColor(R.color.indigo, null), CIRCLE_ALPHA))
+                    .strokeWidth(0f)
+            )
+
+            currentLocationData.location = location
+        }
+    }
+
+
+    private fun createLocationRequest() =
+        LocationRequest.create().apply {
+            interval = 60000
+            priority = Priority.PRIORITY_HIGH_ACCURACY
+        }
 
     private fun displayInfoWindow(scooter: Scooter) {
         val infoWindow = binding.scooterInfoWindow
@@ -228,6 +278,9 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         private const val SCOOTER_ADDRESS_TEMPLATE = "%s %s"
 
         private const val ZOOM_VALUE = 15F
+        private const val CIRCLE_ALPHA = 26
+        private const val CIRCLE_RADIUS = 100.0
+        private const val CIRCLE_RADIUS_DEFAULT = 200.0
 
         private val DEFAULT_LOCATION = LatLng(46.769441, 23.589922)
     }
