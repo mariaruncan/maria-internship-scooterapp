@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_authentication"
+    android:padding="@dimen/medium_margin_size">
+
+
+    <ImageButton
+        android:id="@+id/closeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:src="@drawable/ic_close"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/toolbarTitleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter serial number"
+        android:textAppearance="@style/Heading3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/closeBtn"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/titleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_margin_size"
+        android:layout_marginBottom="@dimen/medium_margin_size"
+        android:gravity="center"
+        android:text="Enter the scooter’s \n serial number"
+        android:textAppearance="@style/Heading1"
+        app:layout_constraintBottom_toTopOf="@id/descriptionTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/descriptionTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="You can find it on the \n scooter’s front panel"
+        android:textAppearance="@style/Heading4"
+        app:layout_constraintBottom_toTopOf="@id/codeInputLL"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6" />
+
+    <LinearLayout
+        android:id="@+id/codeInputLL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/text_input_bg_color"
+            app:boxCornerRadiusBottomEnd="@dimen/small_margin_size"
+            app:boxCornerRadiusBottomStart="@dimen/small_margin_size"
+            app:boxCornerRadiusTopEnd="@dimen/small_margin_size"
+            app:boxCornerRadiusTopStart="@dimen/small_margin_size"
+            app:boxStrokeColor="@color/transparent"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:inputType="number"
+                android:textAppearance="@style/Heading2"
+                android:textColor="@color/text_color_dark" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+            android:layout_width="24dp"
+            android:layout_height="0dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/text_input_bg_color"
+            app:boxCornerRadiusBottomEnd="@dimen/small_margin_size"
+            app:boxCornerRadiusBottomStart="@dimen/small_margin_size"
+            app:boxCornerRadiusTopEnd="@dimen/small_margin_size"
+            app:boxCornerRadiusTopStart="@dimen/small_margin_size"
+            app:boxStrokeColor="@color/transparent"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:inputType="number"
+                android:textAppearance="@style/Heading2"
+                android:textColor="@color/text_color_dark" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+            android:layout_width="24dp"
+            android:layout_height="0dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayout.Digit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:inputType="number"
+                android:textAppearance="@style/Heading2"
+                android:textColor="@color/text_color_dark" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+            android:layout_width="24dp"
+            android:layout_height="0dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/text_input_bg_color"
+            app:boxCornerRadiusBottomEnd="@dimen/small_margin_size"
+            app:boxCornerRadiusBottomStart="@dimen/small_margin_size"
+            app:boxCornerRadiusTopEnd="@dimen/small_margin_size"
+            app:boxCornerRadiusTopStart="@dimen/small_margin_size"
+            app:boxStrokeColor="@color/transparent"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:inputType="number"
+                android:textAppearance="@style/Heading2"
+                android:textColor="@color/text_color_dark" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

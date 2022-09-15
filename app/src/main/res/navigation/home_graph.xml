@@ -16,5 +16,14 @@
             app:destination="@id/splash_graph"
             app:popUpTo="@id/mapFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_mapFragment_to_unlockFragment"
+            app:destination="@id/unlockFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/unlockFragment"
+        android:name="com.internship.move.ui.home.unlock.UnlockFragment"
+        android:label="UnlockFragment"
+        tools:layout="@layout/fragment_unlock" />
 </navigation>

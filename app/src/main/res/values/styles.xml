@@ -79,4 +79,21 @@
         <item name="backgroundTint">@color/pink</item>
         <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
     </style>
+
+    <style name="TextInputLayout.Digit" parent="TextInputLayout">
+        <item name="boxBackgroundColor">@color/text_input_bg_color</item>
+        <item name="boxCornerRadiusTopStart">@dimen/small_margin_size</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/small_margin_size</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/small_margin_size</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/small_margin_size</item>
+        <item name="boxStrokeColor">@color/transparent</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+    </style>
+
+    <style name="TextInputEditText.Digit" parent="TextInputEditText">
+        <item name="android:textAppearance">@style/Heading2</item>
+        <item name="android:inputType">number</item>
+        <item name="android:textColor">@color/text_color_dark</item>
+    </style>
 </resources>

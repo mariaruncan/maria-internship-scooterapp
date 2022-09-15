@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -267,6 +268,11 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
         // set click listeners
+
+        dialogBinding.codeBtn.setOnClickListener {
+            bottomSheetDialog.hide()
+            findNavController().navigate(MapFragmentDirections.actionMapFragmentToUnlockFragment())
+        }
 
         bottomSheetDialog.setContentView(dialogBinding.root)
         bottomSheetDialog.show()
