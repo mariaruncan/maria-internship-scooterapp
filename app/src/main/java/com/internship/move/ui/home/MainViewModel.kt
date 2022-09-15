@@ -1,5 +1,6 @@
 package com.internship.move.ui.home
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +14,9 @@ class MainViewModel(
     private val internalStorageManager: InternalStorageManager
 ) : ViewModel() {
 
-    val scootersList: MutableLiveData<List<Scooter>> = MutableLiveData(listOf())
+    private val _scootersList: MutableLiveData<List<Scooter>> = MutableLiveData(listOf())
+    val scootersList: LiveData<List<Scooter>>
+        get() = _scootersList
 
     fun logOut() {
         internalStorageManager.setToken(null)
@@ -28,7 +31,7 @@ class MainViewModel(
     fun getAllScooters() {
         viewModelScope.launch {
             try {
-                scootersList.value = repo.getAllScooters()
+                _scootersList.value = repo.getAllScooters()
             } catch (e: Exception) {
                 println(e.message)
             }
