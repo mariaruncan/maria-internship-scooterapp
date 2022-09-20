@@ -10,7 +10,7 @@ data class ErrorResponseDTO(
 
 @JsonClass(generateAdapter = true)
 data class RegisterResponseDTO(
-    @Json(name = "registered_user") val user: UserDTO,
+    @Json(name = "registeredUser") val user: UserDTO,
     @Json(name = "token") val token: String
 )
 
@@ -22,7 +22,7 @@ data class LoginResponseDTO(
 
 @JsonClass(generateAdapter = true)
 data class AddLicenseResponseDTO(
-    @Json(name = "existing_user") val user: UserDTO
+    @Json(name = "existingUser") val user: UserDTO
 )
 
 @JsonClass(generateAdapter = true)

@@ -15,10 +15,10 @@ import retrofit2.http.Part
 
 interface UserApi {
 
-    @POST("gateway/register")
+    @POST("auth/register")
     suspend fun register(@Body registerRequest: RegisterRequestDTO): RegisterResponseDTO
 
-    @POST("gateway/login")
+    @POST("auth/login")
     suspend fun login(@Body loginRequest: LoginRequestDTO): LoginResponseDTO
 
     @Multipart

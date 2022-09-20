@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
 import com.internship.move.data.model.Scooter
 import com.internship.move.repository.ScooterRepository
 import com.internship.move.utils.InternalStorageManager
@@ -31,7 +32,8 @@ class MainViewModel(
     fun getAllScooters() {
         viewModelScope.launch {
             try {
-                _scootersList.value = repo.getAllScooters()
+                //_scootersList.value = repo.getAllScooters()
+                _scootersList.value = listOf<Scooter>(Scooter("sdgvcbs", 1005, LatLng(46.769441, 23.589922), 100, "da", "da"))
             } catch (e: Exception) {
                 println(e.message)
             }

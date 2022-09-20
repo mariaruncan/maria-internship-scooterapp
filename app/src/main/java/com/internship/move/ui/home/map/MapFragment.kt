@@ -36,15 +36,16 @@ import com.google.maps.android.clustering.ClusterManager.OnClusterClickListener
 import com.google.maps.android.clustering.ClusterManager.OnClusterItemClickListener
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.internship.move.R
+import com.internship.move.data.model.CurrentLocationData
 import com.internship.move.data.model.Scooter
 import com.internship.move.databinding.FragmentMapBinding
 import com.internship.move.databinding.ViewUnlockDialogBinding
 import com.internship.move.ui.home.MainViewModel
+import com.internship.move.ui.home.unlock.UnlockMethod
 import com.internship.move.utils.extensions.getDrawableToBitmapDescriptor
 import com.internship.move.utils.extensions.setBatteryIcon
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
@@ -207,7 +208,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             currentLocationData.marker?.remove()
             currentLocationData.circle?.remove()
 
-            binding.toolbar.title = geocoder.getFromLocation(location.latitude, location.longitude, 1).firstOrNull()?.locality
+            binding.toolbar.title = geocoder.getFromLocation(location.latitude, location.longitude, 1)?.firstOrNull()?.locality
             currentLocationData.marker = map?.addMarker(
                 MarkerOptions()
                     .position(position)
@@ -242,7 +243,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
         infoWindow.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
-        val address = geocoder.getFromLocation(scooter.latLng.latitude, scooter.latLng.longitude, 1).firstOrNull() ?: return
+        val address = geocoder.getFromLocation(scooter.latLng.latitude, scooter.latLng.longitude, 1)?.firstOrNull() ?: return
         infoWindow.addressTV.text = SCOOTER_ADDRESS_TEMPLATE.format(address.thoroughfare, address.subThoroughfare)
 
         infoWindow.unlockBtn.setOnClickListener {
@@ -267,11 +268,37 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
         dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
-        // set click listeners
+        dialogBinding.nfcBtn.setOnClickListener {
+            bottomSheetDialog.hide()
+            findNavController().navigate(
+                MapFragmentDirections.actionMapFragmentToUnlockFragment(
+                    currentLocationData.location?.longitude?.toFloat() ?: 0f,
+                    currentLocationData.location?.latitude?.toFloat() ?: 0f,
+                    UnlockMethod.NFC
+                )
+            )
+        }
+
+        dialogBinding.qrBtn.setOnClickListener {
+            bottomSheetDialog.hide()
+            findNavController().navigate(
+                MapFragmentDirections.actionMapFragmentToUnlockFragment(
+                    currentLocationData.location?.longitude?.toFloat() ?: 0f,
+                    currentLocationData.location?.latitude?.toFloat() ?: 0f,
+                    UnlockMethod.QR
+                )
+            )
+        }
 
         dialogBinding.codeBtn.setOnClickListener {
             bottomSheetDialog.hide()
-            findNavController().navigate(MapFragmentDirections.actionMapFragmentToUnlockFragment())
+            findNavController().navigate(
+                MapFragmentDirections.actionMapFragmentToUnlockFragment(
+                    currentLocationData.location?.longitude?.toFloat() ?: 0f,
+                    currentLocationData.location?.latitude?.toFloat() ?: 0f,
+                    UnlockMethod.CODE
+                )
+            )
         }
 
         bottomSheetDialog.setContentView(dialogBinding.root)

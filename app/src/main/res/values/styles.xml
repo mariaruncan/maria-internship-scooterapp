@@ -90,10 +90,4 @@
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxStrokeWidthFocused">0dp</item>
     </style>
-
-    <style name="TextInputEditText.Digit" parent="TextInputEditText">
-        <item name="android:textAppearance">@style/Heading2</item>
-        <item name="android:inputType">number</item>
-        <item name="android:textColor">@color/text_color_dark</item>
-    </style>
 </resources>

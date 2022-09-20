@@ -16,6 +16,7 @@
             app:destination="@id/splash_graph"
             app:popUpTo="@id/mapFragment"
             app:popUpToInclusive="true" />
+
         <action
             android:id="@+id/action_mapFragment_to_unlockFragment"
             app:destination="@id/unlockFragment" />
@@ -25,5 +26,25 @@
         android:id="@+id/unlockFragment"
         android:name="com.internship.move.ui.home.unlock.UnlockFragment"
         android:label="UnlockFragment"
-        tools:layout="@layout/fragment_unlock" />
+        tools:layout="@layout/fragment_unlock">
+
+        <argument
+            android:name="unlockMethod"
+            android:defaultValue="CODE"
+            app:argType="com.internship.move.ui.home.unlock.UnlockMethod" />
+
+        <argument
+            android:name="longitude"
+            app:argType="float" />
+
+        <argument
+            android:name="latitude"
+            app:argType="float" />
+
+        <action
+            android:id="@+id/action_unlockFragment_self"
+            app:destination="@id/unlockFragment"
+            app:popUpTo="@id/unlockFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

@@ -14,7 +14,7 @@ data class ScootersResponseDTO(
 data class ScooterDTO(
     @Json(name = "location") val location: LocationDTO,
     @Json(name = "_id") val scooterId: String,
-    @Json(name = "ScootNumber") val scooterNumber: Int,
+    @Json(name = "scootNumber") val scooterNumber: Int,
     @Json(name = "battery") val batteryLevel: Int,
     @Json(name = "bookedStatus") val bookedStatus: String,
     @Json(name = "lockedStatus") val lockedStatus: String,

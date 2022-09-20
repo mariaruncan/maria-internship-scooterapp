@@ -4,9 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.internship.move.data.dto.ErrorResponseDTO
+import com.internship.move.data.dto.ErrorResponseDTOJsonAdapter
 import com.internship.move.data.dto.UserDTO
 import com.internship.move.repository.UserRepository
 import com.internship.move.utils.InternalStorageManager
+import com.internship.move.utils.extensions.toErrorResponseDTO
+import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -14,7 +17,7 @@ import retrofit2.HttpException
 class AuthenticationViewModel(
     private val repo: UserRepository,
     private val internalStorageManager: InternalStorageManager,
-    private val moshi: Moshi
+    private val errorJSONAdapter: JsonAdapter<ErrorResponseDTO>
 ) : ViewModel() {
 
     val errorMessage: MutableLiveData<String> = MutableLiveData()
@@ -69,13 +72,8 @@ class AuthenticationViewModel(
     }
 
     private fun handleException(e: Exception) {
-        when (e) {
-            is HttpException -> {
-                val errorResponse = e.response()?.errorBody()?.source()?.let { moshi.adapter(ErrorResponseDTO::class.java).fromJson(it) }
-                errorMessage.value = errorResponse?.message
-            }
-            else -> errorMessage.value = e.message
-        }
+        val x = e.toErrorResponseDTO(errorJSONAdapter)
+        errorMessage.value = x.message
         isLoading.value = false
     }
 }

@@ -1,4 +1,4 @@
-package com.internship.move.ui.home.map
+package com.internship.move.data.model
 
 import android.location.Location
 import com.google.android.gms.maps.model.Circle

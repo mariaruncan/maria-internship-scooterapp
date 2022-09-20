@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 interface ScooterApi {
 
-    @GET("scooters/getScooters")
+    @GET("scooters/all")
     suspend fun getAllScooters(): ScootersResponseDTO
 }

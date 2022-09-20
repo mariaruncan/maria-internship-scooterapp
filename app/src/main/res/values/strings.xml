@@ -78,11 +78,28 @@
     <string name="view_scooter_info_title">Scooter</string>
     <string name="view_scooter_info_unlock_btn_text">Unlock</string>
 
-    <!-- region UnlockScooter -->
+    <!-- region UnlockDialog -->
     <string name="unlock_dialog_title">You can unlock this scooter\nthrough these methods:</string>
     <string name="unlock_dialog_ring_btn_label">Ring</string>
     <string name="unlock_dialog_missing_btn_label">Missing</string>
-    <string name="unlock_dialog_nfc_btn_text">NFC</string>
-    <string name="unlock_dialog_qr_btn_text">QR</string>
-    <string name="unlock_dialog_code_btn_text">123</string>
+    <string name="unlock_nfc_btn_text">NFC</string>
+    <string name="unlock_qr_btn_text">QR</string>
+    <string name="unlock_code_btn_text">123</string>
+    <string name="unlock_or_label">or</string>
+    <string name="unlock_alternately_label">Alternately you can unlock using</string>
+
+    <!-- region UnlockCode -->
+    <string name="unlock_code_toolbar_title">Enter serial number</string>
+    <string name="unlock_code_title">Enter the scooter’s \n serial number</string>
+    <string name="unlock_code_description">You can find it on the \n scooter’s front panel</string>
+
+    <!-- region UnlockQR -->
+    <string name="unlock_qr_toolbar_title">Unlock Scooter</string>
+    <string name="unlock_qr_title">Scan QR</string>
+    <string name="unlock_qr_description">You can find it on the \n scooter’s front panel</string>
+
+    <!-- region UnlockNFC -->
+    <string name="unlock_nfc_toolbar_title">Unlock Scooter</string>
+    <string name="unlock_nfc_title">NFC unlock</string>
+    <string name="unlock_nfc_description">Hold your phone close to the NFC Tag \n located on top of the handlebar of \n your scooter.</string>
 </resources>
