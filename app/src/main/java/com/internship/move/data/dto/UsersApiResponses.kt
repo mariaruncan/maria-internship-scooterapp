@@ -34,3 +34,8 @@ data class UserDTO(
     @Json(name = "password") val encryptedPassword: String,
     @Json(name = "productImage") val drivingLicense: String?
 )
+
+@JsonClass(generateAdapter = true)
+data class UserResponseDTO(
+    @Json(name = "existingUser") val user: UserDTO?
+)

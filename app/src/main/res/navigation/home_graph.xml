@@ -30,7 +30,7 @@
 
         <argument
             android:name="unlockMethod"
-            android:defaultValue="CODE"
+            android:defaultValue="PIN"
             app:argType="com.internship.move.ui.home.unlock.UnlockMethod" />
 
         <argument

@@ -24,12 +24,18 @@ data class ScooterDTO(
         Scooter(
             this.scooterId,
             this.scooterNumber,
-            LatLng(this.location.coordinates[1], this.location.coordinates[0]),
+            LatLng(this.location.coordinates[0], this.location.coordinates[1]),
             this.batteryLevel,
             this.bookedStatus,
             this.lockedStatus
         )
 }
+
+@JsonClass(generateAdapter = true)
+data class ScanResponseDTO(
+    @Json(name = "updated_scooter") val scooter: ScooterDTO,
+    @Json(name = "updatedUser") val user: UserDTO
+)
 
 @JsonClass(generateAdapter = true)
 data class LocationDTO(

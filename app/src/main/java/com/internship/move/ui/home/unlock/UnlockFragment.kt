@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.SurfaceHolder
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
@@ -26,14 +28,19 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
     private val viewModel: MainViewModel by viewModel()
     private val args by navArgs<UnlockFragmentArgs>()
     private var cameraSource: CameraSource? = null
+    private var scooterId: Int = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.errorMessage.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        }
+
         when (args.unlockMethod) {
             UnlockMethod.QR -> initQRUnlock()
             UnlockMethod.NFC -> initNFCUnlock()
-            UnlockMethod.CODE -> initCodeUnlock()
+            UnlockMethod.PIN -> initPinUnlock()
         }
 
         binding.closeBtn.setOnClickListener {
@@ -63,7 +70,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
                 UnlockFragmentDirections.actionUnlockFragmentSelf(
                     args.longitude,
                     args.latitude,
-                    UnlockMethod.CODE
+                    UnlockMethod.PIN
                 )
             )
         }
@@ -115,6 +122,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
                     println(x.toString())
                 }
             }
+
             override fun release() {}
         })
     }
@@ -139,13 +147,13 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
                 UnlockFragmentDirections.actionUnlockFragmentSelf(
                     args.longitude,
                     args.latitude,
-                    UnlockMethod.CODE
+                    UnlockMethod.PIN
                 )
             )
         }
     }
 
-    private fun initCodeUnlock() {
+    private fun initPinUnlock() {
         binding.root.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_authentication, null)
         binding.toolbarTitleTV.text = resources.getString(R.string.unlock_code_toolbar_title)
         binding.titleTV.text = resources.getString(R.string.unlock_code_title)
@@ -155,24 +163,32 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         binding.secondBtn.text = resources.getString(R.string.unlock_nfc_btn_text)
 
         // set TIL listeners
-        binding.firstDigitTIET.doOnTextChanged { text, start, before, count ->
+        binding.firstDigitTIET.doOnTextChanged { text, _, _, _ ->
             binding.firstDigitTIET.clearFocus()
+            scooterId = text.toString().toInt()
             binding.secondDigitTIET.requestFocus()
         }
 
-        binding.secondDigitTIET.doOnTextChanged { text, start, before, count ->
+        binding.secondDigitTIET.doOnTextChanged { text, _, _, _ ->
             binding.secondDigitTIET.clearFocus()
+            scooterId *= 10
+            scooterId += text.toString().toInt()
             binding.thirdDigitTIET.requestFocus()
         }
 
-        binding.thirdDigitTIET.doOnTextChanged { text, start, before, count ->
+        binding.thirdDigitTIET.doOnTextChanged { text, _, _, _ ->
             binding.thirdDigitTIET.clearFocus()
+            scooterId *= 10
+            scooterId += text.toString().toInt()
             binding.fourthDigitTIET.requestFocus()
         }
 
-        binding.fourthDigitTIET.doOnTextChanged { text, start, before, count ->
+        binding.fourthDigitTIET.doOnTextChanged { text, _, _, _ ->
             binding.fourthDigitTIET.clearFocus()
-            binding.firstDigitTIET.requestFocus()
+            scooterId *= 10
+            scooterId += text.toString().toInt()
+            viewModel.scanScooter(UnlockMethod.PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
+            requireActivity().onBackPressed()
         }
 
 
@@ -189,5 +205,5 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
 enum class UnlockMethod {
     QR,
     NFC,
-    CODE
+    PIN;
 }

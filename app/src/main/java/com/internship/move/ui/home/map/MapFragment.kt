@@ -24,6 +24,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
@@ -72,6 +73,25 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         checkLocationPermissions(savedInstanceState)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.currentUser.observe(viewLifecycleOwner) { user ->
+            if(user == null){
+                viewModel.clearApp()
+                findNavController().navigate(MapFragmentDirections.actionMapFragmentToSplashGraph())
+            }
+            if (user?.status == "free") {
+                viewModel.getAllScooters()
+                displayCurrentLocation()
+            }
+            else {
+                // aici intra dupa scan
+            }
+        }
+        viewModel.getCurrentUser()
+    }
+
     private fun checkLocationPermissions(savedInstanceState: Bundle?) {
         if (ContextCompat.checkSelfPermission(requireContext(), ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
@@ -85,9 +105,11 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun initMap(savedInstanceState: Bundle?) {
-        binding.map.onCreate(savedInstanceState)
-        binding.map.onResume()
-        binding.map.getMapAsync(onMapReadyCallback)
+        MapsInitializer.initialize(requireContext(), MapsInitializer.Renderer.LATEST) {
+            binding.map.onCreate(savedInstanceState)
+            binding.map.onResume()
+            binding.map.getMapAsync(onMapReadyCallback)
+        }
     }
 
     private fun initOnMapReadyCallback() = OnMapReadyCallback { googleMap ->
@@ -108,7 +130,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             map!!.setOnMapClickListener(onMapClickListener)
             initClustering()
             initObservers()
-            viewModel.getAllScooters()
         }
         displayCurrentLocation()
     }
@@ -129,7 +150,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         clusterManager = ClusterManager<Scooter>(requireContext(), map)
         clusterManager!!.setOnClusterClickListener(onClusterClickListener)
         clusterManager!!.setOnClusterItemClickListener(onClusterItemClickListener)
-        clusterManager!!.renderer = map?.let { ScooterRenderer(requireContext(), it, clusterManager!!) }
+        clusterManager!!.renderer = map?.let { ScooterRenderer(ƒrequireContext(), it, clusterManager!!) }
 
         map?.setOnCameraIdleListener {
             clusterManager!!.onCameraIdle()
@@ -296,7 +317,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 MapFragmentDirections.actionMapFragmentToUnlockFragment(
                     currentLocationData.location?.longitude?.toFloat() ?: 0f,
                     currentLocationData.location?.latitude?.toFloat() ?: 0f,
-                    UnlockMethod.CODE
+                    UnlockMethod.PIN
                 )
             )
         }
@@ -310,7 +331,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         private const val SCOOTER_BATTERY_TEMPLATE = "%d%%"
         private const val SCOOTER_ADDRESS_TEMPLATE = "%s %s"
 
-        private const val ZOOM_VALUE = 15F
+        private const val ZOOM_VALUE = 17F
         private const val CIRCLE_ALPHA = 26
         private const val CIRCLE_RADIUS = 100.0
         private const val CIRCLE_RADIUS_DEFAULT = 200.0
