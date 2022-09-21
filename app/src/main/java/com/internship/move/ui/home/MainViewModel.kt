@@ -13,7 +13,7 @@ class MainViewModel(
     private val internalStorageManager: InternalStorageManager
 ) : ViewModel() {
 
-    val scootersList: MutableLiveData<List<Scooter>> = MutableLiveData()
+    val scootersList: MutableLiveData<List<Scooter>> = MutableLiveData(listOf())
 
     fun logOut() {
         internalStorageManager.setToken(null)
