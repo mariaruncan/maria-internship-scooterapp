@@ -31,7 +31,7 @@ class MainViewModel(
     val scootersList: LiveData<List<Scooter>>
         get() = _scootersList
 
-    private val _selectedScooter: MutableLiveData<Scooter?> = MutableLiveData(null)
+    private var _selectedScooter: MutableLiveData<Scooter?> = MutableLiveData()
     val selectedScooter: LiveData<Scooter?>
         get() = _selectedScooter
 
@@ -53,8 +53,7 @@ class MainViewModel(
         viewModelScope.launch {
             try {
                 _currentUser.value = userRepo.getCurrentUser()
-            }
-            catch (e: Exception){
+            } catch (e: Exception) {
                 handleException(e)
             }
         }
@@ -82,10 +81,10 @@ class MainViewModel(
         }
     }
 
-    fun cancelScanScooter(id: Int) {
+    fun cancelScanScooter() {
         viewModelScope.launch {
             try {
-                scooterRepo.cancelScanScooter(id)
+                _selectedScooter.value?.number?.let { scooterRepo.cancelScanScooter(it) }
             } catch (e: Exception) {
                 handleException(e)
             }

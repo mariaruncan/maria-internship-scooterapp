@@ -102,4 +102,7 @@
     <string name="unlock_nfc_toolbar_title">Unlock Scooter</string>
     <string name="unlock_nfc_title">NFC unlock</string>
     <string name="unlock_nfc_description">Hold your phone close to the NFC Tag \n located on top of the handlebar of \n your scooter.</string>
+
+    <!-- region StartRide -->
+    <string name="start_ride_button_text">Start ride</string>
 </resources>
