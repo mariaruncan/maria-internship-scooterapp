@@ -8,7 +8,9 @@ import android.location.Geocoder
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -74,6 +76,14 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         checkLocationPermissions(savedInstanceState)
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -99,11 +109,43 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         if (ContextCompat.checkSelfPermission(requireContext(), ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
                 locationGranted = result
+                if (!locationGranted) {
+                    Toast.makeText(requireContext(), resources.getString(R.string.map_location_denied_message), Toast.LENGTH_SHORT).show()
+                }
                 initMap(savedInstanceState)
+                initToolbar()
             }.launch(ACCESS_FINE_LOCATION)
         } else {
             locationGranted = true
             initMap(savedInstanceState)
+            initToolbar()
+        }
+    }
+
+    private fun initToolbar() {
+        binding.menuBtn.setOnClickListener {
+            findNavController().navigate(MapFragmentDirections.actionMapFragmentToMenuFragment())
+        }
+
+        map?.uiSettings?.isMapToolbarEnabled = false
+
+        if (!locationGranted) {
+            binding.locationBtn.setImageResource(R.drawable.ic_no_location)
+        }
+
+        binding.locationBtn.setOnClickListener {
+            if (locationGranted) {
+                if (currentLocationData.location != null) {
+                    map?.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(currentLocationData.location!!.latitude, currentLocationData.location!!.longitude),
+                            ZOOM_VALUE
+                        )
+                    )
+                }
+            } else {
+                map?.animateCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, ZOOM_VALUE))
+            }
         }
     }
 
@@ -162,7 +204,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun initOnClusterClickListener() = OnClusterClickListener<Scooter> { cluster ->
         if (cluster != null) {
-            map?.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.position, ZOOM_VALUE))
+            map?.animateCamera(CameraUpdateFactory.newLatLngZoom(cluster.position, ZOOM_VALUE_CLUSTER))
         }
         true
     }
@@ -208,8 +250,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             )
 
             map?.animateCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, ZOOM_VALUE))
-            Toast.makeText(requireContext(), resources.getString(R.string.map_location_denied_message), Toast.LENGTH_SHORT).show()
-            binding.toolbar.title = resources.getString(R.string.map_toolbar_default_title)
+            binding.titleTV.text = resources.getString(R.string.map_toolbar_default_title)
         } else {
             fusedLocationClient.requestLocationUpdates(createLocationRequest(), locationCallback, Looper.getMainLooper())
         }
@@ -227,7 +268,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             currentLocationData.marker?.remove()
             currentLocationData.circle?.remove()
 
-            binding.toolbar.title = geocoder.getFromLocation(location.latitude, location.longitude, 1)?.firstOrNull()?.locality
+            binding.titleTV.text = geocoder.getFromLocation(location.latitude, location.longitude, 1)?.firstOrNull()?.locality
             currentLocationData.marker = map?.addMarker(
                 MarkerOptions().position(position).icon(requireContext().getDrawableToBitmapDescriptor(R.drawable.ic_current_location))
                     .anchor(.5f, .5f)
@@ -343,6 +384,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         private const val SCOOTER_ADDRESS_TEMPLATE = "%s %s"
 
         private const val ZOOM_VALUE = 17F
+        private const val ZOOM_VALUE_CLUSTER = 14F
         private const val CIRCLE_ALPHA = 26
         private const val CIRCLE_RADIUS = 100.0
         private const val CIRCLE_RADIUS_DEFAULT = 200.0

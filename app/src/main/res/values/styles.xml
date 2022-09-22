@@ -26,6 +26,11 @@
         <item name="android:fontFamily">@font/bai_jamjuree_medium</item>
     </style>
 
+    <style name="Heading5" parent="TextAppearance">
+        <item name="android:fontFamily">@font/bai_jamjuree_bold</item>
+        <item name="android:textSize">@dimen/body1_text_size</item>
+    </style>
+
     <style name="Button1" parent="TextAppearance">
         <item name="android:fontFamily">@font/bai_jamjuree_medium</item>
     </style>

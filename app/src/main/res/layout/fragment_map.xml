@@ -15,17 +15,51 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:titleCentered="true"
-        app:titleTextAppearance="@style/Heading3"
-        app:titleTextColor="@color/text_color_dark" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/menuBtn"
+            style="?actionButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="@dimen/small_margin_size"
+            android:layout_marginTop="@dimen/small_margin_size"
+            android:background="@drawable/bg_button"
+            android:backgroundTint="@color/white"
+            android:elevation="@dimen/view_scooter_info_button_elevation"
+            android:src="@drawable/ic_menu"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/titleTV"
+            style="@style/Heading3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/text_color_dark"
+            tools:text="Cluj-Napoca" />
+
+        <ImageButton
+            android:id="@+id/locationBtn"
+            style="?actionButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/small_margin_size"
+            android:layout_marginEnd="@dimen/small_margin_size"
+            android:background="@drawable/bg_button"
+            android:backgroundTint="@color/white"
+            android:elevation="@dimen/view_scooter_info_button_elevation"
+            android:src="@drawable/ic_location"
+            tools:ignore="ContentDescription" />
+    </FrameLayout>
 
     <include
         android:id="@+id/scooterInfoWindow"

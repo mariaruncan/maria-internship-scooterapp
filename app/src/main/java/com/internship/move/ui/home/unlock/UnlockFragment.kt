@@ -9,7 +9,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.model.LatLng
@@ -21,7 +20,6 @@ import com.internship.move.R
 import com.internship.move.databinding.FragmentUnlockBinding
 import com.internship.move.ui.home.MainViewModel
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UnlockFragment : Fragment(R.layout.fragment_unlock) {
@@ -130,7 +128,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
     }
 
     private fun initNFCUnlock() {
-        binding.root.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_authentication, null)
+        binding.root.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_default, null)
         binding.toolbarTitleTV.text = resources.getString(R.string.unlock_nfc_toolbar_title)
         binding.titleTV.text = resources.getString(R.string.unlock_nfc_title)
         binding.descriptionTV.text = resources.getString(R.string.unlock_nfc_description)
@@ -156,7 +154,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
     }
 
     private fun initPinUnlock() {
-        binding.root.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_authentication, null)
+        binding.root.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_default, null)
         binding.toolbarTitleTV.text = resources.getString(R.string.unlock_code_toolbar_title)
         binding.titleTV.text = resources.getString(R.string.unlock_code_title)
         binding.descriptionTV.text = resources.getString(R.string.unlock_code_description)
