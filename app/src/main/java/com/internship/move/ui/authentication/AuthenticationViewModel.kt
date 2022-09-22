@@ -4,15 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.internship.move.data.dto.ErrorResponseDTO
-import com.internship.move.data.dto.ErrorResponseDTOJsonAdapter
-import com.internship.move.data.dto.UserDTO
+import com.internship.move.data.model.User
 import com.internship.move.repository.UserRepository
 import com.internship.move.utils.InternalStorageManager
 import com.internship.move.utils.extensions.toErrorResponseDTO
 import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 
 class AuthenticationViewModel(
     private val repo: UserRepository,
@@ -22,7 +19,7 @@ class AuthenticationViewModel(
 
     val errorMessage: MutableLiveData<String> = MutableLiveData()
     val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
-    val user: MutableLiveData<UserDTO> = MutableLiveData()
+    val user: MutableLiveData<User> = MutableLiveData()
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -32,7 +29,7 @@ class AuthenticationViewModel(
                 internalStorageManager.setToken(response.token)
                 internalStorageManager.setHasDrivingLicense(response.user.drivingLicense != null)
                 isLoading.value = false
-                user.value = response.user
+                user.value = response.user.toUser()
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -46,7 +43,7 @@ class AuthenticationViewModel(
                 val response = repo.register(name, email, password)
                 internalStorageManager.setToken(response.token)
                 isLoading.value = false
-                user.value = response.user
+                user.value = response.user.toUser()
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -60,7 +57,7 @@ class AuthenticationViewModel(
                 val response = repo.addLicense(imagePath)
                 internalStorageManager.setHasDrivingLicense(true)
                 isLoading.value = false
-                user.value = response.user
+                user.value = response.user.toUser()
             } catch (e: Exception) {
                 handleException(e)
             }

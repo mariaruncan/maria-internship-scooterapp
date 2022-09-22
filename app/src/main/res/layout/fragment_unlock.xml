@@ -114,7 +114,8 @@
                 android:gravity="center"
                 android:inputType="number"
                 android:textAppearance="@style/Heading2"
-                android:textColor="@color/text_color_dark" />
+                android:textColor="@color/text_color_dark"
+                android:textCursorDrawable="@drawable/bg_cursor" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Space
@@ -133,7 +134,8 @@
                 android:gravity="center"
                 android:inputType="number"
                 android:textAppearance="@style/Heading2"
-                android:textColor="@color/text_color_dark" />
+                android:textColor="@color/text_color_dark"
+                android:textCursorDrawable="@drawable/bg_cursor" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Space
@@ -152,7 +154,8 @@
                 android:gravity="center"
                 android:inputType="number"
                 android:textAppearance="@style/Heading2"
-                android:textColor="@color/text_color_dark" />
+                android:textColor="@color/text_color_dark"
+                android:textCursorDrawable="@drawable/bg_cursor" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 

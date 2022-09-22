@@ -162,7 +162,6 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         binding.firstBtn.text = resources.getString(R.string.unlock_qr_btn_text)
         binding.secondBtn.text = resources.getString(R.string.unlock_nfc_btn_text)
 
-        // set TIL listeners
         binding.firstDigitTIET.doOnTextChanged { text, _, _, _ ->
             binding.firstDigitTIET.clearFocus()
             scooterId = text.toString().toInt()
@@ -187,8 +186,8 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
             binding.fourthDigitTIET.clearFocus()
             scooterId *= 10
             scooterId += text.toString().toInt()
-            viewModel.scanScooter(UnlockMethod.PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
             requireActivity().onBackPressed()
+            viewModel.scanScooter(UnlockMethod.PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
         }
 
 

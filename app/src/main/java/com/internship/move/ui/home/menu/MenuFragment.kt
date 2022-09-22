@@ -20,7 +20,7 @@ class MenuFragment: Fragment(R.layout.fragment_menu) {
 
         initListeners()
         binding.titleTV.text = resources.getString(R.string.menu_title_template, viewModel.currentUser.value?.name)
-        binding.ridesNumberTV.text = resources.getString(R.string.menu_total_rides_template, 12)
+        binding.ridesNumberTV.text = resources.getString(R.string.menu_total_rides_template)
     }
 
     private fun initListeners() {

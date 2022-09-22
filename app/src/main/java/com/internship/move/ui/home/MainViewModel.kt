@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.internship.move.data.dto.ErrorResponseDTO
-import com.internship.move.data.dto.UserDTO
 import com.internship.move.data.model.Scooter
+import com.internship.move.data.model.User
 import com.internship.move.repository.ScooterRepository
 import com.internship.move.repository.UserRepository
 import com.internship.move.ui.home.unlock.UnlockMethod
@@ -23,8 +23,8 @@ class MainViewModel(
     private val errorJSONAdapter: JsonAdapter<ErrorResponseDTO>
 ) : ViewModel() {
 
-    private val _currentUser: MutableLiveData<UserDTO?> = MutableLiveData()
-    val currentUser: LiveData<UserDTO?>
+    private val _currentUser: MutableLiveData<User?> = MutableLiveData()
+    val currentUser: LiveData<User?>
         get() = _currentUser
 
     private val _scootersList: MutableLiveData<List<Scooter>> = MutableLiveData(listOf())
@@ -52,8 +52,9 @@ class MainViewModel(
     fun getCurrentUser() {
         viewModelScope.launch {
             try {
-                _currentUser.value = userRepo.getCurrentUser()
+                _currentUser.value = userRepo.getCurrentUser().toUser()
             } catch (e: Exception) {
+                _currentUser.value = null
                 handleException(e)
             }
         }
@@ -74,7 +75,7 @@ class MainViewModel(
             try {
                 val response = scooterRepo.scanScooter(method, scooterId, location)
                 _selectedScooter.value = response.scooter.toScooter()
-                _currentUser.value = response.user
+                _currentUser.value = response.user.toUser()
             } catch (e: Exception) {
                 handleException(e)
             }
