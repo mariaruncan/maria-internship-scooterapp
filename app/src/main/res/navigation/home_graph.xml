@@ -16,5 +16,49 @@
             app:destination="@id/splash_graph"
             app:popUpTo="@id/mapFragment"
             app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_mapFragment_to_unlockFragment"
+            app:destination="@id/unlockFragment" />
+
+        <action
+            android:id="@+id/action_mapFragment_to_menuFragment"
+            app:destination="@id/menuFragment"
+            app:enterAnim="@anim/enter_from_left"
+            app:exitAnim="@anim/exit_to_right"
+            app:popEnterAnim="@anim/enter_from_right"
+            app:popExitAnim="@anim/exit_to_left" />
     </fragment>
+
+    <fragment
+        android:id="@+id/unlockFragment"
+        android:name="com.internship.move.ui.home.unlock.UnlockFragment"
+        android:label="UnlockFragment"
+        tools:layout="@layout/fragment_unlock">
+
+        <argument
+            android:name="unlockMethod"
+            android:defaultValue="PIN"
+            app:argType="com.internship.move.ui.home.unlock.UnlockMethod" />
+
+        <argument
+            android:name="longitude"
+            app:argType="float" />
+
+        <argument
+            android:name="latitude"
+            app:argType="float" />
+
+        <action
+            android:id="@+id/action_unlockFragment_self"
+            app:destination="@id/unlockFragment"
+            app:popUpTo="@id/unlockFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="com.internship.move.ui.home.menu.MenuFragment"
+        android:label="MenuFragment"
+        tools:layout="@layout/fragment_menu" />
 </navigation>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:background="@drawable/bg_default">
+
+
+    <ImageButton
+        android:id="@+id/closeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin_size"
+        android:background="@color/transparent"
+        android:src="@drawable/ic_close"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/toolbarTitleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium_margin_size"
+        android:textAppearance="@style/Heading3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/closeBtn"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/unlock_code_toolbar_title" />
+
+    <SurfaceView
+        android:id="@+id/cameraSurface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/titleTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_margin_size"
+        android:layout_marginBottom="@dimen/medium_margin_size"
+        android:gravity="center"
+        android:textAppearance="@style/Heading1"
+        app:layout_constraintBottom_toTopOf="@id/descriptionTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/unlock_code_title" />
+
+    <TextView
+        android:id="@+id/descriptionTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAppearance="@style/Heading4"
+        app:layout_constraintBottom_toTopOf="@id/codeInputLL"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6"
+        tools:text="@string/unlock_code_description" />
+
+    <ImageView
+        android:id="@+id/unlockBgIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <LinearLayout
+        android:id="@+id/codeInputLL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayout.Digit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/firstDigitTIET"
+                android:layout_width="@dimen/unlock_code_input_dim"
+                android:layout_height="@dimen/unlock_code_input_dim"
+                android:gravity="center"
+                android:inputType="number"
+                android:textAppearance="@style/Heading2"
+                android:textColor="@color/text_color_dark"
+                android:textCursorDrawable="@drawable/bg_cursor" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+            android:layout_width="@dimen/unlock_code_space_width"
+            android:layout_height="0dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayout.Digit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/secondDigitTIET"
+                android:layout_width="@dimen/unlock_code_input_dim"
+                android:layout_height="@dimen/unlock_code_input_dim"
+                android:gravity="center"
+                android:inputType="number"
+                android:textAppearance="@style/Heading2"
+                android:textColor="@color/text_color_dark"
+                android:textCursorDrawable="@drawable/bg_cursor" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+            android:layout_width="@dimen/unlock_code_space_width"
+            android:layout_height="0dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayout.Digit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/thirdDigitTIET"
+                android:layout_width="@dimen/unlock_code_input_dim"
+                android:layout_height="@dimen/unlock_code_input_dim"
+                android:gravity="center"
+                android:inputType="number"
+                android:textAppearance="@style/Heading2"
+                android:textColor="@color/text_color_dark"
+                android:textCursorDrawable="@drawable/bg_cursor" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+            android:layout_width="@dimen/unlock_code_space_width"
+            android:layout_height="0dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayout.Digit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fourthDigitTIET"
+                android:layout_width="@dimen/unlock_code_input_dim"
+                android:layout_height="@dimen/unlock_code_input_dim"
+                android:gravity="center"
+                android:inputType="number"
+                android:textAppearance="@style/Heading2"
+                android:textColor="@color/text_color_dark"
+                android:textCursorDrawable="@drawable/bg_cursor" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <TextView
+        style="@style/Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/medium_margin_size"
+        android:text="@string/unlock_alternately_label"
+        app:layout_constraintBottom_toTopOf="@id/firstBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/firstBtn"
+        android:layout_width="@dimen/unlock_btn_dim"
+        android:layout_height="@dimen/unlock_btn_dim"
+        android:layout_marginEnd="@dimen/medium_margin_size"
+        android:layout_marginBottom="@dimen/large_margin_size"
+        android:background="@drawable/bg_button_outlined_filled"
+        android:fontFamily="@font/bai_jamjuree_bold"
+        android:textAppearance="@style/Button1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/textView" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bai_jamjuree_bold"
+        android:text="@string/unlock_or_label"
+        android:textAppearance="@style/Body1"
+        app:layout_constraintBottom_toBottomOf="@id/firstBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/firstBtn" />
+
+    <Button
+        android:id="@+id/secondBtn"
+        android:layout_width="@dimen/unlock_btn_dim"
+        android:layout_height="@dimen/unlock_btn_dim"
+        android:layout_marginStart="@dimen/medium_margin_size"
+        android:layout_marginBottom="@dimen/large_margin_size"
+        android:background="@drawable/bg_button_outlined_filled"
+        android:fontFamily="@font/bai_jamjuree_bold"
+        android:textAppearance="@style/Button1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textView" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -71,10 +71,51 @@
     <string name="driving_license_validated_status">We’ve successfully validated your driving license</string>
 
     <!-- region MapFragment -->
-    <string name="map_log_out_btn_text">Log out</string>
-    <string name="map_clear_app_btn_text">Clear App</string>
+    <string name="map_toolbar_default_title">Allow location</string>
+    <string name="map_location_denied_message">Location permission denied!</string>
 
     <!-- region ViewScooterInfo -->
     <string name="view_scooter_info_title">Scooter</string>
     <string name="view_scooter_info_unlock_btn_text">Unlock</string>
+
+    <!-- region UnlockDialog -->
+    <string name="unlock_dialog_title">You can unlock this scooter\nthrough these methods:</string>
+    <string name="unlock_dialog_ring_btn_label">Ring</string>
+    <string name="unlock_dialog_missing_btn_label">Missing</string>
+    <string name="unlock_nfc_btn_text">NFC</string>
+    <string name="unlock_qr_btn_text">QR</string>
+    <string name="unlock_code_btn_text">123</string>
+    <string name="unlock_or_label">or</string>
+    <string name="unlock_alternately_label">Alternately you can unlock using</string>
+
+    <!-- region UnlockCode -->
+    <string name="unlock_code_toolbar_title">Enter serial number</string>
+    <string name="unlock_code_title">Enter the scooter’s \n serial number</string>
+    <string name="unlock_code_description">You can find it on the \n scooter’s front panel</string>
+
+    <!-- region UnlockQR -->
+    <string name="unlock_qr_toolbar_title">Unlock Scooter</string>
+    <string name="unlock_qr_title">Scan QR</string>
+    <string name="unlock_qr_description">You can find it on the \n scooter’s front panel</string>
+
+    <!-- region UnlockNFC -->
+    <string name="unlock_nfc_toolbar_title">Unlock Scooter</string>
+    <string name="unlock_nfc_title">NFC unlock</string>
+    <string name="unlock_nfc_description">Hold your phone close to the NFC Tag \n located on top of the handlebar of \n your scooter.</string>
+
+    <!-- region StartRide -->
+    <string name="start_ride_button_text">Start ride</string>
+
+    <!-- region Menu -->
+    <string name="menu_total_rides_template">Total rides: %d</string>
+    <string name="menu_title_template">Hi %s!</string>
+    <string name="menu_history_label">History</string>
+    <string name="menu_see_rides_btn_text">See all</string>
+    <string name="menu_general_settings_text">General Settings</string>
+    <string name="menu_account_text">Account</string>
+    <string name="menu_change_password_text">Change password</string>
+    <string name="menu_legal_text">Legal</string>
+    <string name="menu_terms_and_conditions_text">Terms and Conditions</string>
+    <string name="menu_privacy_policy_text">Privacy Policy</string>
+    <string name="menu_rate_us_text">Rate Us</string>
 </resources>

@@ -32,4 +32,7 @@
     <dimen name="view_scooter_info_card_corner_radius">20dp</dimen>
     <dimen name="view_scooter_info_button_dim">52dp</dimen>
     <dimen name="view_scooter_info_button_elevation">4dp</dimen>
+    <dimen name="unlock_code_space_width">24dp</dimen>
+    <dimen name="unlock_code_input_dim">66dp</dimen>
+    <dimen name="unlock_btn_dim">66dp</dimen>
 </resources>
