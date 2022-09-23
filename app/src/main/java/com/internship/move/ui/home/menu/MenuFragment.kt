@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentMenuBinding
 import com.internship.move.ui.home.MainViewModel
@@ -25,7 +26,7 @@ class MenuFragment: Fragment(R.layout.fragment_menu) {
 
     private fun initListeners() {
         binding.backBtn.setOnClickListener {
-            requireActivity().onBackPressed()
+            findNavController().navigate(MenuFragmentDirections.actionMenuFragmentToMapFragment())
         }
 
         binding.seeRidesBtn.setOnClickListener {

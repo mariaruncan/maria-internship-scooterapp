@@ -122,6 +122,13 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
     }
 
+    override fun onDestroyView() {
+        map?.clear()
+        map = null
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+        super.onDestroyView()
+    }
+
     private fun initMap(savedInstanceState: Bundle?) {
         MapsInitializer.initialize(requireContext(), MapsInitializer.Renderer.LATEST) {
             binding.map.onCreate(savedInstanceState)

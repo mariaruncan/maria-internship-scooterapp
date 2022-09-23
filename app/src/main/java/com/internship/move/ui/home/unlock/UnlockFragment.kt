@@ -44,7 +44,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         }
 
         binding.closeBtn.setOnClickListener {
-            requireActivity().onBackPressed()
+            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentToMapFragment())
         }
     }
 
@@ -186,8 +186,8 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
             binding.fourthDigitTIET.clearFocus()
             scooterId *= 10
             scooterId += text.toString().toInt()
-            requireActivity().onBackPressed()
             viewModel.scanScooter(UnlockMethod.PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
+            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentToMapFragment())
         }
 
 

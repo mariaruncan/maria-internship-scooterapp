@@ -19,7 +19,9 @@
 
         <action
             android:id="@+id/action_mapFragment_to_unlockFragment"
-            app:destination="@id/unlockFragment" />
+            app:destination="@id/unlockFragment"
+            app:popUpTo="@id/mapFragment"
+            app:popUpToInclusive="true" />
 
         <action
             android:id="@+id/action_mapFragment_to_menuFragment"
@@ -27,7 +29,9 @@
             app:enterAnim="@anim/enter_from_left"
             app:exitAnim="@anim/exit_to_right"
             app:popEnterAnim="@anim/enter_from_right"
-            app:popExitAnim="@anim/exit_to_left" />
+            app:popExitAnim="@anim/exit_to_left"
+            app:popUpTo="@id/mapFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -54,11 +58,24 @@
             app:destination="@id/unlockFragment"
             app:popUpTo="@id/unlockFragment"
             app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_unlockFragment_to_mapFragment"
+            app:destination="@id/mapFragment"
+            app:popUpTo="@id/unlockFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
         android:id="@+id/menuFragment"
         android:name="com.internship.move.ui.home.menu.MenuFragment"
         android:label="MenuFragment"
-        tools:layout="@layout/fragment_menu" />
+        tools:layout="@layout/fragment_menu">
+
+        <action
+            android:id="@+id/action_menuFragment_to_mapFragment"
+            app:destination="@id/mapFragment"
+            app:popUpTo="@id/menuFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
