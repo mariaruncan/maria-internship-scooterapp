@@ -1,10 +1,14 @@
 package com.internship.move.ui.home.unlock
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.SurfaceHolder
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -20,12 +24,12 @@ import com.internship.move.R
 import com.internship.move.databinding.FragmentUnlockBinding
 import com.internship.move.ui.home.MainViewModel
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class UnlockFragment : Fragment(R.layout.fragment_unlock) {
 
     private val binding by viewBinding(FragmentUnlockBinding::bind)
-    private val viewModel: MainViewModel by viewModel()
+    private val viewModel: MainViewModel by sharedViewModel()
     private val args by navArgs<UnlockFragmentArgs>()
     private var cameraSource: CameraSource? = null
     private var scooterId: Int = 0
@@ -38,7 +42,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         }
 
         when (args.unlockMethod) {
-            UnlockMethod.QR -> initQRUnlock()
+            UnlockMethod.QR -> checkCameraPermission()
             UnlockMethod.NFC -> initNFCUnlock()
             UnlockMethod.PIN -> initPinUnlock()
         }
@@ -77,6 +81,25 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
 
         binding.secondBtn.setOnClickListener {
             findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, UnlockMethod.NFC))
+        }
+    }
+
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
+                if (result) {
+                    initQRUnlock()
+                }
+                else {
+                    Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_LONG).show()
+                }
+            }.launch(Manifest.permission.CAMERA)
+        } else {
+            initQRUnlock()
         }
     }
 

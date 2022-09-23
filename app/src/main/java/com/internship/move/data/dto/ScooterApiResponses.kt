@@ -33,7 +33,7 @@ data class ScooterDTO(
 
 @JsonClass(generateAdapter = true)
 data class ScanResponseDTO(
-    @Json(name = "updated_scooter") val scooter: ScooterDTO,
+    @Json(name = "updatedScooter") val scooter: ScooterDTO,
     @Json(name = "updatedUser") val user: UserDTO
 )
 

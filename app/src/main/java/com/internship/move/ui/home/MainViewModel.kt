@@ -23,6 +23,10 @@ class MainViewModel(
     private val errorJSONAdapter: JsonAdapter<ErrorResponseDTO>
 ) : ViewModel() {
 
+    private var _status: String = "free"
+    val status: String
+        get() = _status
+
     private val _currentUser: MutableLiveData<User?> = MutableLiveData()
     val currentUser: LiveData<User?>
         get() = _currentUser
@@ -31,13 +35,20 @@ class MainViewModel(
     val scootersList: LiveData<List<Scooter>>
         get() = _scootersList
 
-    private var _selectedScooter: MutableLiveData<Scooter?> = MutableLiveData()
-    val selectedScooter: LiveData<Scooter?>
-        get() = _selectedScooter
-
     private val _errorMessage: MutableLiveData<String> = MutableLiveData()
     val errorMessage: LiveData<String>
         get() = _errorMessage
+
+    init {
+        viewModelScope.launch {
+            try {
+                _currentUser.value = userRepo.getCurrentUser().toUser()
+            } catch (e: Exception) {
+                _currentUser.value = null
+                handleException(e)
+            }
+        }
+    }
 
     fun logOut() {
         internalStorageManager.setToken(null)
@@ -47,17 +58,6 @@ class MainViewModel(
     fun clearApp() {
         logOut()
         internalStorageManager.setHasSeenOnboarding(false)
-    }
-
-    fun getCurrentUser() {
-        viewModelScope.launch {
-            try {
-                _currentUser.value = userRepo.getCurrentUser().toUser()
-            } catch (e: Exception) {
-                _currentUser.value = null
-                handleException(e)
-            }
-        }
     }
 
     fun getAllScooters() {
@@ -74,8 +74,10 @@ class MainViewModel(
         viewModelScope.launch {
             try {
                 val response = scooterRepo.scanScooter(method, scooterId, location)
-                _selectedScooter.value = response.scooter.toScooter()
-                _currentUser.value = response.user.toUser()
+                val user = response.user.toUser()
+                _status = user.status
+                user.scooter = response.scooter.toScooter()
+                _currentUser.value = user
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -85,7 +87,12 @@ class MainViewModel(
     fun cancelScanScooter() {
         viewModelScope.launch {
             try {
-                _selectedScooter.value?.number?.let { scooterRepo.cancelScanScooter(it) }
+                val number = _currentUser.value?.scooter?.number
+                if(number != null) {
+                    scooterRepo.cancelScanScooter(number)
+                }
+                _scootersList.value = scooterRepo.getAllScooters()
+                _currentUser.value = userRepo.getCurrentUser().toUser()
             } catch (e: Exception) {
                 handleException(e)
             }

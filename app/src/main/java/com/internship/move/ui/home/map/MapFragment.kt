@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -38,6 +39,9 @@ import com.internship.move.ui.home.unlock.UnlockMethod
 import com.internship.move.utils.extensions.getDrawableToBitmapDescriptor
 import com.internship.move.utils.extensions.setBatteryIcon
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class MapFragment : Fragment(R.layout.fragment_map) {
@@ -59,23 +63,45 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private val onMapClickListener by lazy { initOnMapClickListener() }
     private val locationCallback by lazy { initLocationCallback() }
 
+    private var scootersJob: Job? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.errorMessage.observe(viewLifecycleOwner) {errorMsg ->
+            Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show()
+        }
 
         viewModel.currentUser.observe(viewLifecycleOwner) { user ->
             if (user == null) {
                 viewModel.clearApp()
                 findNavController().navigate(MapFragmentDirections.actionMapFragmentToSplashGraph())
             } else if (user.status == "free") {
-                viewModel.getAllScooters()
-                displayCurrentLocation()
+                if(viewModel.status == "free") {
+                    startScootersUpdates()
+                    displayCurrentLocation()
+                }
             } else if (user.status == "scanned") {
+                stopScootersUpdates()
                 showStartRideDialog()
             }
         }
         checkLocationPermissions(savedInstanceState)
+    }
 
-        viewModel.getCurrentUser()
+    private fun startScootersUpdates() {
+        stopScootersUpdates()
+        scootersJob = viewLifecycleOwner.lifecycleScope.launch {
+            while(true) {
+                viewModel.getAllScooters()
+                delay(60000)
+            }
+        }
+    }
+
+    private fun stopScootersUpdates() {
+        scootersJob?.cancel()
+        scootersJob = null
     }
 
     private fun checkLocationPermissions(savedInstanceState: Bundle?) {
@@ -126,6 +152,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         map?.clear()
         map = null
         fusedLocationClient.removeLocationUpdates(locationCallback)
+        stopScootersUpdates()
+
         super.onDestroyView()
     }
 
@@ -226,7 +254,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             )
             map?.addCircle(
                 CircleOptions().center(DEFAULT_LOCATION).radius(CIRCLE_RADIUS_DEFAULT)
-                    .fillColor(ColorUtils.setAlphaComponent(resources.getColor(R.color.indigo, null), CIRCLE_ALPHA)).strokeWidth(0f)
+                    .fillColor(ColorUtils.setAlphaComponent(resources.getColor(R.color.indigo, null), CIRCLE_ALPHA))
+                    .strokeWidth(0f)
             )
 
             map?.animateCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, ZOOM_VALUE))
@@ -256,7 +285,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
             currentLocationData.circle = map?.addCircle(
                 CircleOptions().center(position).radius(CIRCLE_RADIUS)
-                    .fillColor(ColorUtils.setAlphaComponent(resources.getColor(R.color.indigo, null), CIRCLE_ALPHA)).strokeWidth(0f)
+                    .fillColor(ColorUtils.setAlphaComponent(resources.getColor(R.color.indigo, null), CIRCLE_ALPHA))
+                    .strokeWidth(0f)
             )
 
             currentLocationData.location = location
@@ -265,7 +295,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
 
     private fun createLocationRequest() = LocationRequest.create().apply {
-        interval = 60000
+        interval = 10000
         priority = Priority.PRIORITY_HIGH_ACCURACY
     }
 
@@ -292,7 +322,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun showUnlockDialog(scooter: Scooter) {
-        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
         bottomSheetDialog.setOnDismissListener {
             selectedMarker?.setIcon(requireContext().getDrawableToBitmapDescriptor(R.drawable.ic_scooter))
         }
@@ -340,11 +370,12 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun showStartRideDialog() {
-        val scooter: Scooter = viewModel.selectedScooter.value ?: return
+        val scooter: Scooter = viewModel.currentUser.value?.scooter ?: return
 
-        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
         bottomSheetDialog.setOnDismissListener {
             viewModel.cancelScanScooter()
+            startScootersUpdates()
         }
 
         val dialogBinding = ViewStartRideDialogBinding.inflate(layoutInflater, null, false)
