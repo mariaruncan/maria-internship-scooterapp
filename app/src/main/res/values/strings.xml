@@ -107,7 +107,7 @@
     <string name="start_ride_button_text">Start ride</string>
 
     <!-- region Menu -->
-    <string name="menu_total_rides_template">Total rides: %d</string>
+    <string name="menu_total_rides_template">Total rides: %1$d</string>
     <string name="menu_title_template">Hi %s!</string>
     <string name="menu_history_label">History</string>
     <string name="menu_see_rides_btn_text">See all</string>
