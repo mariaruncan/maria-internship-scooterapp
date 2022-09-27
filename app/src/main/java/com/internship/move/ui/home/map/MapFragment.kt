@@ -68,7 +68,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.errorMessage.observe(viewLifecycleOwner) {errorMsg ->
+        viewModel.errorMessage.observe(viewLifecycleOwner) { errorMsg ->
             Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show()
         }
 
@@ -77,7 +77,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 viewModel.clearApp()
                 findNavController().navigate(MapFragmentDirections.actionMapFragmentToSplashGraph())
             } else if (user.status == "free") {
-                if(viewModel.status == "free") {
+                if (viewModel.status == "free") {
                     startScootersUpdates()
                     displayCurrentLocation()
                 }
@@ -92,7 +92,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private fun startScootersUpdates() {
         stopScootersUpdates()
         scootersJob = viewLifecycleOwner.lifecycleScope.launch {
-            while(true) {
+            while (true) {
                 viewModel.getAllScooters()
                 delay(60000)
             }
@@ -241,6 +241,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun displayScooters(scooters: List<Scooter>) {
+        clusterManager?.clearItems()
         clusterManager?.addItems(scooters)
         clusterManager?.cluster()
     }
@@ -250,7 +251,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         if (!locationGranted) {
             map?.addMarker(
                 MarkerOptions().position(DEFAULT_LOCATION)
-                    .icon(requireContext().getDrawableToBitmapDescriptor(R.drawable.ic_default_location)).anchor(.5f, .5f)
+                    .icon(requireContext().getDrawableToBitmapDescriptor(R.drawable.ic_default_location))
+                    .anchor(.5f, .5f)
             )
             map?.addCircle(
                 CircleOptions().center(DEFAULT_LOCATION).radius(CIRCLE_RADIUS_DEFAULT)

@@ -13,6 +13,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.model.LatLng
@@ -24,6 +25,8 @@ import com.internship.move.R
 import com.internship.move.databinding.FragmentUnlockBinding
 import com.internship.move.ui.home.MainViewModel
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class UnlockFragment : Fragment(R.layout.fragment_unlock) {
@@ -93,8 +96,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
                 if (result) {
                     initQRUnlock()
-                }
-                else {
+                } else {
                     Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_LONG).show()
                 }
             }.launch(Manifest.permission.CAMERA)
@@ -177,6 +179,17 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
     }
 
     private fun initPinUnlock() {
+        viewModel.unlockSuccessful.observe(viewLifecycleOwner) {
+            if (it == true) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    displayUnlockSuccessfulScreen()
+                    delay(2000)
+                    viewModel.unlockSuccessful.value = false
+                    findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentToMapFragment())
+                }
+            }
+        }
+
         binding.root.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_default, null)
         binding.toolbarTitleTV.text = resources.getString(R.string.unlock_code_toolbar_title)
         binding.titleTV.text = resources.getString(R.string.unlock_code_title)
@@ -209,8 +222,9 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
             binding.fourthDigitTIET.clearFocus()
             scooterId *= 10
             scooterId += text.toString().toInt()
+
+            binding.progressBar.isVisible = true
             viewModel.scanScooter(UnlockMethod.PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
-            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentToMapFragment())
         }
 
 
@@ -221,6 +235,21 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         binding.secondBtn.setOnClickListener {
             findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, UnlockMethod.NFC))
         }
+    }
+
+    private fun displayUnlockSuccessfulScreen() {
+        binding.progressBar.isVisible = false
+        binding.closeBtn.isVisible = false
+        binding.toolbarTitleTV.isVisible = false
+        binding.titleTV.text = resources.getString(R.string.unlock_successful_title)
+        binding.descriptionTV.isVisible = false
+        binding.codeInputLL.isVisible = false
+        binding.unlockBgIV.setImageResource(R.drawable.bg_unlock_successful)
+        binding.unlockSuccessfulTV.isVisible = true
+        binding.buttonsTV.isVisible = false
+        binding.orTV.isVisible = false
+        binding.firstBtn.isVisible = false
+        binding.secondBtn.isVisible = false
     }
 }
 
