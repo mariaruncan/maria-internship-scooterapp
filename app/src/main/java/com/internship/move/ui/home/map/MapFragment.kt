@@ -31,6 +31,7 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.internship.move.R
 import com.internship.move.data.model.CurrentLocationData
 import com.internship.move.data.model.Scooter
+import com.internship.move.data.model.UserStatus
 import com.internship.move.databinding.FragmentMapBinding
 import com.internship.move.databinding.ViewStartRideDialogBinding
 import com.internship.move.databinding.ViewUnlockDialogBinding
@@ -76,12 +77,12 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             if (user == null) {
                 viewModel.clearApp()
                 findNavController().navigate(MapFragmentDirections.actionMapFragmentToSplashGraph())
-            } else if (user.status == "free") {
-                if (viewModel.status == "free") {
+            } else if (user.status == UserStatus.FREE) {
+                if (viewModel.status == UserStatus.FREE) {
                     startScootersUpdates()
                     displayCurrentLocation()
                 }
-            } else if (user.status == "scanned") {
+            } else if (user.status == UserStatus.SCANNED) {
                 stopScootersUpdates()
                 showStartRideDialog()
             }

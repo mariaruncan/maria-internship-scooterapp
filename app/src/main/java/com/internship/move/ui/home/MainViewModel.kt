@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.internship.move.data.dto.ErrorResponseDTO
 import com.internship.move.data.model.Scooter
 import com.internship.move.data.model.User
+import com.internship.move.data.model.UserStatus
 import com.internship.move.repository.ScooterRepository
 import com.internship.move.repository.UserRepository
 import com.internship.move.ui.home.unlock.UnlockMethod
@@ -15,6 +16,7 @@ import com.internship.move.utils.InternalStorageManager
 import com.internship.move.utils.extensions.toErrorResponseDTO
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.launch
+import com.internship.move.data.model.UserStatus.FREE
 
 class MainViewModel(
     private val userRepo: UserRepository,
@@ -23,8 +25,8 @@ class MainViewModel(
     private val errorJSONAdapter: JsonAdapter<ErrorResponseDTO>
 ) : ViewModel() {
 
-    private var _status: String = "free"
-    val status: String
+    private var _status: UserStatus = FREE
+    val status: UserStatus
         get() = _status
 
     private val _currentUser: MutableLiveData<User?> = MutableLiveData()
@@ -91,7 +93,7 @@ class MainViewModel(
         viewModelScope.launch {
             try {
                 val number = _currentUser.value?.scooter?.number
-                if(number != null) {
+                if (number != null) {
                     scooterRepo.cancelScanScooter(number)
                 }
                 _scootersList.value = scooterRepo.getAllScooters()

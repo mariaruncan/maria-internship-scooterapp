@@ -1,6 +1,7 @@
 package com.internship.move.data.dto
 
 import com.internship.move.data.model.User
+import com.internship.move.data.model.UserStatus
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -35,7 +36,7 @@ data class UserDTO(
     @Json(name = "password") val encryptedPassword: String,
     @Json(name = "productImage") val drivingLicense: String?
 ) {
-    fun toUser() = User(name, email, status, drivingLicense != null)
+    fun toUser() = User(name, email, UserStatus.fromString(status), drivingLicense != null)
 }
 
 @JsonClass(generateAdapter = true)
