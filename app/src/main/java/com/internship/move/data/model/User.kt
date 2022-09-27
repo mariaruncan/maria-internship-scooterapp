@@ -11,7 +11,8 @@ data class User(
 
 enum class UserStatus {
     FREE,
-    SCANNED;
+    SCANNED,
+    BUSY;
 
     companion object{
         fun toString(status: UserStatus) = status.name.lowercase()
@@ -19,6 +20,7 @@ enum class UserStatus {
         fun fromString(status: String) = when (status) {
             "free" -> FREE
             "scanned" -> SCANNED
+            "busy" -> BUSY
             else -> throw IllegalArgumentException("Wrong status!")
         }
     }

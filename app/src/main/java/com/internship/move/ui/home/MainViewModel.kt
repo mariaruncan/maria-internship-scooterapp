@@ -17,10 +17,12 @@ import com.internship.move.utils.extensions.toErrorResponseDTO
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.launch
 import com.internship.move.data.model.UserStatus.FREE
+import com.internship.move.repository.TripRepository
 
 class MainViewModel(
     private val userRepo: UserRepository,
     private val scooterRepo: ScooterRepository,
+    private val tripRepo: TripRepository,
     private val internalStorageManager: InternalStorageManager,
     private val errorJSONAdapter: JsonAdapter<ErrorResponseDTO>
 ) : ViewModel() {
@@ -44,9 +46,15 @@ class MainViewModel(
     val unlockSuccessful: MutableLiveData<Boolean> = MutableLiveData(false)
 
     init {
+        getCurrentUser()
+    }
+
+    fun getCurrentUser() {
         viewModelScope.launch {
             try {
-                _currentUser.value = userRepo.getCurrentUser().toUser()
+                val userDTO = userRepo.getCurrentUser()
+                val user = userDTO.toUser()
+                _currentUser.value = user
             } catch (e: Exception) {
                 _currentUser.value = null
                 handleException(e)
@@ -98,6 +106,27 @@ class MainViewModel(
                 }
                 _scootersList.value = scooterRepo.getAllScooters()
                 _currentUser.value = userRepo.getCurrentUser().toUser()
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun startRide(scooterNumber: Int, latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            try {
+                tripRepo.startRide(scooterNumber, latitude, longitude)
+                getCurrentUser()
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun endRide(scooterId: String, latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            try {
+                tripRepo.endRide(scooterId, latitude, longitude)
             } catch (e: Exception) {
                 handleException(e)
             }

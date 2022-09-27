@@ -77,16 +77,27 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             if (user == null) {
                 viewModel.clearApp()
                 findNavController().navigate(MapFragmentDirections.actionMapFragmentToSplashGraph())
-            } else if (user.status == UserStatus.FREE) {
-                if (viewModel.status == UserStatus.FREE) {
-                    startScootersUpdates()
-                    displayCurrentLocation()
+            }
+            else {
+                when(user.status){
+                    UserStatus.FREE -> {
+                        if (viewModel.status == UserStatus.FREE) {
+                            startScootersUpdates()
+                            displayCurrentLocation()
+                        }
+                    }
+
+                    UserStatus.SCANNED -> {
+                        stopScootersUpdates()
+                        showStartRideDialog()
+                    }
+                    UserStatus.BUSY -> {
+                        showCurrentRideDialog()
+                    }
                 }
-            } else if (user.status == UserStatus.SCANNED) {
-                stopScootersUpdates()
-                showStartRideDialog()
             }
         }
+
         checkLocationPermissions(savedInstanceState)
     }
 
@@ -386,10 +397,21 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
         dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
-        // btn click listener
+        dialogBinding.startRideBtn.setOnClickListener {
+            viewModel.startRide(
+                scooter.number,
+                currentLocationData.location?.latitude ?: .0,
+                currentLocationData.location?.longitude ?: .0
+            )
+            bottomSheetDialog.dismiss()
+        }
 
         bottomSheetDialog.setContentView(dialogBinding.root)
         bottomSheetDialog.show()
+    }
+
+    private fun showCurrentRideDialog() {
+
     }
 
     companion object {

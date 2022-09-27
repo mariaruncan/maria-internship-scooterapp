@@ -3,9 +3,11 @@ package com.internship.move.di
 import com.internship.move.BuildConfig
 import com.internship.move.data.dto.ErrorResponseDTO
 import com.internship.move.network.ScooterApi
+import com.internship.move.network.TripApi
 import com.internship.move.network.UserApi
 import com.internship.move.network.interceptors.TokenInterceptor
 import com.internship.move.repository.ScooterRepository
+import com.internship.move.repository.TripRepository
 import com.internship.move.repository.UserRepository
 import com.internship.move.ui.authentication.AuthenticationViewModel
 import com.internship.move.ui.home.MainViewModel
@@ -31,12 +33,21 @@ val viewModels = module {
     viewModel { SplashViewModel(internalStorageManager = get()) }
     viewModel { OnboardingViewModel(internalStorageManager = get()) }
     viewModel { AuthenticationViewModel(repo = get(), internalStorageManager = get(), errorJSONAdapter = get()) }
-    viewModel { MainViewModel(userRepo = get(), scooterRepo = get(), internalStorageManager = get(), errorJSONAdapter = get()) }
+    viewModel {
+        MainViewModel(
+            userRepo = get(),
+            scooterRepo = get(),
+            tripRepo = get(),
+            internalStorageManager = get(),
+            errorJSONAdapter = get()
+        )
+    }
 }
 
 val repositories = module {
     single { UserRepository(api = get(), compressor = get(), context = androidContext()) }
     single { ScooterRepository(api = get()) }
+    single { TripRepository(api = get()) }
 }
 
 val services = module {
@@ -47,6 +58,7 @@ val services = module {
     single { getRetrofit(moshi = get(), httpClient = get()) }
     single { getUserService(retrofit = get()) }
     single { getScooterService(retrofit = get()) }
+    single { getTripService(retrofit = get()) }
     single { getErrorAdapter(moshi = get()) }
 }
 
@@ -88,3 +100,5 @@ fun getRetrofit(moshi: Moshi, httpClient: OkHttpClient): Retrofit =
 fun getUserService(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
 
 fun getScooterService(retrofit: Retrofit): ScooterApi = retrofit.create(ScooterApi::class.java)
+
+fun getTripService(retrofit: Retrofit): TripApi = retrofit.create(TripApi::class.java)
