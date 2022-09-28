@@ -2,6 +2,7 @@ package com.internship.move.ui.home.unlock
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.View
 import android.widget.Toast
@@ -9,7 +10,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.model.LatLng
@@ -21,7 +21,6 @@ import com.internship.move.R
 import com.internship.move.databinding.FragmentUnlockBinding
 import com.internship.move.ui.home.MainViewModel
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UnlockFragment : Fragment(R.layout.fragment_unlock) {
@@ -46,7 +45,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         }
 
         binding.closeBtn.setOnClickListener {
-            requireActivity().onBackPressed()
+            findNavController().navigateUp()
         }
     }
 
@@ -88,7 +87,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
             .build()
 
         cameraSource = CameraSource.Builder(requireContext(), barcodeDetector)
-            .setRequestedPreviewSize(1920, 1080)
+            .setRequestedPreviewSize(CAMERA_PREVIEW_HEIGHT, CAMERA_PREVIEW_WIDTH)
             .setAutoFocusEnabled(true)
             .build()
 
@@ -119,13 +118,12 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         barcodeDetector.setProcessor(object : Detector.Processor<Barcode> {
             override fun receiveDetections(detections: Detector.Detections<Barcode>) {
                 val barcodes = detections.detectedItems
-                if (barcodes.size() == 1) {
-                    val x = barcodes.valueAt(0).rawValue
-                    println(x.toString())
+                if (barcodes.size() == BARCODE_MINIMUM_SIZE) {
+                    Log.d("BARCODES_VALUE", barcodes.valueAt(0).rawValue)
                 }
             }
 
-            override fun release() {}
+            override fun release() = Unit
         })
     }
 
@@ -164,7 +162,6 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         binding.firstBtn.text = resources.getString(R.string.unlock_qr_btn_text)
         binding.secondBtn.text = resources.getString(R.string.unlock_nfc_btn_text)
 
-        // set TIL listeners
         binding.firstDigitTIET.doOnTextChanged { text, _, _, _ ->
             binding.firstDigitTIET.clearFocus()
             scooterId = text.toString().toInt()
@@ -190,9 +187,8 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
             scooterId *= 10
             scooterId += text.toString().toInt()
             viewModel.scanScooter(UnlockMethod.PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
-            requireActivity().onBackPressed()
+            findNavController().navigateUp()
         }
-
 
         binding.firstBtn.setOnClickListener {
             findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, UnlockMethod.QR))
@@ -202,10 +198,11 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
             findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, UnlockMethod.NFC))
         }
     }
-}
 
-enum class UnlockMethod {
-    QR,
-    NFC,
-    PIN;
+    companion object {
+        private const val BARCODE_MINIMUM_SIZE = 1
+
+        private const val CAMERA_PREVIEW_HEIGHT = 1920
+        private const val CAMERA_PREVIEW_WIDTH = 1080
+    }
 }

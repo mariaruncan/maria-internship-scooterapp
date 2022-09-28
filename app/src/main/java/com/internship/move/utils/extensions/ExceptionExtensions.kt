@@ -4,16 +4,14 @@ import com.internship.move.data.dto.ErrorResponseDTO
 import com.squareup.moshi.JsonAdapter
 import retrofit2.HttpException
 
-fun Exception.toErrorResponseDTO(errorJSONAdapter: JsonAdapter<ErrorResponseDTO>): ErrorResponseDTO {
-    return when (this) {
+fun Exception.toErrorResponseDTO(errorJSONAdapter: JsonAdapter<ErrorResponseDTO>): ErrorResponseDTO =
+    when (this) {
         is HttpException -> {
-            try{
+            try {
                 errorJSONAdapter.fromJson(response()?.errorBody()?.string().toString()) ?: ErrorResponseDTO(message.toString())
-            }
-            catch (e: Exception){
+            } catch (e: Exception) {
                 ErrorResponseDTO(e.message.toString())
             }
         }
         else -> ErrorResponseDTO(message.toString())
     }
-}
