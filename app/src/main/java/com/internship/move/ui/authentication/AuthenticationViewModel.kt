@@ -69,8 +69,7 @@ class AuthenticationViewModel(
     }
 
     private fun handleException(e: Exception) {
-        val x = e.toErrorResponseDTO(errorJSONAdapter)
-        errorMessage.value = x.message
+        errorMessage.value = e.toErrorResponseDTO(errorJSONAdapter).message
         isLoading.value = false
     }
 }

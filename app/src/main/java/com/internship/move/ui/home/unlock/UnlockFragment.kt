@@ -111,7 +111,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
             .build()
 
         cameraSource = CameraSource.Builder(requireContext(), barcodeDetector)
-            .setRequestedPreviewSize(1920, 1080)
+            .setRequestedPreviewSize(CAMERA_PREVIEW_HEIGHT, CAMERA_PREVIEW_WIDTH)
             .setAutoFocusEnabled(true)
             .build()
 
@@ -142,13 +142,12 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         barcodeDetector.setProcessor(object : Detector.Processor<Barcode> {
             override fun receiveDetections(detections: Detector.Detections<Barcode>) {
                 val barcodes = detections.detectedItems
-                if (barcodes.size() == 1) {
-                    val x = barcodes.valueAt(0).rawValue
-                    println(x.toString())
+                if (barcodes.size() == BARCODE_MINIMUM_SIZE) {
+                    Log.d("BARCODES_VALUE", barcodes.valueAt(0).rawValue)
                 }
             }
 
-            override fun release() {}
+            override fun release() = Unit
         })
     }
 
@@ -225,8 +224,8 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
 
             binding.progressBar.isVisible = true
             viewModel.scanScooter(UnlockMethod.PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
+            findNavController().navigateUp()
         }
-
 
         binding.firstBtn.setOnClickListener {
             findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, UnlockMethod.QR))
@@ -251,10 +250,11 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         binding.firstBtn.isVisible = false
         binding.secondBtn.isVisible = false
     }
-}
 
-enum class UnlockMethod {
-    QR,
-    NFC,
-    PIN;
+    companion object {
+        private const val BARCODE_MINIMUM_SIZE = 1
+
+        private const val CAMERA_PREVIEW_HEIGHT = 1920
+        private const val CAMERA_PREVIEW_WIDTH = 1080
+    }
 }
