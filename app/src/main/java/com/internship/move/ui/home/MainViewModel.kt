@@ -41,7 +41,7 @@ class MainViewModel(
     val errorMessage: LiveData<String>
         get() = _errorMessage
 
-    val unlockSuccessful: MutableLiveData<Boolean> = MutableLiveData(false)
+    val unlockResult: MutableLiveData<Boolean> = MutableLiveData(false)
 
     init {
         viewModelScope.launch {
@@ -82,7 +82,7 @@ class MainViewModel(
                 _status = user.status
                 user.scooter = response.scooter.toScooter()
                 _currentUser.value = user
-                unlockSuccessful.value = true
+                unlockResult.value = true
             } catch (e: Exception) {
                 handleException(e)
             }

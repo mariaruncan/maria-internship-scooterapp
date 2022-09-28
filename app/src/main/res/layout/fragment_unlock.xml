@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    tools:background="@drawable/bg_default"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:background="@drawable/bg_default">
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -228,4 +228,10 @@
         android:textAppearance="@style/Button1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/orTV" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/unlockSuccessfulGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="progressBar,closeBtn,toolbarTitleTV,descriptionTV, codeInputLL, buttonsTV, orTV,firstBtn,secondBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

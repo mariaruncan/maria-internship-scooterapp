@@ -20,7 +20,9 @@
     <color name="status_bar_color">@color/purple</color>
     <color name="accent_color">@color/pink</color>
     <color name="background_color">@color/purple</color>
+    <color name="background_color_light">@color/white</color>
     <color name="text_color_light">@color/white</color>
+    <color name="text_color_light_secondary">@color/pastel_purple</color>
     <color name="text_color_secondary">@color/pastel_purple</color>
     <color name="text_color_dark">@color/indigo</color>
     <color name="box_stroke_color">@color/text_input_box_stroke_color</color>

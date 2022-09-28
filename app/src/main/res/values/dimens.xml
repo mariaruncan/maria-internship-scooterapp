@@ -37,4 +37,7 @@
     <dimen name="unlock_code_space_width">24dp</dimen>
     <dimen name="unlock_code_input_dim">66dp</dimen>
     <dimen name="unlock_btn_dim">66dp</dimen>
+    <dimen name="map_toolbar_margin_bottom">4dp</dimen>
+    <dimen name="menu_guideline_start_margin">30dp</dimen>
+    <dimen name="menu_history_card_height">130dp</dimen>
 </resources>

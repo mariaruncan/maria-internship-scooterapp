@@ -5,7 +5,7 @@ data class User(
     val email: String,
     val status: UserStatus,
     val hasDrivingLicense: Boolean,
-    var numberOfTrips: Int = 0,
+    val numberOfTrips: Int = 0,
     var scooter: Scooter? = null
 )
 
@@ -14,11 +14,14 @@ enum class UserStatus {
     SCANNED;
 
     companion object{
+        private const val FREE_STRING = "free"
+        private const val SCANNED_STRING = "scanned"
+
         fun toString(status: UserStatus) = status.name.lowercase()
 
         fun fromString(status: String) = when (status) {
-            "free" -> FREE
-            "scanned" -> SCANNED
+            FREE_STRING -> FREE
+            SCANNED_STRING -> SCANNED
             else -> throw IllegalArgumentException("Wrong status!")
         }
     }
