@@ -3,7 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="@dimen/medium_margin_size"
+    android:paddingBottom="@dimen/medium_margin_size">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -15,14 +24,130 @@
         tools:ignore="ContentDescription" />
 
     <TextView
-        style="@style/Body1"
+        android:id="@+id/titleTV"
+        style="@style/Heading3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/medium_margin_size"
-        android:text="Trip Details"
+        android:layout_marginTop="@dimen/small_margin_size"
+        android:text="@string/trip_details_title"
         android:textColor="@color/text_color_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/batteryIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleTV"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_battery_80" />
+
+    <TextView
+        android:id="@+id/batteryTV"
+        style="@style/Button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/small_margin_size"
+        android:textColor="@color/text_color_dark"
+        app:layout_constraintStart_toEndOf="@id/batteryIV"
+        app:layout_constraintTop_toBottomOf="@id/titleTV"
+        tools:text="80%" />
+
+    <ImageView
+        android:id="@+id/clockIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_margin_size"
+        android:src="@drawable/ic_clock"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/batteryIV"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/travelTimeTV"
+        style="@style/Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="@dimen/medium_margin_size"
+        android:text="@string/trip_details_time_label"
+        android:textColor="@color/text_color_secondary"
+        app:layout_constraintStart_toEndOf="@id/clockIV"
+        app:layout_constraintTop_toBottomOf="@id/batteryIV" />
+
+    <TextView
+        android:id="@+id/durationTV"
+        style="@style/Heading1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_color_dark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/travelTimeTV"
+        tools:text="00:12 min" />
+
+    <ImageView
+        android:id="@+id/mapIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/small_margin_size"
+        android:layout_marginTop="@dimen/medium_margin_size"
+        android:src="@drawable/ic_map"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/batteryIV"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/distanceLabelTV"
+        style="@style/Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="@dimen/medium_margin_size"
+        android:text="@string/trip_details_distance_label"
+        android:textColor="@color/text_color_secondary"
+        app:layout_constraintStart_toEndOf="@id/mapIV"
+        app:layout_constraintTop_toBottomOf="@id/batteryIV" />
+
+    <TextView
+        android:id="@+id/distanceTV"
+        style="@style/Heading1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/small_margin_size"
+        android:textColor="@color/text_color_dark"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/travelTimeTV"
+        tools:text="2.7 km" />
+
+    <Button
+        style="@style/PrimaryButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/small_margin_size"
+        android:background="@drawable/bg_button_outlined"
+        android:drawableLeft="@drawable/ic_lock"
+        android:text="@string/trip_details_lock_btn_text"
+        android:textColor="@color/pink"
+        app:layout_constraintBottom_toBottomOf="@id/endRideBtn"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/endRideBtn"
+        tools:ignore="ContentDescription" />
+
+    <Button
+        android:id="@+id/endRideBtn"
+        style="@style/PrimaryButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/small_margin_size"
+        android:layout_marginTop="@dimen/small_margin_size"
+        android:text="@string/trip_details_end_ride_btn_text"
+        android:textAppearance="@style/Button1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toBottomOf="@+id/distanceTV" />
 </androidx.constraintlayout.widget.ConstraintLayout>

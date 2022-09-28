@@ -12,6 +12,6 @@ interface TripApi {
     @POST("trips")
     suspend fun startRide(@Body startRideRequest: StartRideRequestDTO)
 
-    @PATCH("trips/end/:{id}")
+    @PATCH("trips/end/{id}")
     suspend fun endRide(@Path("id") scooterId: String, @Body endRideRequest: EndRideRequestDTO)
 }

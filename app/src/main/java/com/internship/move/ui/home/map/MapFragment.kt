@@ -34,6 +34,7 @@ import com.internship.move.data.model.Scooter
 import com.internship.move.data.model.UserStatus
 import com.internship.move.databinding.FragmentMapBinding
 import com.internship.move.databinding.ViewStartRideDialogBinding
+import com.internship.move.databinding.ViewTripDetailsCollapsedBinding
 import com.internship.move.databinding.ViewUnlockDialogBinding
 import com.internship.move.ui.home.MainViewModel
 import com.internship.move.ui.home.unlock.UnlockMethod
@@ -77,9 +78,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             if (user == null) {
                 viewModel.clearApp()
                 findNavController().navigate(MapFragmentDirections.actionMapFragmentToSplashGraph())
-            }
-            else {
-                when(user.status){
+            } else {
+                when (user.status) {
                     UserStatus.FREE -> {
                         if (viewModel.status == UserStatus.FREE) {
                             startScootersUpdates()
@@ -403,6 +403,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 currentLocationData.location?.latitude ?: .0,
                 currentLocationData.location?.longitude ?: .0
             )
+            bottomSheetDialog.setOnDismissListener {}
             bottomSheetDialog.dismiss()
         }
 
@@ -411,7 +412,35 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun showCurrentRideDialog() {
+        val scooter = viewModel.currentUser.value?.scooter
 
+        if (scooter == null) return
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
+        bottomSheetDialog.setOnDismissListener {
+            viewModel.endRide(
+                scooter.id,
+                currentLocationData.location?.latitude ?: .0,
+                currentLocationData.location?.longitude ?: .0
+            )
+            startScootersUpdates()
+        }
+
+        val dialogBinding = ViewTripDetailsCollapsedBinding.inflate(layoutInflater, null, false)
+        dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
+        dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
+
+        dialogBinding.endRideBtn.setOnClickListener {
+            viewModel.endRide(
+                scooter.id,
+                currentLocationData.location?.latitude ?: .0,
+                currentLocationData.location?.longitude ?: .0
+            )
+            bottomSheetDialog.dismiss()
+            startScootersUpdates()
+        }
+
+        bottomSheetDialog.setContentView(dialogBinding.root)
+        bottomSheetDialog.show()
     }
 
     companion object {

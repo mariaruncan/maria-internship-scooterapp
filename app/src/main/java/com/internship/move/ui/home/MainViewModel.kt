@@ -52,9 +52,8 @@ class MainViewModel(
     fun getCurrentUser() {
         viewModelScope.launch {
             try {
-                val userDTO = userRepo.getCurrentUser()
-                val user = userDTO.toUser()
-                _currentUser.value = user
+                val scooter = _currentUser.value?.scooter
+                _currentUser.value = userRepo.getCurrentUser().toUser().copy(scooter = scooter)
             } catch (e: Exception) {
                 _currentUser.value = null
                 handleException(e)
