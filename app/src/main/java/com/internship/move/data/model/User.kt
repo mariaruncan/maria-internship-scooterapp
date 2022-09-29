@@ -6,7 +6,7 @@ data class User(
     val status: UserStatus,
     val hasDrivingLicense: Boolean,
     val numberOfTrips: Int = 0,
-    var scooter: Scooter? = null
+    val scooter: Scooter? = null
 )
 
 enum class UserStatus {
