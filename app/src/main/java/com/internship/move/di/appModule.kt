@@ -58,7 +58,6 @@ val services = module {
     single { getRetrofit(moshi = get(), httpClient = get()) }
     single { getUserService(retrofit = get()) }
     single { getScooterService(retrofit = get()) }
-    single { getTripService(retrofit = get()) }
     single { getErrorAdapter(moshi = get()) }
 }
 
@@ -66,15 +65,15 @@ val storage = module {
     single { InternalStorageManager(androidContext()) }
 }
 
-fun getErrorAdapter(moshi: Moshi): JsonAdapter<ErrorResponseDTO> = moshi.adapter(ErrorResponseDTO::class.java).lenient()
+private fun getErrorAdapter(moshi: Moshi): JsonAdapter<ErrorResponseDTO> = moshi.adapter(ErrorResponseDTO::class.java).lenient()
 
-fun getTokenInterceptor(internalStorageManager: InternalStorageManager) = TokenInterceptor(internalStorageManager)
+private fun getTokenInterceptor(internalStorageManager: InternalStorageManager) = TokenInterceptor(internalStorageManager)
 
-fun getFileCompressor(): Compressor = Compressor
+private fun getFileCompressor(): Compressor = Compressor
 
-fun getMoshi(): Moshi = Moshi.Builder().build()
+private fun getMoshi(): Moshi = Moshi.Builder().build()
 
-fun getOkHttpClient(tokenInterceptor: TokenInterceptor): OkHttpClient {
+private fun getOkHttpClient(tokenInterceptor: TokenInterceptor): OkHttpClient {
     val httpClient = OkHttpClient.Builder()
     if (BuildConfig.DEBUG) {
         val logging = HttpLoggingInterceptor()
@@ -90,15 +89,15 @@ fun getOkHttpClient(tokenInterceptor: TokenInterceptor): OkHttpClient {
         .build()
 }
 
-fun getRetrofit(moshi: Moshi, httpClient: OkHttpClient): Retrofit =
+private fun getRetrofit(moshi: Moshi, httpClient: OkHttpClient): Retrofit =
     Retrofit.Builder()
         .baseUrl(BuildConfig.BASE_URL)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .client(httpClient)
         .build()
 
-fun getUserService(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
+private fun getUserService(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
 
-fun getScooterService(retrofit: Retrofit): ScooterApi = retrofit.create(ScooterApi::class.java)
+private fun getScooterService(retrofit: Retrofit): ScooterApi = retrofit.create(ScooterApi::class.java)
 
-fun getTripService(retrofit: Retrofit): TripApi = retrofit.create(TripApi::class.java)
+private fun getTripService(retrofit: Retrofit): TripApi = retrofit.create(TripApi::class.java)

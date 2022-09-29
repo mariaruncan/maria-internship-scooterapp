@@ -36,7 +36,7 @@ data class UserDTO(
     @Json(name = "password") val encryptedPassword: String,
     @Json(name = "productImage") val drivingLicense: String?
 ) {
-    fun toUser() = User(name, email, UserStatus.fromString(status), drivingLicense != null)
+    fun toUser(): User = User(name, email, UserStatus.fromString(status), drivingLicense != null)
 }
 
 @JsonClass(generateAdapter = true)
@@ -45,9 +45,5 @@ data class UserResponseDTO(
     @Json(name = "nrOfTrips") val numberOfTrips: Int
 ) {
 
-    fun toUser(): User{
-        val user = user.toUser()
-        user.numberOfTrips = numberOfTrips
-        return user
-    }
+    fun toUser(): User = user.toUser().copy(numberOfTrips = numberOfTrips)
 }

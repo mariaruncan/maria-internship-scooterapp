@@ -1,9 +1,10 @@
 package com.internship.move.ui.home.unlock
 
-import android.Manifest
+import android.Manifest.permission.CAMERA
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
+import android.util.Log
 import android.view.SurfaceHolder
 import android.view.View
 import android.widget.Toast
@@ -28,6 +29,9 @@ import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import com.internship.move.ui.home.unlock.UnlockMethod.QR
+import com.internship.move.ui.home.unlock.UnlockMethod.NFC
+import com.internship.move.ui.home.unlock.UnlockMethod.PIN
 
 class UnlockFragment : Fragment(R.layout.fragment_unlock) {
 
@@ -45,9 +49,9 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         }
 
         when (args.unlockMethod) {
-            UnlockMethod.QR -> checkCameraPermission()
-            UnlockMethod.NFC -> initNFCUnlock()
-            UnlockMethod.PIN -> initPinUnlock()
+            QR -> checkCameraPermission()
+            NFC -> initNFCUnlock()
+            PIN -> initPinUnlock()
         }
 
         binding.closeBtn.setOnClickListener {
@@ -77,29 +81,25 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
                 UnlockFragmentDirections.actionUnlockFragmentSelf(
                     args.longitude,
                     args.latitude,
-                    UnlockMethod.PIN
+                    PIN
                 )
             )
         }
 
         binding.secondBtn.setOnClickListener {
-            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, UnlockMethod.NFC))
+            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, NFC))
         }
     }
 
     private fun checkCameraPermission() {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
-                if (result) {
+        if (ContextCompat.checkSelfPermission(requireContext(), CAMERA) != PERMISSION_GRANTED) {
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { hasUserAcceptedCameraPermission ->
+                if (hasUserAcceptedCameraPermission) {
                     initQRUnlock()
                 } else {
                     Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_LONG).show()
                 }
-            }.launch(Manifest.permission.CAMERA)
+            }.launch(CAMERA)
         } else {
             initQRUnlock()
         }
@@ -111,7 +111,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
             .build()
 
         cameraSource = CameraSource.Builder(requireContext(), barcodeDetector)
-            .setRequestedPreviewSize(1920, 1080)
+            .setRequestedPreviewSize(CAMERA_PREVIEW_HEIGHT, CAMERA_PREVIEW_WIDTH)
             .setAutoFocusEnabled(true)
             .build()
 
@@ -142,13 +142,12 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         barcodeDetector.setProcessor(object : Detector.Processor<Barcode> {
             override fun receiveDetections(detections: Detector.Detections<Barcode>) {
                 val barcodes = detections.detectedItems
-                if (barcodes.size() == 1) {
-                    val x = barcodes.valueAt(0).rawValue
-                    println(x.toString())
+                if (barcodes.size() == BARCODE_MINIMUM_SIZE) {
+                    Log.d("BARCODES_VALUE", barcodes.valueAt(0).rawValue)
                 }
             }
 
-            override fun release() {}
+            override fun release() = Unit
         })
     }
 
@@ -164,7 +163,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         // listener for nfc
 
         binding.firstBtn.setOnClickListener {
-            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, UnlockMethod.QR))
+            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, QR))
         }
 
         binding.secondBtn.setOnClickListener {
@@ -172,19 +171,19 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
                 UnlockFragmentDirections.actionUnlockFragmentSelf(
                     args.longitude,
                     args.latitude,
-                    UnlockMethod.PIN
+                    PIN
                 )
             )
         }
     }
 
     private fun initPinUnlock() {
-        viewModel.unlockSuccessful.observe(viewLifecycleOwner) {
-            if (it == true) {
+        viewModel.unlockResult.observe(viewLifecycleOwner) { isUnlockSuccessful ->
+            if (isUnlockSuccessful) {
                 viewLifecycleOwner.lifecycleScope.launch {
                     displayUnlockSuccessfulScreen()
-                    delay(2000)
-                    viewModel.unlockSuccessful.value = false
+                    delay(UNLOCK_SUCCESSFUL_DELAY)
+                    viewModel.unlockResult.value = false
                     findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentToMapFragment())
                 }
             }
@@ -224,37 +223,30 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
             scooterId += text.toString().toInt()
 
             binding.progressBar.isVisible = true
-            viewModel.scanScooter(UnlockMethod.PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
+            viewModel.scanScooter(PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
+            findNavController().navigateUp()
         }
 
-
         binding.firstBtn.setOnClickListener {
-            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, UnlockMethod.QR))
+            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, QR))
         }
 
         binding.secondBtn.setOnClickListener {
-            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, UnlockMethod.NFC))
+            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, NFC))
         }
     }
 
     private fun displayUnlockSuccessfulScreen() {
-        binding.progressBar.isVisible = false
-        binding.closeBtn.isVisible = false
-        binding.toolbarTitleTV.isVisible = false
+        binding.unlockSuccessfulGroup.isVisible = false
         binding.titleTV.text = resources.getString(R.string.unlock_successful_title)
-        binding.descriptionTV.isVisible = false
-        binding.codeInputLL.isVisible = false
         binding.unlockBgIV.setImageResource(R.drawable.bg_unlock_successful)
         binding.unlockSuccessfulTV.isVisible = true
-        binding.buttonsTV.isVisible = false
-        binding.orTV.isVisible = false
-        binding.firstBtn.isVisible = false
-        binding.secondBtn.isVisible = false
     }
-}
 
-enum class UnlockMethod {
-    QR,
-    NFC,
-    PIN;
+    companion object {
+        private const val BARCODE_MINIMUM_SIZE = 1
+        private const val UNLOCK_SUCCESSFUL_DELAY = 2000L
+        private const val CAMERA_PREVIEW_HEIGHT = 1920
+        private const val CAMERA_PREVIEW_WIDTH = 1080
+    }
 }

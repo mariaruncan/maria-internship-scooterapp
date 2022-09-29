@@ -13,13 +13,16 @@
     <color name="black">#000000</color>
     <color name="red">#FF0000</color>
     <color name="transparent">#00000000</color>
+    <color name="light_gray">#D2D2D2</color>
 
     <color name="dots_color">@color/pastel_purple</color>
     <color name="selected_dot_color">@color/indigo</color>
     <color name="status_bar_color">@color/purple</color>
     <color name="accent_color">@color/pink</color>
     <color name="background_color">@color/purple</color>
+    <color name="background_color_light">@color/white</color>
     <color name="text_color_light">@color/white</color>
+    <color name="text_color_light_secondary">@color/pastel_purple</color>
     <color name="text_color_secondary">@color/pastel_purple</color>
     <color name="text_color_dark">@color/indigo</color>
     <color name="box_stroke_color">@color/text_input_box_stroke_color</color>
@@ -27,4 +30,8 @@
     <color name="hint_color_foreground">@color/pastel_purple</color>
     <color name="icon_tint">@color/white</color>
     <color name="progress_bar_color">@color/white</color>
+    <color name="outlined_button_stroke_color">@color/light_gray</color>
+    <color name="text_input_color_focused">@color/white</color>
+    <color name="text_input_color_unfocused">@color/pastel_purple</color>
+    <color name="scooter_info_card_color">@color/white</color>
 </resources>

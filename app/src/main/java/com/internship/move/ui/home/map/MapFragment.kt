@@ -17,12 +17,21 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.CircleOptions
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.ClusterManager.OnClusterClickListener
@@ -31,7 +40,8 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.internship.move.R
 import com.internship.move.data.model.CurrentLocationData
 import com.internship.move.data.model.Scooter
-import com.internship.move.data.model.UserStatus
+import com.internship.move.data.model.UserStatus.FREE
+import com.internship.move.data.model.UserStatus.SCANNED
 import com.internship.move.databinding.FragmentMapBinding
 import com.internship.move.databinding.ViewStartRideDialogBinding
 import com.internship.move.databinding.ViewTripDetailsCollapsedBinding
@@ -92,6 +102,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                         showStartRideDialog()
                     }
                     UserStatus.BUSY -> {
+                        stopScootersUpdates()
                         showCurrentRideDialog()
                     }
                 }
@@ -106,7 +117,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         scootersJob = viewLifecycleOwner.lifecycleScope.launch {
             while (true) {
                 viewModel.getAllScooters()
-                delay(60000)
+                delay(SCOOTER_UPDATES_INTERVAL)
             }
         }
     }
@@ -264,12 +275,12 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             map?.addMarker(
                 MarkerOptions().position(DEFAULT_LOCATION)
                     .icon(requireContext().getDrawableToBitmapDescriptor(R.drawable.ic_default_location))
-                    .anchor(.5f, .5f)
+                    .anchor(MARKER_ANCHOR, MARKER_ANCHOR)
             )
             map?.addCircle(
                 CircleOptions().center(DEFAULT_LOCATION).radius(CIRCLE_RADIUS_DEFAULT)
                     .fillColor(ColorUtils.setAlphaComponent(resources.getColor(R.color.indigo, null), CIRCLE_ALPHA))
-                    .strokeWidth(0f)
+                    .strokeWidth(CIRCLE_STROKE_WIDTH)
             )
 
             map?.animateCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, ZOOM_VALUE))
@@ -294,13 +305,13 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             binding.titleTV.text = geocoder.getFromLocation(location.latitude, location.longitude, 1)?.firstOrNull()?.locality
             currentLocationData.marker = map?.addMarker(
                 MarkerOptions().position(position).icon(requireContext().getDrawableToBitmapDescriptor(R.drawable.ic_current_location))
-                    .anchor(.5f, .5f)
+                    .anchor(MARKER_ANCHOR, MARKER_ANCHOR)
             )
 
             currentLocationData.circle = map?.addCircle(
                 CircleOptions().center(position).radius(CIRCLE_RADIUS)
                     .fillColor(ColorUtils.setAlphaComponent(resources.getColor(R.color.indigo, null), CIRCLE_ALPHA))
-                    .strokeWidth(0f)
+                    .strokeWidth(CIRCLE_STROKE_WIDTH)
             )
 
             currentLocationData.location = location
@@ -309,8 +320,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
 
     private fun createLocationRequest() = LocationRequest.create().apply {
-        interval = 10000
-        priority = Priority.PRIORITY_HIGH_ACCURACY
+        interval = LOCATION_UPDATES_INTERVAL
+        priority = PRIORITY_HIGH_ACCURACY
     }
 
     private fun displayInfoWindow(scooter: Scooter) {
@@ -336,7 +347,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun showUnlockDialog(scooter: Scooter) {
-        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         bottomSheetDialog.setOnDismissListener {
             selectedMarker?.setIcon(requireContext().getDrawableToBitmapDescriptor(R.drawable.ic_scooter))
         }
@@ -350,8 +361,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             bottomSheetDialog.hide()
             findNavController().navigate(
                 MapFragmentDirections.actionMapFragmentToUnlockFragment(
-                    currentLocationData.location?.longitude?.toFloat() ?: 0f,
-                    currentLocationData.location?.latitude?.toFloat() ?: 0f,
+                    currentLocationData.location?.longitude?.toFloat() ?: COORDINATE_SUBSTITUTE,
+                    currentLocationData.location?.latitude?.toFloat() ?: COORDINATE_SUBSTITUTE,
                     UnlockMethod.NFC
                 )
             )
@@ -361,8 +372,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             bottomSheetDialog.hide()
             findNavController().navigate(
                 MapFragmentDirections.actionMapFragmentToUnlockFragment(
-                    currentLocationData.location?.longitude?.toFloat() ?: 0f,
-                    currentLocationData.location?.latitude?.toFloat() ?: 0f,
+                    currentLocationData.location?.longitude?.toFloat() ?: COORDINATE_SUBSTITUTE,
+                    currentLocationData.location?.latitude?.toFloat() ?: COORDINATE_SUBSTITUTE,
                     UnlockMethod.QR
                 )
             )
@@ -372,8 +383,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             bottomSheetDialog.hide()
             findNavController().navigate(
                 MapFragmentDirections.actionMapFragmentToUnlockFragment(
-                    currentLocationData.location?.longitude?.toFloat() ?: 0f,
-                    currentLocationData.location?.latitude?.toFloat() ?: 0f,
+                    currentLocationData.location?.longitude?.toFloat() ?: COORDINATE_SUBSTITUTE,
+                    currentLocationData.location?.latitude?.toFloat() ?: COORDINATE_SUBSTITUTE,
                     UnlockMethod.PIN
                 )
             )
@@ -386,7 +397,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private fun showStartRideDialog() {
         val scooter: Scooter = viewModel.currentUser.value?.scooter ?: return
 
-        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         bottomSheetDialog.setOnDismissListener {
             viewModel.cancelScanScooter()
             startScootersUpdates()
@@ -452,7 +463,13 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         private const val CIRCLE_ALPHA = 26
         private const val CIRCLE_RADIUS = 100.0
         private const val CIRCLE_RADIUS_DEFAULT = 200.0
+        private const val CIRCLE_STROKE_WIDTH = 0F
 
         private val DEFAULT_LOCATION = LatLng(46.769441, 23.589922)
+        private const val COORDINATE_SUBSTITUTE = 0F
+
+        private const val SCOOTER_UPDATES_INTERVAL = 60000L
+        private const val LOCATION_UPDATES_INTERVAL = 10000L
+        private const val MARKER_ANCHOR = 0.5F
     }
 }

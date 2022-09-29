@@ -59,7 +59,7 @@ class DrivingLicenseFragment : Fragment(R.layout.fragment_driving_license) {
         binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         binding.toolbar.setNavigationIconTint(ResourcesCompat.getColor(resources, R.color.text_color_dark, null))
         binding.toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
+            findNavController().navigateUp()
         }
     }
 
@@ -69,9 +69,9 @@ class DrivingLicenseFragment : Fragment(R.layout.fragment_driving_license) {
                 Manifest.permission.CAMERA
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
-                binding.addLicenseBtn.isEnabled = result
-                if (!result) {
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { hasUserAcceptedPermissions ->
+                binding.addLicenseBtn.isEnabled = hasUserAcceptedPermissions
+                if (!hasUserAcceptedPermissions) {
                     Toast.makeText(requireContext(), "Camera permission denied", LENGTH_LONG).show()
                 }
             }.launch(Manifest.permission.CAMERA)

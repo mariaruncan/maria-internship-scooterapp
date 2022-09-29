@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="30dp" />
+        app:layout_constraintGuide_begin="@dimen/menu_guideline_start_margin" />
 
     <ImageView
         android:id="@+id/backBtn"
@@ -66,7 +66,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="@dimen/menu_history_card_height"
             android:background="@drawable/bg_history"
             android:padding="@dimen/medium_margin_size">
 
@@ -88,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/menu_total_rides_template"
-                android:textColor="@color/pastel_purple"
+                android:textColor="@color/text_color_light_secondary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/historyTV" />
@@ -109,11 +109,11 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/generalSettingsTV"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_settings"
         app:layout_constraintBottom_toBottomOf="@id/generalSettingsTV"
         app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/ic_settings"
-        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/generalSettingsTV"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -123,9 +123,9 @@
         android:layout_height="wrap_content"
         android:text="@string/menu_general_settings_text"
         android:textColor="@color/text_color_dark"
-        app:layout_constraintBottom_toTopOf="@+id/accountTV"
+        app:layout_constraintBottom_toTopOf="@id/accountTV"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/historyCV" />
+        app:layout_constraintTop_toBottomOf="@id/historyCV" />
 
     <TextView
         android:id="@+id/accountTV"
@@ -134,9 +134,9 @@
         android:layout_height="wrap_content"
         android:text="@string/menu_account_text"
         android:textColor="@color/text_color_dark"
-        app:layout_constraintBottom_toTopOf="@+id/changePassTV"
+        app:layout_constraintBottom_toTopOf="@id/changePassTV"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/generalSettingsTV" />
+        app:layout_constraintTop_toBottomOf="@id/generalSettingsTV" />
 
     <TextView
         android:id="@+id/changePassTV"
@@ -145,17 +145,17 @@
         android:layout_height="wrap_content"
         android:text="@string/menu_change_password_text"
         android:textColor="@color/text_color_dark"
-        app:layout_constraintBottom_toTopOf="@+id/legalTV"
+        app:layout_constraintBottom_toTopOf="@id/legalTV"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/accountTV" />
+        app:layout_constraintTop_toBottomOf="@id/accountTV" />
 
     <ImageView
         android:layout_width="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/legalTV"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_flag"
         app:layout_constraintBottom_toBottomOf="@id/legalTV"
         app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/ic_flag"
-        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/legalTV"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -165,9 +165,9 @@
         android:layout_height="wrap_content"
         android:text="@string/menu_legal_text"
         android:textColor="@color/text_color_dark"
-        app:layout_constraintBottom_toTopOf="@+id/termsAndConditionsTV"
+        app:layout_constraintBottom_toTopOf="@id/termsAndConditionsTV"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/changePassTV" />
+        app:layout_constraintTop_toBottomOf="@id/changePassTV" />
 
     <TextView
         android:id="@+id/termsAndConditionsTV"
@@ -176,9 +176,9 @@
         android:layout_height="wrap_content"
         android:text="@string/menu_terms_and_conditions_text"
         android:textColor="@color/text_color_dark"
-        app:layout_constraintBottom_toTopOf="@+id/privacyPolicyTV"
+        app:layout_constraintBottom_toTopOf="@id/privacyPolicyTV"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/legalTV" />
+        app:layout_constraintTop_toBottomOf="@id/legalTV" />
 
     <TextView
         android:id="@+id/privacyPolicyTV"
@@ -187,17 +187,17 @@
         android:layout_height="wrap_content"
         android:text="@string/menu_privacy_policy_text"
         android:textColor="@color/text_color_dark"
-        app:layout_constraintBottom_toTopOf="@+id/rateTV"
+        app:layout_constraintBottom_toTopOf="@id/rateTV"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/termsAndConditionsTV" />
+        app:layout_constraintTop_toBottomOf="@id/termsAndConditionsTV" />
 
     <ImageView
         android:layout_width="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/rateTV"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_star"
         app:layout_constraintBottom_toBottomOf="@id/rateTV"
         app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/ic_star"
-        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/rateTV"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -210,5 +210,5 @@
         android:textColor="@color/text_color_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/privacyPolicyTV" />
+        app:layout_constraintTop_toBottomOf="@id/privacyPolicyTV" />
 </androidx.constraintlayout.widget.ConstraintLayout>
