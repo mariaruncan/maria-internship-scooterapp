@@ -412,9 +412,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun showCurrentRideDialog() {
-        val scooter = viewModel.currentUser.value?.scooter
+        val scooter = viewModel.currentUser.value?.scooter ?: return
 
-        if (scooter == null) return
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
         bottomSheetDialog.setOnDismissListener {
             viewModel.endRide(

@@ -8,20 +8,3 @@ data class User(
     var numberOfTrips: Int = 0,
     var scooter: Scooter? = null
 )
-
-enum class UserStatus {
-    FREE,
-    SCANNED,
-    BUSY;
-
-    companion object{
-        fun toString(status: UserStatus) = status.name.lowercase()
-
-        fun fromString(status: String) = when (status) {
-            "free" -> FREE
-            "scanned" -> SCANNED
-            "busy" -> BUSY
-            else -> throw IllegalArgumentException("Wrong status!")
-        }
-    }
-}
