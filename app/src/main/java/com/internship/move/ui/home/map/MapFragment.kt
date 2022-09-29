@@ -2,13 +2,16 @@ package com.internship.move.ui.home.map
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.content.res.Resources
 import android.location.Geocoder
 import android.os.Bundle
 import android.os.Looper
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -57,6 +60,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
@@ -467,6 +471,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         val scooter = viewModel.currentUser.value?.scooter ?: return
 
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
+
 
         val dialogBinding = ViewTripDetailsExpandedBinding.inflate(layoutInflater, null, false)
         dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
