@@ -6,8 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.internship.move.data.dto.ErrorResponseDTO
-import com.internship.move.data.dto.UserDTO
 import com.internship.move.data.model.Scooter
+import com.internship.move.data.model.User
+import com.internship.move.data.model.UserStatus
 import com.internship.move.repository.ScooterRepository
 import com.internship.move.repository.UserRepository
 import com.internship.move.ui.home.unlock.UnlockMethod
@@ -15,6 +16,7 @@ import com.internship.move.utils.InternalStorageManager
 import com.internship.move.utils.extensions.toErrorResponseDTO
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.launch
+import com.internship.move.data.model.UserStatus.FREE
 
 class MainViewModel(
     private val userRepo: UserRepository,
@@ -23,21 +25,34 @@ class MainViewModel(
     private val errorJSONAdapter: JsonAdapter<ErrorResponseDTO>
 ) : ViewModel() {
 
-    private val _currentUser: MutableLiveData<UserDTO?> = MutableLiveData()
-    val currentUser: LiveData<UserDTO?>
+    private var _status: UserStatus = FREE
+    val status: UserStatus
+        get() = _status
+
+    private val _currentUser: MutableLiveData<User?> = MutableLiveData()
+    val currentUser: LiveData<User?>
         get() = _currentUser
 
     private val _scootersList: MutableLiveData<List<Scooter>> = MutableLiveData(listOf())
     val scootersList: LiveData<List<Scooter>>
         get() = _scootersList
 
-    private var _selectedScooter: MutableLiveData<Scooter?> = MutableLiveData()
-    val selectedScooter: LiveData<Scooter?>
-        get() = _selectedScooter
-
     private val _errorMessage: MutableLiveData<String> = MutableLiveData()
     val errorMessage: LiveData<String>
         get() = _errorMessage
+
+    val unlockResult: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    init {
+        viewModelScope.launch {
+            try {
+                _currentUser.value = userRepo.getCurrentUser().toUser()
+            } catch (e: Exception) {
+                _currentUser.value = null
+                handleException(e)
+            }
+        }
+    }
 
     fun logOut() {
         internalStorageManager.setToken(null)
@@ -47,16 +62,6 @@ class MainViewModel(
     fun clearApp() {
         logOut()
         internalStorageManager.setHasSeenOnboarding(false)
-    }
-
-    fun getCurrentUser() {
-        viewModelScope.launch {
-            try {
-                _currentUser.value = userRepo.getCurrentUser()
-            } catch (e: Exception) {
-                handleException(e)
-            }
-        }
     }
 
     fun getAllScooters() {
@@ -73,8 +78,11 @@ class MainViewModel(
         viewModelScope.launch {
             try {
                 val response = scooterRepo.scanScooter(method, scooterId, location)
-                _selectedScooter.value = response.scooter.toScooter()
-                _currentUser.value = response.user
+                val scooter = response.scooter.toScooter()
+                val user = response.user.toUser().copy(scooter = scooter)
+                _status = user.status
+                _currentUser.value = user
+                unlockResult.value = true
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -84,7 +92,12 @@ class MainViewModel(
     fun cancelScanScooter() {
         viewModelScope.launch {
             try {
-                _selectedScooter.value?.number?.let { scooterRepo.cancelScanScooter(it) }
+                val number = _currentUser.value?.scooter?.number
+                if (number != null) {
+                    scooterRepo.cancelScanScooter(number)
+                }
+                _scootersList.value = scooterRepo.getAllScooters()
+                _currentUser.value = userRepo.getCurrentUser().toUser()
             } catch (e: Exception) {
                 handleException(e)
             }

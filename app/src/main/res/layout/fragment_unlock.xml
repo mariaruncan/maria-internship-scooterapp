@@ -3,8 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    tools:background="@drawable/bg_authentication"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:background="@drawable/bg_default">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/closeBtn"
@@ -53,6 +63,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textAppearance="@style/Heading4"
+        android:textColor="@color/text_color_secondary"
         app:layout_constraintBottom_toTopOf="@id/codeInputLL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +123,8 @@
                 android:gravity="center"
                 android:inputType="number"
                 android:textAppearance="@style/Heading2"
-                android:textColor="@color/text_color_dark" />
+                android:textColor="@color/text_color_dark"
+                android:textCursorDrawable="@drawable/bg_cursor" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Space
@@ -131,7 +143,8 @@
                 android:gravity="center"
                 android:inputType="number"
                 android:textAppearance="@style/Heading2"
-                android:textColor="@color/text_color_dark" />
+                android:textColor="@color/text_color_dark"
+                android:textCursorDrawable="@drawable/bg_cursor" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Space
@@ -150,11 +163,27 @@
                 android:gravity="center"
                 android:inputType="number"
                 android:textAppearance="@style/Heading2"
-                android:textColor="@color/text_color_dark" />
+                android:textColor="@color/text_color_dark"
+                android:textCursorDrawable="@drawable/bg_cursor" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <TextView
+        android:id="@+id/unlockSuccessfulTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/unlock_successful_message"
+        android:textAppearance="@style/Heading4"
+        android:textColor="@color/text_color_secondary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/buttonsTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/buttonsTV"
         style="@style/Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -174,10 +203,10 @@
         android:fontFamily="@font/bai_jamjuree_bold"
         android:textAppearance="@style/Button1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/textView" />
+        app:layout_constraintEnd_toStartOf="@id/orTV" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/orTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bai_jamjuree_bold"
@@ -198,5 +227,11 @@
         android:fontFamily="@font/bai_jamjuree_bold"
         android:textAppearance="@style/Button1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/textView" />
+        app:layout_constraintStart_toEndOf="@id/orTV" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/unlockSuccessfulGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="progressBar,closeBtn,toolbarTitleTV,descriptionTV, codeInputLL, buttonsTV, orTV,firstBtn,secondBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,18 +1,16 @@
 package com.internship.move.ui.authentication
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.internship.move.data.dto.ErrorResponseDTO
-import com.internship.move.data.dto.ErrorResponseDTOJsonAdapter
-import com.internship.move.data.dto.UserDTO
+import com.internship.move.data.model.User
 import com.internship.move.repository.UserRepository
 import com.internship.move.utils.InternalStorageManager
 import com.internship.move.utils.extensions.toErrorResponseDTO
 import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 
 class AuthenticationViewModel(
     private val repo: UserRepository,
@@ -20,19 +18,27 @@ class AuthenticationViewModel(
     private val errorJSONAdapter: JsonAdapter<ErrorResponseDTO>
 ) : ViewModel() {
 
-    val errorMessage: MutableLiveData<String> = MutableLiveData()
-    val isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
-    val user: MutableLiveData<UserDTO> = MutableLiveData()
+    private val _errorMessage: MutableLiveData<String> = MutableLiveData()
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
+
+    private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
+    private val _user: MutableLiveData<User> = MutableLiveData()
+    val user: LiveData<User>
+        get() = _user
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
             try {
-                isLoading.value = true
+                _isLoading.value = true
                 val response = repo.login(email, password)
                 internalStorageManager.setToken(response.token)
                 internalStorageManager.setHasDrivingLicense(response.user.drivingLicense != null)
-                isLoading.value = false
-                user.value = response.user
+                _isLoading.value = false
+                _user.value = response.user.toUser()
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -42,11 +48,11 @@ class AuthenticationViewModel(
     fun register(name: String, email: String, password: String) {
         viewModelScope.launch {
             try {
-                isLoading.value = true
+                _isLoading.value = true
                 val response = repo.register(name, email, password)
                 internalStorageManager.setToken(response.token)
-                isLoading.value = false
-                user.value = response.user
+                _isLoading.value = false
+                _user.value = response.user.toUser()
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -56,11 +62,11 @@ class AuthenticationViewModel(
     fun addDrivingLicense(imagePath: String) {
         viewModelScope.launch {
             try {
-                isLoading.value = true
+                _isLoading.value = true
                 val response = repo.addLicense(imagePath)
                 internalStorageManager.setHasDrivingLicense(true)
-                isLoading.value = false
-                user.value = response.user
+                _isLoading.value = false
+                _user.value = response.user.toUser()
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -72,7 +78,7 @@ class AuthenticationViewModel(
     }
 
     private fun handleException(e: Exception) {
-        errorMessage.value = e.toErrorResponseDTO(errorJSONAdapter).message
-        isLoading.value = false
+        _errorMessage.value = e.toErrorResponseDTO(errorJSONAdapter).message
+        _isLoading.value = false
     }
 }

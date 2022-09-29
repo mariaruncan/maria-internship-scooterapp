@@ -1,15 +1,20 @@
 package com.internship.move.ui.home.unlock
 
+import android.Manifest.permission.CAMERA
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.model.LatLng
@@ -21,12 +26,17 @@ import com.internship.move.R
 import com.internship.move.databinding.FragmentUnlockBinding
 import com.internship.move.ui.home.MainViewModel
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import com.internship.move.ui.home.unlock.UnlockMethod.QR
+import com.internship.move.ui.home.unlock.UnlockMethod.NFC
+import com.internship.move.ui.home.unlock.UnlockMethod.PIN
 
 class UnlockFragment : Fragment(R.layout.fragment_unlock) {
 
     private val binding by viewBinding(FragmentUnlockBinding::bind)
-    private val viewModel: MainViewModel by viewModel()
+    private val viewModel: MainViewModel by sharedViewModel()
     private val args by navArgs<UnlockFragmentArgs>()
     private var cameraSource: CameraSource? = null
     private var scooterId: Int = 0
@@ -39,13 +49,13 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         }
 
         when (args.unlockMethod) {
-            UnlockMethod.QR -> initQRUnlock()
-            UnlockMethod.NFC -> initNFCUnlock()
-            UnlockMethod.PIN -> initPinUnlock()
+            QR -> checkCameraPermission()
+            NFC -> initNFCUnlock()
+            PIN -> initPinUnlock()
         }
 
         binding.closeBtn.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentToMapFragment())
         }
     }
 
@@ -71,13 +81,27 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
                 UnlockFragmentDirections.actionUnlockFragmentSelf(
                     args.longitude,
                     args.latitude,
-                    UnlockMethod.PIN
+                    PIN
                 )
             )
         }
 
         binding.secondBtn.setOnClickListener {
-            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, UnlockMethod.NFC))
+            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, NFC))
+        }
+    }
+
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(requireContext(), CAMERA) != PERMISSION_GRANTED) {
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { hasUserAcceptedCameraPermission ->
+                if (hasUserAcceptedCameraPermission) {
+                    initQRUnlock()
+                } else {
+                    Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_LONG).show()
+                }
+            }.launch(CAMERA)
+        } else {
+            initQRUnlock()
         }
     }
 
@@ -128,7 +152,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
     }
 
     private fun initNFCUnlock() {
-        binding.root.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_authentication, null)
+        binding.root.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_default, null)
         binding.toolbarTitleTV.text = resources.getString(R.string.unlock_nfc_toolbar_title)
         binding.titleTV.text = resources.getString(R.string.unlock_nfc_title)
         binding.descriptionTV.text = resources.getString(R.string.unlock_nfc_description)
@@ -139,7 +163,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         // listener for nfc
 
         binding.firstBtn.setOnClickListener {
-            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, UnlockMethod.QR))
+            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, QR))
         }
 
         binding.secondBtn.setOnClickListener {
@@ -147,14 +171,25 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
                 UnlockFragmentDirections.actionUnlockFragmentSelf(
                     args.longitude,
                     args.latitude,
-                    UnlockMethod.PIN
+                    PIN
                 )
             )
         }
     }
 
     private fun initPinUnlock() {
-        binding.root.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_authentication, null)
+        viewModel.unlockResult.observe(viewLifecycleOwner) { isUnlockSuccessful ->
+            if (isUnlockSuccessful) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    displayUnlockSuccessfulScreen()
+                    delay(UNLOCK_SUCCESSFUL_DELAY)
+                    viewModel.unlockResult.value = false
+                    findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentToMapFragment())
+                }
+            }
+        }
+
+        binding.root.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_default, null)
         binding.toolbarTitleTV.text = resources.getString(R.string.unlock_code_toolbar_title)
         binding.titleTV.text = resources.getString(R.string.unlock_code_title)
         binding.descriptionTV.text = resources.getString(R.string.unlock_code_description)
@@ -186,22 +221,31 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
             binding.fourthDigitTIET.clearFocus()
             scooterId *= 10
             scooterId += text.toString().toInt()
-            viewModel.scanScooter(UnlockMethod.PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
+
+            binding.progressBar.isVisible = true
+            viewModel.scanScooter(PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
             findNavController().navigateUp()
         }
 
         binding.firstBtn.setOnClickListener {
-            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, UnlockMethod.QR))
+            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, QR))
         }
 
         binding.secondBtn.setOnClickListener {
-            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, UnlockMethod.NFC))
+            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, NFC))
         }
+    }
+
+    private fun displayUnlockSuccessfulScreen() {
+        binding.unlockSuccessfulGroup.isVisible = false
+        binding.titleTV.text = resources.getString(R.string.unlock_successful_title)
+        binding.unlockBgIV.setImageResource(R.drawable.bg_unlock_successful)
+        binding.unlockSuccessfulTV.isVisible = true
     }
 
     companion object {
         private const val BARCODE_MINIMUM_SIZE = 1
-
+        private const val UNLOCK_SUCCESSFUL_DELAY = 2000L
         private const val CAMERA_PREVIEW_HEIGHT = 1920
         private const val CAMERA_PREVIEW_WIDTH = 1080
     }

@@ -30,7 +30,7 @@ class UserRepository(
         return api.addDrivingLicense(filePart)
     }
 
-    suspend fun getCurrentUser(): UserDTO? = api.getCurrentUser().user
+    suspend fun getCurrentUser(): UserDTO = api.getCurrentUser().user
 
     companion object {
         private const val KEY_JSON_IMAGE = "productImage"

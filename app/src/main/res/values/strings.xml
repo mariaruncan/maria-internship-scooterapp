@@ -103,6 +103,23 @@
     <string name="unlock_nfc_title">NFC unlock</string>
     <string name="unlock_nfc_description">Hold your phone close to the NFC Tag \n located on top of the handlebar of \n your scooter.</string>
 
+    <!-- region UnlockSuccessful -->
+    <string name="unlock_successful_message">Please respect all the driving regulations \n and other participants in traffic while using \n our scooters.</string>
+    <string name="unlock_successful_title">Unlock \n successful</string>
+
     <!-- region StartRide -->
     <string name="start_ride_button_text">Start ride</string>
+
+    <!-- region Menu -->
+    <string name="menu_total_rides_template">Total rides: %1$d</string>
+    <string name="menu_title_template">Hi %s!</string>
+    <string name="menu_history_label">History</string>
+    <string name="menu_see_rides_btn_text">See all</string>
+    <string name="menu_general_settings_text">General Settings</string>
+    <string name="menu_account_text">Account</string>
+    <string name="menu_change_password_text">Change password</string>
+    <string name="menu_legal_text">Legal</string>
+    <string name="menu_terms_and_conditions_text">Terms and Conditions</string>
+    <string name="menu_privacy_policy_text">Privacy Policy</string>
+    <string name="menu_rate_us_text">Rate Us</string>
 </resources>
