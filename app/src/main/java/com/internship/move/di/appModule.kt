@@ -57,6 +57,7 @@ val services = module {
     single { getOkHttpClient(tokenInterceptor = get()) }
     single { getRetrofit(moshi = get(), httpClient = get()) }
     single { getUserService(retrofit = get()) }
+    single { getTripService(retrofit = get()) }
     single { getScooterService(retrofit = get()) }
     single { getErrorAdapter(moshi = get()) }
 }

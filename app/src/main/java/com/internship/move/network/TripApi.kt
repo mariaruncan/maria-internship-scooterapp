@@ -9,9 +9,9 @@ import retrofit2.http.Path
 
 interface TripApi {
 
-    @POST("trips")
+    @POST("trips/startPhysical")
     suspend fun startRide(@Body startRideRequest: StartRideRequestDTO)
 
-    @PATCH("trips/end/{id}")
+    @PATCH("trips/endPhysical/{id}")
     suspend fun endRide(@Path("id") scooterId: String, @Body endRideRequest: EndRideRequestDTO)
 }

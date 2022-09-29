@@ -21,8 +21,8 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
@@ -40,6 +40,7 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.internship.move.R
 import com.internship.move.data.model.CurrentLocationData
 import com.internship.move.data.model.Scooter
+import com.internship.move.data.model.UserStatus.BUSY
 import com.internship.move.data.model.UserStatus.FREE
 import com.internship.move.data.model.UserStatus.SCANNED
 import com.internship.move.databinding.FragmentMapBinding
@@ -90,18 +91,16 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 findNavController().navigate(MapFragmentDirections.actionMapFragmentToSplashGraph())
             } else {
                 when (user.status) {
-                    UserStatus.FREE -> {
-                        if (viewModel.status == UserStatus.FREE) {
-                            startScootersUpdates()
-                            displayCurrentLocation()
-                        }
+                    FREE -> {
+                        startScootersUpdates()
+                        displayCurrentLocation()
                     }
 
-                    UserStatus.SCANNED -> {
+                    SCANNED -> {
                         stopScootersUpdates()
                         showStartRideDialog()
                     }
-                    UserStatus.BUSY -> {
+                    BUSY -> {
                         stopScootersUpdates()
                         showCurrentRideDialog()
                     }
@@ -292,23 +291,25 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun initLocationCallback() = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
+            val map = this@MapFragment.map ?: return
+
             val location = locationResult.lastLocation ?: return
             val position = LatLng(location.latitude, location.longitude)
 
             if (currentLocationData.location == null) {
-                map?.animateCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM_VALUE))
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM_VALUE))
             }
 
             currentLocationData.marker?.remove()
             currentLocationData.circle?.remove()
 
             binding.titleTV.text = geocoder.getFromLocation(location.latitude, location.longitude, 1)?.firstOrNull()?.locality
-            currentLocationData.marker = map?.addMarker(
+            currentLocationData.marker = map.addMarker(
                 MarkerOptions().position(position).icon(requireContext().getDrawableToBitmapDescriptor(R.drawable.ic_current_location))
                     .anchor(MARKER_ANCHOR, MARKER_ANCHOR)
             )
 
-            currentLocationData.circle = map?.addCircle(
+            currentLocationData.circle = map.addCircle(
                 CircleOptions().center(position).radius(CIRCLE_RADIUS)
                     .fillColor(ColorUtils.setAlphaComponent(resources.getColor(R.color.indigo, null), CIRCLE_ALPHA))
                     .strokeWidth(CIRCLE_STROKE_WIDTH)
@@ -339,6 +340,10 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             showUnlockDialog(scooter)
             hideInfoWindow()
         }
+
+        infoWindow.ringBtn.setOnClickListener {
+            viewModel.beepScooter(scooter.id)
+        }
     }
 
     private fun hideInfoWindow() {
@@ -357,8 +362,12 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
         dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
+        dialogBinding.ringBtn.setOnClickListener {
+            viewModel.beepScooter(scooter.id)
+        }
+
         dialogBinding.nfcBtn.setOnClickListener {
-            bottomSheetDialog.hide()
+            bottomSheetDialog.dismiss()
             findNavController().navigate(
                 MapFragmentDirections.actionMapFragmentToUnlockFragment(
                     currentLocationData.location?.longitude?.toFloat() ?: COORDINATE_SUBSTITUTE,
@@ -369,7 +378,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
 
         dialogBinding.qrBtn.setOnClickListener {
-            bottomSheetDialog.hide()
+            bottomSheetDialog.dismiss()
             findNavController().navigate(
                 MapFragmentDirections.actionMapFragmentToUnlockFragment(
                     currentLocationData.location?.longitude?.toFloat() ?: COORDINATE_SUBSTITUTE,
@@ -380,7 +389,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
 
         dialogBinding.codeBtn.setOnClickListener {
-            bottomSheetDialog.hide()
+            bottomSheetDialog.dismiss()
             findNavController().navigate(
                 MapFragmentDirections.actionMapFragmentToUnlockFragment(
                     currentLocationData.location?.longitude?.toFloat() ?: COORDINATE_SUBSTITUTE,
@@ -425,15 +434,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private fun showCurrentRideDialog() {
         val scooter = viewModel.currentUser.value?.scooter ?: return
 
-        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.SheetDialog)
-        bottomSheetDialog.setOnDismissListener {
-            viewModel.endRide(
-                scooter.id,
-                currentLocationData.location?.latitude ?: .0,
-                currentLocationData.location?.longitude ?: .0
-            )
-            startScootersUpdates()
-        }
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
 
         val dialogBinding = ViewTripDetailsCollapsedBinding.inflate(layoutInflater, null, false)
         dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
