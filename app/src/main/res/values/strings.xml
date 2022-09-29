@@ -127,4 +127,5 @@
     <string name="trip_details_distance_label">Distance</string>
     <string name="trip_details_lock_btn_text">Lock</string>
     <string name="trip_details_end_ride_btn_text">End ride</string>
+    <string name="trip_details_battery_label">Battery</string>
 </resources>

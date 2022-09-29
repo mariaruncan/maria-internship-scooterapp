@@ -14,7 +14,7 @@ interface ScooterApi {
     @GET("scooters")
     suspend fun getAllScooters(): ScootersResponseDTO
 
-    @PATCH("scooters/scanPhysical")
+    @PATCH("scooters/scan")
     suspend fun scanScooter(
         @Query("method") method: String,
         @Query("id") id: Int,
@@ -22,7 +22,7 @@ interface ScooterApi {
         @Query("longitude") longitude: Double
     ): ScanResponseDTO
 
-    @PATCH("scooters/cancelPhysical")
+    @PATCH("scooters/cancel")
     suspend fun cancelScanScooter(@Query("id") id: Int)
 
     @PUT("scooters/{id}/beep")

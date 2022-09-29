@@ -46,6 +46,7 @@ import com.internship.move.data.model.UserStatus.SCANNED
 import com.internship.move.databinding.FragmentMapBinding
 import com.internship.move.databinding.ViewStartRideDialogBinding
 import com.internship.move.databinding.ViewTripDetailsCollapsedBinding
+import com.internship.move.databinding.ViewTripDetailsExpandedBinding
 import com.internship.move.databinding.ViewUnlockDialogBinding
 import com.internship.move.ui.home.MainViewModel
 import com.internship.move.ui.home.unlock.UnlockMethod
@@ -102,7 +103,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                     }
                     BUSY -> {
                         stopScootersUpdates()
-                        showCurrentRideDialog()
+                        showCurrentRideDialogCollapsed()
                     }
                 }
             }
@@ -431,7 +432,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         bottomSheetDialog.show()
     }
 
-    private fun showCurrentRideDialog() {
+    private fun showCurrentRideDialogCollapsed() {
         val scooter = viewModel.currentUser.value?.scooter ?: return
 
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
@@ -439,6 +440,9 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         val dialogBinding = ViewTripDetailsCollapsedBinding.inflate(layoutInflater, null, false)
         dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
         dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
+
+        // TODO("listener for lockBtn")
+        // TODO("travel time + distance")
 
         dialogBinding.endRideBtn.setOnClickListener {
             viewModel.endRide(
@@ -448,6 +452,42 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             )
             bottomSheetDialog.dismiss()
             startScootersUpdates()
+        }
+
+        dialogBinding.root.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            showCurrentRideDialogExpanded()
+        }
+
+        bottomSheetDialog.setContentView(dialogBinding.root)
+        bottomSheetDialog.show()
+    }
+
+    private fun showCurrentRideDialogExpanded() {
+        val scooter = viewModel.currentUser.value?.scooter ?: return
+
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
+
+        val dialogBinding = ViewTripDetailsExpandedBinding.inflate(layoutInflater, null, false)
+        dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
+        dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
+
+        // TODO("listener for lockBtn")
+        // TODO("travel time + distance")
+
+        dialogBinding.endRideBtn.setOnClickListener {
+            viewModel.endRide(
+                scooter.id,
+                currentLocationData.location?.latitude ?: .0,
+                currentLocationData.location?.longitude ?: .0
+            )
+            bottomSheetDialog.dismiss()
+            startScootersUpdates()
+        }
+
+        dialogBinding.minimizeBtn.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            showCurrentRideDialogCollapsed()
         }
 
         bottomSheetDialog.setContentView(dialogBinding.root)
