@@ -26,6 +26,11 @@
         <item name="android:fontFamily">@font/bai_jamjuree_medium</item>
     </style>
 
+    <style name="Heading5" parent="TextAppearance">
+        <item name="android:fontFamily">@font/bai_jamjuree_bold</item>
+        <item name="android:textSize">@dimen/body1_text_size</item>
+    </style>
+
     <style name="Button1" parent="TextAppearance">
         <item name="android:fontFamily">@font/bai_jamjuree_medium</item>
     </style>
@@ -78,5 +83,20 @@
         <item name="android:background">@drawable/bg_button</item>
         <item name="backgroundTint">@color/pink</item>
         <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="TextInputLayout.Digit" parent="TextInputLayout">
+        <item name="boxBackgroundColor">@color/text_input_bg_color</item>
+        <item name="boxCornerRadiusTopStart">@dimen/small_margin_size</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/small_margin_size</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/small_margin_size</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/small_margin_size</item>
+        <item name="boxStrokeColor">@color/transparent</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+    </style>
+
+    <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:colorBackground">@color/transparent</item>
     </style>
 </resources>

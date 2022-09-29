@@ -6,6 +6,8 @@
     <dimen name="large_margin_size">32dp</dimen>
     <dimen name="progress_bar_elevation">10dp</dimen>
     <dimen name="dialog_width">320dp</dimen>
+    <dimen name="cursor_width">2dp</dimen>
+    <dimen name="outlined_button_stroke_width">1dp</dimen>
 
     <!-- styles -->
     <dimen name="h1_text_size">32sp</dimen>
@@ -32,4 +34,10 @@
     <dimen name="view_scooter_info_card_corner_radius">20dp</dimen>
     <dimen name="view_scooter_info_button_dim">52dp</dimen>
     <dimen name="view_scooter_info_button_elevation">4dp</dimen>
+    <dimen name="unlock_code_space_width">24dp</dimen>
+    <dimen name="unlock_code_input_dim">66dp</dimen>
+    <dimen name="unlock_btn_dim">66dp</dimen>
+    <dimen name="map_toolbar_margin_bottom">4dp</dimen>
+    <dimen name="menu_guideline_start_margin">30dp</dimen>
+    <dimen name="menu_history_card_height">130dp</dimen>
 </resources>

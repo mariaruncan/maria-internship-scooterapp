@@ -14,6 +14,10 @@
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"
             app:popUpTo="@id/registerFragment"
             app:popUpToInclusive="true" />
 
@@ -33,12 +37,20 @@
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment"
+            app:enterAnim="@anim/enter_from_left"
+            app:exitAnim="@anim/exit_to_right"
+            app:popEnterAnim="@anim/enter_from_right"
+            app:popExitAnim="@anim/exit_to_left"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
 
         <action
             android:id="@+id/action_loginFragment_to_home_graph"
             app:destination="@id/home_graph"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
 
@@ -116,6 +128,10 @@
         <action
             android:id="@+id/action_viewLicenseFragment_to_home_graph"
             app:destination="@id/home_graph"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"
             app:popUpTo="@id/viewLicenseFragment"
             app:popUpToInclusive="true" />
     </fragment>

@@ -1,6 +1,7 @@
 package com.internship.move.di
 
 import com.internship.move.BuildConfig
+import com.internship.move.data.dto.ErrorResponseDTO
 import com.internship.move.network.ScooterApi
 import com.internship.move.network.UserApi
 import com.internship.move.network.interceptors.TokenInterceptor
@@ -14,13 +15,13 @@ import com.internship.move.utils.Constants.HttpClient.CONNECT_TIMEOUT
 import com.internship.move.utils.Constants.HttpClient.READ_TIMEOUT
 import com.internship.move.utils.Constants.HttpClient.WRITE_TIMEOUT
 import com.internship.move.utils.InternalStorageManager
+import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import id.zelory.compressor.Compressor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -29,8 +30,8 @@ import java.util.concurrent.TimeUnit
 val viewModels = module {
     viewModel { SplashViewModel(internalStorageManager = get()) }
     viewModel { OnboardingViewModel(internalStorageManager = get()) }
-    viewModel { AuthenticationViewModel(repo = get(), internalStorageManager = get(), moshi = get()) }
-    viewModel { MainViewModel(repo = get(), internalStorageManager = get()) }
+    viewModel { AuthenticationViewModel(repo = get(), internalStorageManager = get(), errorJSONAdapter = get()) }
+    viewModel { MainViewModel(userRepo = get(), scooterRepo = get(), internalStorageManager = get(), errorJSONAdapter = get()) }
 }
 
 val repositories = module {
@@ -46,19 +47,22 @@ val services = module {
     single { getRetrofit(moshi = get(), httpClient = get()) }
     single { getUserService(retrofit = get()) }
     single { getScooterService(retrofit = get()) }
+    single { getErrorAdapter(moshi = get()) }
 }
 
 val storage = module {
     single { InternalStorageManager(androidContext()) }
 }
 
-fun getTokenInterceptor(internalStorageManager: InternalStorageManager) = TokenInterceptor(internalStorageManager)
+private fun getErrorAdapter(moshi: Moshi): JsonAdapter<ErrorResponseDTO> = moshi.adapter(ErrorResponseDTO::class.java).lenient()
 
-fun getFileCompressor(): Compressor = Compressor
+private fun getTokenInterceptor(internalStorageManager: InternalStorageManager) = TokenInterceptor(internalStorageManager)
 
-fun getMoshi(): Moshi = Moshi.Builder().build()
+private fun getFileCompressor(): Compressor = Compressor
 
-fun getOkHttpClient(tokenInterceptor: TokenInterceptor): OkHttpClient {
+private fun getMoshi(): Moshi = Moshi.Builder().build()
+
+private fun getOkHttpClient(tokenInterceptor: TokenInterceptor): OkHttpClient {
     val httpClient = OkHttpClient.Builder()
     if (BuildConfig.DEBUG) {
         val logging = HttpLoggingInterceptor()
@@ -74,13 +78,13 @@ fun getOkHttpClient(tokenInterceptor: TokenInterceptor): OkHttpClient {
         .build()
 }
 
-fun getRetrofit(moshi: Moshi, httpClient: OkHttpClient): Retrofit =
+private fun getRetrofit(moshi: Moshi, httpClient: OkHttpClient): Retrofit =
     Retrofit.Builder()
         .baseUrl(BuildConfig.BASE_URL)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .client(httpClient)
         .build()
 
-fun getUserService(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
+private fun getUserService(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
 
-fun getScooterService(retrofit: Retrofit): ScooterApi = retrofit.create(ScooterApi::class.java)
+private fun getScooterService(retrofit: Retrofit): ScooterApi = retrofit.create(ScooterApi::class.java)

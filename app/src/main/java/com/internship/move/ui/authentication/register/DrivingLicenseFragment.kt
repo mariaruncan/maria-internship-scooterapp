@@ -1,12 +1,16 @@
 package com.internship.move.ui.authentication.register
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -43,16 +47,36 @@ class DrivingLicenseFragment : Fragment(R.layout.fragment_driving_license) {
         super.onViewCreated(view, savedInstanceState)
 
         initToolbar()
+        binding.addLicenseBtn.isEnabled = false
         binding.addLicenseBtn.setOnClickListener {
             takePicture()
         }
+
+        checkCameraPermission()
     }
 
     private fun initToolbar() {
         binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         binding.toolbar.setNavigationIconTint(ResourcesCompat.getColor(resources, R.color.text_color_dark, null))
         binding.toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { hasUserAcceptedPermissions ->
+                binding.addLicenseBtn.isEnabled = hasUserAcceptedPermissions
+                if (!hasUserAcceptedPermissions) {
+                    Toast.makeText(requireContext(), "Camera permission denied", LENGTH_LONG).show()
+                }
+            }.launch(Manifest.permission.CAMERA)
+        } else {
+            binding.addLicenseBtn.isEnabled = true
         }
     }
 
