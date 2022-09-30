@@ -3,10 +3,10 @@ package com.internship.move.utils.extensions
 import android.widget.ImageView
 import com.internship.move.R
 import com.internship.move.utils.Constants.BatteryLevel.BATTERY_THRESHOLD_100
-import com.internship.move.utils.Constants.BatteryLevel.BATTERY_THRESHOLD_80
-import com.internship.move.utils.Constants.BatteryLevel.BATTERY_THRESHOLD_60
-import com.internship.move.utils.Constants.BatteryLevel.BATTERY_THRESHOLD_40
 import com.internship.move.utils.Constants.BatteryLevel.BATTERY_THRESHOLD_20
+import com.internship.move.utils.Constants.BatteryLevel.BATTERY_THRESHOLD_40
+import com.internship.move.utils.Constants.BatteryLevel.BATTERY_THRESHOLD_60
+import com.internship.move.utils.Constants.BatteryLevel.BATTERY_THRESHOLD_80
 
 fun ImageView.setBatteryIcon(batteryLevel: Int) {
     this.setImageResource(

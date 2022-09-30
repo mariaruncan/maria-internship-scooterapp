@@ -3,7 +3,6 @@ package com.internship.move.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.internship.move.data.dto.ErrorResponseDTO
@@ -13,8 +12,6 @@ import com.internship.move.data.model.User
 import com.internship.move.repository.ScooterRepository
 import com.internship.move.repository.TripRepository
 import com.internship.move.repository.UserRepository
-import com.internship.move.ui.home.map.MapFragment
-import com.internship.move.ui.home.unlock.UnlockFragment
 import com.internship.move.ui.home.unlock.UnlockMethod
 import com.internship.move.utils.InternalStorageManager
 import com.internship.move.utils.extensions.toErrorResponseDTO

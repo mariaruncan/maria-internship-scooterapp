@@ -451,8 +451,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
 
         viewModel.trip.observe(viewLifecycleOwner) { trip ->
-            if(trip == null) return@observe
-            val kms = trip.distance.toFloat() /1000F
+            if (trip == null) return@observe
+            val kms = trip.distance.toFloat() / 1000F
             dialogBinding.distanceTV.text = DISTANCE_TEMPLATE_SECONDS.format(kms)
         }
 
@@ -496,8 +496,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
 
         viewModel.trip.observe(viewLifecycleOwner) { trip ->
-            if(trip == null) return@observe
-            val kms = trip.distance.toFloat() /1000F
+            if (trip == null) return@observe
+            val kms = trip.distance.toFloat() / 1000F
             dialogBinding.distanceTV.text = DISTANCE_TEMPLATE_SECONDS.format(kms)
         }
 

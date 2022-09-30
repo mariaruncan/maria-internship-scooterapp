@@ -6,8 +6,8 @@ import com.internship.move.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashFragment : Fragment(R.layout.fragment_splash) {

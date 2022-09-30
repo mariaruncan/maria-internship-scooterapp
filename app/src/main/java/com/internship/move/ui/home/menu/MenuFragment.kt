@@ -11,7 +11,7 @@ import com.internship.move.ui.home.MainViewModel
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class MenuFragment: Fragment(R.layout.fragment_menu) {
+class MenuFragment : Fragment(R.layout.fragment_menu) {
 
     private val binding by viewBinding(FragmentMenuBinding::bind)
     private val viewModel: MainViewModel by sharedViewModel()

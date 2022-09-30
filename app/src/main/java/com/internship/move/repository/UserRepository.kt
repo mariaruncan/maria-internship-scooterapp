@@ -1,12 +1,11 @@
 package com.internship.move.repository
 
 import android.content.Context
-import com.internship.move.network.UserApi
 import com.internship.move.data.dto.AddLicenseResponseDTO
 import com.internship.move.data.dto.LoginRequestDTO
 import com.internship.move.data.dto.RegisterRequestDTO
-import com.internship.move.data.dto.UserDTO
 import com.internship.move.data.dto.UserResponseDTO
+import com.internship.move.network.UserApi
 import id.zelory.compressor.Compressor
 import okhttp3.MediaType
 import okhttp3.MultipartBody

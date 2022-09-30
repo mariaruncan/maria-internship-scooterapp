@@ -1,9 +1,5 @@
 package com.internship.move.data.dto
 
-import com.google.android.gms.maps.model.LatLng
-import com.internship.move.data.model.BookedStatus
-import com.internship.move.data.model.LockedStatus
-import com.internship.move.data.model.Scooter
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

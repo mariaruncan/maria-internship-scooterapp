@@ -5,7 +5,7 @@ enum class UserStatus {
     SCANNED,
     BUSY;
 
-    companion object{
+    companion object {
         private const val FREE_STRING = "free"
         private const val SCANNED_STRING = "scanned"
         private const val BUSY_STRING = "busy"

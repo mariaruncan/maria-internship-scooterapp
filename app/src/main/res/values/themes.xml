@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.Move" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -10,7 +10,7 @@
         <item name="colorSecondaryVariant">@color/pastel_pink</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" >@color/status_bar_color</item>
+        <item name="android:statusBarColor">@color/status_bar_color</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/white</item>
     </style>

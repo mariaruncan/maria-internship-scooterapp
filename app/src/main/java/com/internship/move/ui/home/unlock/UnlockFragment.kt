@@ -25,13 +25,13 @@ import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.internship.move.R
 import com.internship.move.databinding.FragmentUnlockBinding
 import com.internship.move.ui.home.MainViewModel
+import com.internship.move.ui.home.unlock.UnlockMethod.NFC
+import com.internship.move.ui.home.unlock.UnlockMethod.PIN
+import com.internship.move.ui.home.unlock.UnlockMethod.QR
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import com.internship.move.ui.home.unlock.UnlockMethod.QR
-import com.internship.move.ui.home.unlock.UnlockMethod.NFC
-import com.internship.move.ui.home.unlock.UnlockMethod.PIN
 
 class UnlockFragment : Fragment(R.layout.fragment_unlock) {
 
