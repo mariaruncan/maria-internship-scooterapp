@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.internship.move.data.dto.ErrorResponseDTO
 import com.internship.move.data.model.Scooter
+import com.internship.move.data.model.Trip
 import com.internship.move.data.model.User
 import com.internship.move.repository.ScooterRepository
 import com.internship.move.repository.TripRepository
@@ -92,6 +93,7 @@ class MainViewModel(
                 val response = scooterRepo.scanScooter(method, scooterId, location)
                 val scooter = response.scooter.toScooter()
                 val user = response.user.toUser().copy(numberOfTrips = _currentUser.value?.numberOfTrips, scooter = scooter)
+                internalStorageManager.setScooterId(scooter.id)
                 _currentUser.value = user
                 unlockResult.value = true
             } catch (e: Exception) {
@@ -106,6 +108,7 @@ class MainViewModel(
                 val number = _currentUser.value?.scooter?.number
                 if (number != null) {
                     scooterRepo.cancelScanScooter(number)
+                    internalStorageManager.setScooterId(null)
                 }
                 _currentUser.value = userRepo.getCurrentUser().toUser()
             } catch (e: Exception) {
@@ -119,6 +122,7 @@ class MainViewModel(
             try {
                 tripRepo.startRide(scooterNumber, latitude, longitude)
                 getCurrentUser()
+                TODO("start coroutine for timer")
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -129,7 +133,31 @@ class MainViewModel(
         viewModelScope.launch {
             try {
                 tripRepo.endRide(scooterId, latitude, longitude)
+                internalStorageManager.setScooterId(null)
                 getCurrentUser()
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun getCurrentTrip() {
+        viewModelScope.launch {
+            try {
+                val scooterId = internalStorageManager.getScooterId() ?: throw Exception("not in a trip")
+                val trip = tripRepo.getCurrentTrip(scooterId)
+                // de pus in live data
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun getUserTrips() {
+        viewModelScope.launch {
+            try {
+               val tripsList = tripRepo.getUserTrips()
+                // set live data
             } catch (e: Exception) {
                 handleException(e)
             }

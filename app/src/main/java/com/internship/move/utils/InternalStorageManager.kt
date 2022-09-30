@@ -35,10 +35,19 @@ class InternalStorageManager(context: Context) {
             .apply()
     }
 
+    fun setScooterId(value: String?) {
+        sharedPref.edit()
+            .putString(KEY_SCOOTER_ID, value)
+            .apply()
+    }
+
+    fun getScooterId(): String? = sharedPref.getString(KEY_SCOOTER_ID, null)
+
     companion object {
         private const val KEY_APP_PREFERENCES = "com.internship.move.KEY_APP_PREFERENCES"
         private const val KEY_SESSION_TOKEN = "KEY_SESSION_TOKEN"
         private const val KEY_HAS_VISITED_ONBOARDING = "KEY_HAS_VISITED_ONBOARDING"
         private const val KEY_HAS_DRIVING_LICENSE = "KEY_HAS_DRIVING_LICENSE"
+        private const val KEY_SCOOTER_ID = "KEY_SCOOTER_ID"
     }
 }

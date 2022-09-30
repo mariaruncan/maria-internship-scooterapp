@@ -116,6 +116,15 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         checkLocationPermissions(savedInstanceState)
     }
 
+    override fun onDestroyView() {
+        map?.clear()
+        map = null
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+        stopScootersUpdates()
+
+        super.onDestroyView()
+    }
+
     private fun startScootersUpdates() {
         stopScootersUpdates()
         scootersJob = viewLifecycleOwner.lifecycleScope.launch {
@@ -173,15 +182,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 map?.animateCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, ZOOM_VALUE))
             }
         }
-    }
-
-    override fun onDestroyView() {
-        map?.clear()
-        map = null
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-        stopScootersUpdates()
-
-        super.onDestroyView()
     }
 
     private fun initMap(savedInstanceState: Bundle?) {

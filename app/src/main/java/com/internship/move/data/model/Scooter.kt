@@ -8,8 +8,8 @@ data class Scooter(
     val number: Int,
     val latLng: LatLng,
     val batteryLevel: Int,
-    val bookedStatus: String,
-    val lockedStatus: String,
+    val bookedStatus: BookedStatus,
+    val lockedStatus: LockedStatus,
     var address: String = ""
 ) : ClusterItem {
 
