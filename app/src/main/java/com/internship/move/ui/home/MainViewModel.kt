@@ -157,6 +157,30 @@ class MainViewModel(
         }
     }
 
+    fun lockRide(scooterId: String, latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            try {
+                tripRepo.lockRide(scooterId, latitude, longitude)
+                stopTimeUpdates()
+                stopTripUpdates()
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun unlockRide(scooterId: String, latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            try {
+                tripRepo.unlockRide(scooterId, latitude, longitude)
+                startTimeUpdates()
+                startTripUpdates()
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
     fun getCurrentTrip() {
         viewModelScope.launch {
             try {
@@ -181,7 +205,6 @@ class MainViewModel(
 
     private fun startTimeUpdates() {
         stopTimeUpdates()
-        _seconds.value = 0
         timeJob = viewModelScope.launch {
             while (true) {
                 _seconds.value = _seconds.value?.plus(1)

@@ -1,6 +1,6 @@
 package com.internship.move.repository
 
-import com.internship.move.data.dto.EndRideRequestDTO
+import com.internship.move.data.dto.CoordinatesDTO
 import com.internship.move.data.dto.StartRideRequestDTO
 import com.internship.move.data.model.Trip
 import com.internship.move.network.TripApi
@@ -14,7 +14,15 @@ class TripRepository(
     }
 
     suspend fun endRide(scooterId: String, latitude: Double, longitude: Double) {
-        api.endRide(scooterId, EndRideRequestDTO(latitude, longitude))
+        api.endRide(scooterId, CoordinatesDTO(latitude, longitude))
+    }
+
+    suspend fun lockRide(scooterId: String, latitude: Double, longitude: Double) {
+        api.lockRide(scooterId, CoordinatesDTO(latitude, longitude))
+    }
+
+    suspend fun unlockRide(scooterId: String, latitude: Double, longitude: Double) {
+        api.unlockRide(scooterId, CoordinatesDTO(latitude, longitude))
     }
 
     suspend fun getCurrentTrip(scooterId: String): Trip = api.getCurrentTrip(scooterId).toTrip()

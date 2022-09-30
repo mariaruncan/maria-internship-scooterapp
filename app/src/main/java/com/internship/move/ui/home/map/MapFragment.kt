@@ -78,6 +78,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private val onMapClickListener by lazy { initOnMapClickListener() }
     private val locationCallback by lazy { initLocationCallback() }
 
+    private var isLockable: Boolean = true
     private var scootersJob: Job? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -442,6 +443,9 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
         dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
+        dialogBinding.lockBtn.text =
+            if (isLockable) resources.getString(R.string.trip_details_lock_btn_text) else resources.getString(R.string.trip_details_unlock_btn_text)
+
         viewModel.seconds.observe(viewLifecycleOwner) { seconds ->
             val min = seconds / 60
             val minString = if (min / 10 == 0) "0$min" else min.toString()
@@ -466,6 +470,25 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             startScootersUpdates()
         }
 
+        dialogBinding.lockBtn.setOnClickListener {
+            if (isLockable) {
+                viewModel.lockRide(
+                    scooter.id,
+                    currentLocationData.location?.latitude ?: .0,
+                    currentLocationData.location?.longitude ?: .0
+                )
+                dialogBinding.lockBtn.text = resources.getString(R.string.trip_details_unlock_btn_text)
+            } else {
+                viewModel.unlockRide(
+                    scooter.id,
+                    currentLocationData.location?.latitude ?: .0,
+                    currentLocationData.location?.longitude ?: .0
+                )
+                dialogBinding.lockBtn.text = resources.getString(R.string.trip_details_lock_btn_text)
+            }
+            isLockable = !isLockable
+        }
+
         dialogBinding.root.setOnClickListener {
             bottomSheetDialog.dismiss()
             showCurrentRideDialogExpanded()
@@ -484,6 +507,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         val dialogBinding = ViewTripDetailsExpandedBinding.inflate(layoutInflater, null, false)
         dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
         dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
+        dialogBinding.lockBtn.text =
+            if (isLockable) resources.getString(R.string.trip_details_lock_btn_text) else resources.getString(R.string.trip_details_unlock_btn_text)
 
         viewModel.seconds.observe(viewLifecycleOwner) { seconds ->
             val sec = seconds % 60
@@ -499,6 +524,25 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             if (trip == null) return@observe
             val kms = trip.distance.toFloat() / 1000F
             dialogBinding.distanceTV.text = DISTANCE_TEMPLATE_SECONDS.format(kms)
+        }
+
+        dialogBinding.lockBtn.setOnClickListener {
+            if (isLockable) {
+                viewModel.lockRide(
+                    scooter.id,
+                    currentLocationData.location?.latitude ?: .0,
+                    currentLocationData.location?.longitude ?: .0
+                )
+                dialogBinding.lockBtn.text = resources.getString(R.string.trip_details_unlock_btn_text)
+            } else {
+                viewModel.unlockRide(
+                    scooter.id,
+                    currentLocationData.location?.latitude ?: .0,
+                    currentLocationData.location?.longitude ?: .0
+                )
+                dialogBinding.lockBtn.text = resources.getString(R.string.trip_details_lock_btn_text)
+            }
+            isLockable = !isLockable
         }
 
         dialogBinding.endRideBtn.setOnClickListener {

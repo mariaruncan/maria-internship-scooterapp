@@ -11,7 +11,7 @@ data class StartRideRequestDTO(
 )
 
 @JsonClass(generateAdapter = true)
-data class EndRideRequestDTO(
+data class CoordinatesDTO(
     @Json(name = "latitude") val latitude: Double,
     @Json(name = "longitude") val longitude: Double
 )
