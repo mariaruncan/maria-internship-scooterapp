@@ -3,6 +3,7 @@ package com.internship.move.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.internship.move.data.dto.ErrorResponseDTO
@@ -12,10 +13,14 @@ import com.internship.move.data.model.User
 import com.internship.move.repository.ScooterRepository
 import com.internship.move.repository.TripRepository
 import com.internship.move.repository.UserRepository
+import com.internship.move.ui.home.map.MapFragment
+import com.internship.move.ui.home.unlock.UnlockFragment
 import com.internship.move.ui.home.unlock.UnlockMethod
 import com.internship.move.utils.InternalStorageManager
 import com.internship.move.utils.extensions.toErrorResponseDTO
 import com.squareup.moshi.JsonAdapter
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -40,6 +45,17 @@ class MainViewModel(
 
     val unlockResult: MutableLiveData<Boolean> = MutableLiveData(false)
 
+    private val _seconds: MutableLiveData<Int> = MutableLiveData(0)
+    val seconds: LiveData<Int>
+        get() = _seconds
+
+    private val _trip: MutableLiveData<Trip?> = MutableLiveData(null)
+    val trip: LiveData<Trip?>
+        get() = _trip
+
+    private var timeJob: Job? = null
+    private var tripJob: Job? = null
+
     init {
         getCurrentUser()
     }
@@ -48,8 +64,7 @@ class MainViewModel(
         viewModelScope.launch {
             try {
                 val scooter = _currentUser.value?.scooter
-                val numberOfTrips = _currentUser.value?.numberOfTrips
-                _currentUser.value = userRepo.getCurrentUser().toUser().copy(scooter = scooter, numberOfTrips = numberOfTrips)
+                _currentUser.value = userRepo.getCurrentUser().toUser().copy(scooter = scooter)
             } catch (e: Exception) {
                 _currentUser.value = null
                 handleException(e)
@@ -94,8 +109,9 @@ class MainViewModel(
                 val scooter = response.scooter.toScooter()
                 val user = response.user.toUser().copy(numberOfTrips = _currentUser.value?.numberOfTrips, scooter = scooter)
                 internalStorageManager.setScooterId(scooter.id)
-                _currentUser.value = user
                 unlockResult.value = true
+                delay(UNLOCK_SUCCESSFUL_DELAY)
+                _currentUser.value = user
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -122,7 +138,8 @@ class MainViewModel(
             try {
                 tripRepo.startRide(scooterNumber, latitude, longitude)
                 getCurrentUser()
-                TODO("start coroutine for timer")
+                startTimeUpdates()
+                startTripUpdates()
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -134,6 +151,8 @@ class MainViewModel(
             try {
                 tripRepo.endRide(scooterId, latitude, longitude)
                 internalStorageManager.setScooterId(null)
+                stopTimeUpdates()
+                stopTripUpdates()
                 getCurrentUser()
             } catch (e: Exception) {
                 handleException(e)
@@ -145,8 +164,7 @@ class MainViewModel(
         viewModelScope.launch {
             try {
                 val scooterId = internalStorageManager.getScooterId() ?: throw Exception("not in a trip")
-                val trip = tripRepo.getCurrentTrip(scooterId)
-                // de pus in live data
+                _trip.value = tripRepo.getCurrentTrip(scooterId)
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -156,7 +174,7 @@ class MainViewModel(
     fun getUserTrips() {
         viewModelScope.launch {
             try {
-               val tripsList = tripRepo.getUserTrips()
+                val tripsList = tripRepo.getUserTrips()
                 // set live data
             } catch (e: Exception) {
                 handleException(e)
@@ -164,7 +182,46 @@ class MainViewModel(
         }
     }
 
+    private fun startTimeUpdates() {
+        stopTimeUpdates()
+        _seconds.value = 0
+        timeJob = viewModelScope.launch {
+            while (true) {
+                _seconds.value = _seconds.value?.plus(1)
+                delay(TIME_UPDATES_INTERVAL)
+            }
+        }
+    }
+
+    private fun stopTimeUpdates() {
+        _seconds.value = 0
+        timeJob?.cancel()
+        timeJob = null
+    }
+
+    private fun startTripUpdates() {
+        stopTripUpdates()
+        tripJob = viewModelScope.launch {
+            while (true) {
+                getCurrentTrip()
+                delay(TRIP_UPDATES_INTERVAL)
+            }
+        }
+    }
+
+    private fun stopTripUpdates() {
+        _trip.value = null
+        tripJob?.cancel()
+        tripJob = null
+    }
+
     private fun handleException(e: Exception) {
         _errorMessage.value = e.toErrorResponseDTO(errorJSONAdapter).message
+    }
+
+    companion object {
+        private const val UNLOCK_SUCCESSFUL_DELAY = 2000L
+        private const val TIME_UPDATES_INTERVAL = 1000L
+        private const val TRIP_UPDATES_INTERVAL = 10000L
     }
 }

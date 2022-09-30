@@ -2,16 +2,13 @@ package com.internship.move.ui.home.map
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.content.res.Resources
 import android.location.Geocoder
 import android.os.Bundle
 import android.os.Looper
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -445,8 +442,19 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
         dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
-        // TODO("listener for lockBtn")
-        // TODO("travel time + distance")
+        viewModel.seconds.observe(viewLifecycleOwner) { seconds ->
+            val min = seconds / 60
+            val minString = if (min / 10 == 0) "0$min" else min.toString()
+            val hour = seconds / 3600
+            val hourString = if (hour / 10 == 0) "0$hour" else hour.toString()
+            dialogBinding.durationTV.text = TIME_TEMPLATE_MINUTES.format(hourString, minString)
+        }
+
+        viewModel.trip.observe(viewLifecycleOwner) { trip ->
+            if(trip == null) return@observe
+            val kms = trip.distance.toFloat() /1000F
+            dialogBinding.distanceTV.text = DISTANCE_TEMPLATE_SECONDS.format(kms)
+        }
 
         dialogBinding.endRideBtn.setOnClickListener {
             viewModel.endRide(
@@ -471,14 +479,27 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         val scooter = viewModel.currentUser.value?.scooter ?: return
 
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
-
+        bottomSheetDialog.setCancelable(false)
 
         val dialogBinding = ViewTripDetailsExpandedBinding.inflate(layoutInflater, null, false)
         dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
         dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
-        // TODO("listener for lockBtn")
-        // TODO("travel time + distance")
+        viewModel.seconds.observe(viewLifecycleOwner) { seconds ->
+            val sec = seconds % 60
+            val secString = if (sec / 10 == 0) "0$sec" else sec.toString()
+            val min = seconds / 60
+            val minString = if (min / 10 == 0) "0$min" else min.toString()
+            val hour = seconds / 3600
+            val hourString = if (hour / 10 == 0) "0$hour" else hour.toString()
+            dialogBinding.timeTV.text = TIME_TEMPLATE_SECONDS.format(hourString, minString, secString)
+        }
+
+        viewModel.trip.observe(viewLifecycleOwner) { trip ->
+            if(trip == null) return@observe
+            val kms = trip.distance.toFloat() /1000F
+            dialogBinding.distanceTV.text = DISTANCE_TEMPLATE_SECONDS.format(kms)
+        }
 
         dialogBinding.endRideBtn.setOnClickListener {
             viewModel.endRide(
@@ -517,5 +538,9 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         private const val SCOOTER_UPDATES_INTERVAL = 60000L
         private const val LOCATION_UPDATES_INTERVAL = 10000L
         private const val MARKER_ANCHOR = 0.5F
+
+        private const val TIME_TEMPLATE_MINUTES = "%s:%s min"
+        private const val TIME_TEMPLATE_SECONDS = "%s:%s:%s"
+        private const val DISTANCE_TEMPLATE_SECONDS = "%.1f km"
     }
 }

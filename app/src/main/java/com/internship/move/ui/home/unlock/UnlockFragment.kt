@@ -184,7 +184,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
                     displayUnlockSuccessfulScreen()
                     delay(UNLOCK_SUCCESSFUL_DELAY)
                     viewModel.unlockResult.value = false
-                    findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentToMapFragment())
+                    findNavController().navigateUp()
                 }
             }
         }
@@ -194,6 +194,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         binding.titleTV.text = resources.getString(R.string.unlock_code_title)
         binding.descriptionTV.text = resources.getString(R.string.unlock_code_description)
         binding.codeInputLL.isVisible = true
+        binding.progressBar.isVisible = false
         binding.firstBtn.text = resources.getString(R.string.unlock_qr_btn_text)
         binding.secondBtn.text = resources.getString(R.string.unlock_nfc_btn_text)
 
@@ -224,7 +225,6 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
 
             binding.progressBar.isVisible = true
             viewModel.scanScooter(PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
-            findNavController().navigateUp()
         }
 
         binding.firstBtn.setOnClickListener {
@@ -237,6 +237,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
     }
 
     private fun displayUnlockSuccessfulScreen() {
+        viewModel.unlockResult.value = false
         binding.unlockSuccessfulGroup.isVisible = false
         binding.titleTV.text = resources.getString(R.string.unlock_successful_title)
         binding.unlockBgIV.setImageResource(R.drawable.bg_unlock_successful)

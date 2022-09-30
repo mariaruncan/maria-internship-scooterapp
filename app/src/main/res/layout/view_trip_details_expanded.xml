@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/background_color_light"
     android:layout_height="match_parent"
+    android:background="@color/background_color_light"
     android:backgroundTint="@color/background_color_light"
     android:padding="@dimen/large_margin_size">
 
@@ -79,12 +79,12 @@
 
     <TextView
         android:id="@+id/batteryLabel"
+        style="@style/Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        style="@style/Body1"
-        android:textColor="@color/text_color_light_secondary"
         android:text="@string/trip_details_battery_label"
+        android:textColor="@color/text_color_light_secondary"
         app:layout_constraintBottom_toTopOf="@id/batteryTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -108,21 +108,21 @@
         android:id="@+id/clockIV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/ic_clock"
         app:layout_constraintBottom_toTopOf="@id/timeTV"
         app:layout_constraintEnd_toStartOf="@id/timeLabel"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="ContentDescription"
-        android:src="@drawable/ic_clock" />
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/timeLabel"
+        style="@style/Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        style="@style/Body1"
-        android:textColor="@color/text_color_light_secondary"
         android:text="@string/trip_details_time_label"
+        android:textColor="@color/text_color_light_secondary"
         app:layout_constraintBottom_toTopOf="@id/timeTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -146,21 +146,21 @@
         android:id="@+id/mapIV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/ic_map"
         app:layout_constraintBottom_toTopOf="@id/distanceTV"
         app:layout_constraintEnd_toStartOf="@id/distanceLabel"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="ContentDescription"
-        android:src="@drawable/ic_map" />
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/distanceLabel"
+        style="@style/Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        style="@style/Body1"
-        android:textColor="@color/text_color_light_secondary"
         android:text="@string/trip_details_distance_label"
+        android:textColor="@color/text_color_light_secondary"
         app:layout_constraintBottom_toTopOf="@id/distanceTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
