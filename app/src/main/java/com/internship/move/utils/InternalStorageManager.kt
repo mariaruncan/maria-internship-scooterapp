@@ -35,7 +35,7 @@ class InternalStorageManager(context: Context) {
             .apply()
     }
 
-    fun setScooterId(value: String?) {
+    fun setScooterId(value: String? = null) {
         sharedPref.edit()
             .putString(KEY_SCOOTER_ID, value)
             .apply()
@@ -43,11 +43,27 @@ class InternalStorageManager(context: Context) {
 
     fun getScooterId(): String? = sharedPref.getString(KEY_SCOOTER_ID, null)
 
+    fun setScooterNumber(value: Int = 0) {
+        sharedPref.edit()
+            .putInt(KEY_SCOOTER_NUMBER, value)
+            .apply()
+    }
+
+    fun getScooterNumber(): Int = sharedPref.getInt(KEY_SCOOTER_NUMBER, 0)
+
+    fun clearApp() {
+        setToken(null)
+        setHasDrivingLicense(false)
+        setScooterNumber(0)
+        setScooterId(null)
+    }
+
     companion object {
         private const val KEY_APP_PREFERENCES = "com.internship.move.KEY_APP_PREFERENCES"
         private const val KEY_SESSION_TOKEN = "KEY_SESSION_TOKEN"
         private const val KEY_HAS_VISITED_ONBOARDING = "KEY_HAS_VISITED_ONBOARDING"
         private const val KEY_HAS_DRIVING_LICENSE = "KEY_HAS_DRIVING_LICENSE"
         private const val KEY_SCOOTER_ID = "KEY_SCOOTER_ID"
+        private const val KEY_SCOOTER_NUMBER = "KEY_SCOOTER_NUMBER"
     }
 }
