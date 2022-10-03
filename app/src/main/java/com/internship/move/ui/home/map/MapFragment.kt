@@ -560,8 +560,13 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             showCurrentRideDialogCollapsed()
         }
 
+        bottomSheetDialog.behavior.peekHeight = getScreenHeight()
         bottomSheetDialog.setContentView(dialogBinding.root)
         bottomSheetDialog.show()
+    }
+
+    private fun getScreenHeight(): Int {
+        return Resources.getSystem().displayMetrics.heightPixels
     }
 
     companion object {
