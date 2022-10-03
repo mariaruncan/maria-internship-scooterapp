@@ -19,9 +19,7 @@
 
         <action
             android:id="@+id/action_mapFragment_to_unlockFragment"
-            app:destination="@id/unlockFragment"
-            app:popUpTo="@id/mapFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/unlockFragment" />
 
         <action
             android:id="@+id/action_mapFragment_to_menuFragment"

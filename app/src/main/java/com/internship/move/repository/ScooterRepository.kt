@@ -12,8 +12,10 @@ class ScooterRepository(
 
     suspend fun getAllScooters(): List<Scooter> = api.getAllScooters().scooters.map { scooterDTO -> scooterDTO.toScooter() }
 
-    suspend fun scanScooter(method: UnlockMethod, id: Int, location: LatLng): ScanResponseDTO =
-        api.scanScooter(method.name, id, location.latitude, location.longitude)
+    suspend fun scanScooter(method: UnlockMethod, scooterNumber: Int, location: LatLng): ScanResponseDTO =
+        api.scanScooter(method.name, scooterNumber, location.latitude, location.longitude)
 
-    suspend fun cancelScanScooter(id: Int): Unit = api.cancelScanScooter(id)
+    suspend fun cancelScanScooter(scooterNumber: Int): Unit = api.cancelScanScooter(scooterNumber)
+
+    suspend fun beepScooter(scooterId: String): Unit = api.beepScooter(scooterId)
 }

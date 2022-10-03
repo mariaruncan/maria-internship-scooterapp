@@ -122,4 +122,13 @@
     <string name="menu_terms_and_conditions_text">Terms and Conditions</string>
     <string name="menu_privacy_policy_text">Privacy Policy</string>
     <string name="menu_rate_us_text">Rate Us</string>
+
+    <!-- region TripDetails -->
+    <string name="trip_details_title">Trip Details</string>
+    <string name="trip_details_time_label">Travel time</string>
+    <string name="trip_details_distance_label">Distance</string>
+    <string name="trip_details_lock_btn_text">Lock</string>
+    <string name="trip_details_unlock_btn_text">Unlock</string>
+    <string name="trip_details_end_ride_btn_text">End ride</string>
+    <string name="trip_details_battery_label">Battery</string>
 </resources>

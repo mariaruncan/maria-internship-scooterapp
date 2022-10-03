@@ -21,8 +21,8 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
@@ -40,10 +40,13 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.internship.move.R
 import com.internship.move.data.model.CurrentLocationData
 import com.internship.move.data.model.Scooter
+import com.internship.move.data.model.UserStatus.BUSY
 import com.internship.move.data.model.UserStatus.FREE
 import com.internship.move.data.model.UserStatus.SCANNED
 import com.internship.move.databinding.FragmentMapBinding
 import com.internship.move.databinding.ViewStartRideDialogBinding
+import com.internship.move.databinding.ViewTripDetailsCollapsedBinding
+import com.internship.move.databinding.ViewTripDetailsExpandedBinding
 import com.internship.move.databinding.ViewUnlockDialogBinding
 import com.internship.move.ui.home.MainViewModel
 import com.internship.move.ui.home.unlock.UnlockMethod
@@ -54,6 +57,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
@@ -74,6 +78,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private val onMapClickListener by lazy { initOnMapClickListener() }
     private val locationCallback by lazy { initLocationCallback() }
 
+    private var isLockable: Boolean = true
     private var scootersJob: Job? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,17 +92,35 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             if (user == null) {
                 viewModel.clearApp()
                 findNavController().navigate(MapFragmentDirections.actionMapFragmentToSplashGraph())
-            } else if (user.status == FREE) {
-                if (viewModel.status == FREE) {
-                    startScootersUpdates()
-                    displayCurrentLocation()
+            } else {
+                when (user.status) {
+                    FREE -> {
+                        startScootersUpdates()
+                        displayCurrentLocation()
+                    }
+
+                    SCANNED -> {
+                        stopScootersUpdates()
+                        showStartRideDialog()
+                    }
+                    BUSY -> {
+                        stopScootersUpdates()
+                        showCurrentRideDialogCollapsed()
+                    }
                 }
-            } else if (user.status == SCANNED) {
-                stopScootersUpdates()
-                showStartRideDialog()
             }
         }
+
         checkLocationPermissions(savedInstanceState)
+    }
+
+    override fun onDestroyView() {
+        map?.clear()
+        map = null
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+        stopScootersUpdates()
+
+        super.onDestroyView()
     }
 
     private fun startScootersUpdates() {
@@ -157,15 +180,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 map?.animateCamera(CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, ZOOM_VALUE))
             }
         }
-    }
-
-    override fun onDestroyView() {
-        map?.clear()
-        map = null
-        fusedLocationClient.removeLocationUpdates(locationCallback)
-        stopScootersUpdates()
-
-        super.onDestroyView()
     }
 
     private fun initMap(savedInstanceState: Bundle?) {
@@ -280,23 +294,25 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun initLocationCallback() = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
+            val map = this@MapFragment.map ?: return
+
             val location = locationResult.lastLocation ?: return
             val position = LatLng(location.latitude, location.longitude)
 
             if (currentLocationData.location == null) {
-                map?.animateCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM_VALUE))
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM_VALUE))
             }
 
             currentLocationData.marker?.remove()
             currentLocationData.circle?.remove()
 
             binding.titleTV.text = geocoder.getFromLocation(location.latitude, location.longitude, 1)?.firstOrNull()?.locality
-            currentLocationData.marker = map?.addMarker(
+            currentLocationData.marker = map.addMarker(
                 MarkerOptions().position(position).icon(requireContext().getDrawableToBitmapDescriptor(R.drawable.ic_current_location))
                     .anchor(MARKER_ANCHOR, MARKER_ANCHOR)
             )
 
-            currentLocationData.circle = map?.addCircle(
+            currentLocationData.circle = map.addCircle(
                 CircleOptions().center(position).radius(CIRCLE_RADIUS)
                     .fillColor(ColorUtils.setAlphaComponent(resources.getColor(R.color.indigo, null), CIRCLE_ALPHA))
                     .strokeWidth(CIRCLE_STROKE_WIDTH)
@@ -327,6 +343,10 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             showUnlockDialog(scooter)
             hideInfoWindow()
         }
+
+        infoWindow.ringBtn.setOnClickListener {
+            viewModel.beepScooter(scooter.id)
+        }
     }
 
     private fun hideInfoWindow() {
@@ -345,8 +365,12 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
         dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
+        dialogBinding.ringBtn.setOnClickListener {
+            viewModel.beepScooter(scooter.id)
+        }
+
         dialogBinding.nfcBtn.setOnClickListener {
-            bottomSheetDialog.hide()
+            bottomSheetDialog.dismiss()
             findNavController().navigate(
                 MapFragmentDirections.actionMapFragmentToUnlockFragment(
                     currentLocationData.location?.longitude?.toFloat() ?: COORDINATE_SUBSTITUTE,
@@ -357,7 +381,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
 
         dialogBinding.qrBtn.setOnClickListener {
-            bottomSheetDialog.hide()
+            bottomSheetDialog.dismiss()
             findNavController().navigate(
                 MapFragmentDirections.actionMapFragmentToUnlockFragment(
                     currentLocationData.location?.longitude?.toFloat() ?: COORDINATE_SUBSTITUTE,
@@ -368,7 +392,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
 
         dialogBinding.codeBtn.setOnClickListener {
-            bottomSheetDialog.hide()
+            bottomSheetDialog.dismiss()
             findNavController().navigate(
                 MapFragmentDirections.actionMapFragmentToUnlockFragment(
                     currentLocationData.location?.longitude?.toFloat() ?: COORDINATE_SUBSTITUTE,
@@ -396,7 +420,145 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
         dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
-        // btn click listener
+        dialogBinding.startRideBtn.setOnClickListener {
+            viewModel.startRide(
+                scooter.number,
+                currentLocationData.location?.latitude ?: .0,
+                currentLocationData.location?.longitude ?: .0
+            )
+            bottomSheetDialog.setOnDismissListener {}
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomSheetDialog.setContentView(dialogBinding.root)
+        bottomSheetDialog.show()
+    }
+
+    private fun showCurrentRideDialogCollapsed() {
+        val scooter = viewModel.currentUser.value?.scooter ?: return
+
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
+
+        val dialogBinding = ViewTripDetailsCollapsedBinding.inflate(layoutInflater, null, false)
+        dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
+        dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
+
+        dialogBinding.lockBtn.text =
+            if (isLockable) resources.getString(R.string.trip_details_lock_btn_text) else resources.getString(R.string.trip_details_unlock_btn_text)
+
+        viewModel.seconds.observe(viewLifecycleOwner) { seconds ->
+            val min = seconds / 60
+            val minString = if (min / 10 == 0) "0$min" else min.toString()
+            val hour = seconds / 3600
+            val hourString = if (hour / 10 == 0) "0$hour" else hour.toString()
+            dialogBinding.durationTV.text = TIME_TEMPLATE_MINUTES.format(hourString, minString)
+        }
+
+        viewModel.trip.observe(viewLifecycleOwner) { trip ->
+            if (trip == null) return@observe
+            val kms = trip.distance.toFloat() / 1000F
+            dialogBinding.distanceTV.text = DISTANCE_TEMPLATE_SECONDS.format(kms)
+        }
+
+        dialogBinding.endRideBtn.setOnClickListener {
+            viewModel.endRide(
+                scooter.id,
+                currentLocationData.location?.latitude ?: .0,
+                currentLocationData.location?.longitude ?: .0
+            )
+            bottomSheetDialog.dismiss()
+            startScootersUpdates()
+        }
+
+        dialogBinding.lockBtn.setOnClickListener {
+            if (isLockable) {
+                viewModel.lockRide(
+                    scooter.id,
+                    currentLocationData.location?.latitude ?: .0,
+                    currentLocationData.location?.longitude ?: .0
+                )
+                dialogBinding.lockBtn.text = resources.getString(R.string.trip_details_unlock_btn_text)
+            } else {
+                viewModel.unlockRide(
+                    scooter.id,
+                    currentLocationData.location?.latitude ?: .0,
+                    currentLocationData.location?.longitude ?: .0
+                )
+                dialogBinding.lockBtn.text = resources.getString(R.string.trip_details_lock_btn_text)
+            }
+            isLockable = !isLockable
+        }
+
+        dialogBinding.root.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            showCurrentRideDialogExpanded()
+        }
+
+        bottomSheetDialog.setContentView(dialogBinding.root)
+        bottomSheetDialog.show()
+    }
+
+    private fun showCurrentRideDialogExpanded() {
+        val scooter = viewModel.currentUser.value?.scooter ?: return
+
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
+        bottomSheetDialog.setCancelable(false)
+
+        val dialogBinding = ViewTripDetailsExpandedBinding.inflate(layoutInflater, null, false)
+        dialogBinding.batteryIV.setBatteryIcon(scooter.batteryLevel)
+        dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
+        dialogBinding.lockBtn.text =
+            if (isLockable) resources.getString(R.string.trip_details_lock_btn_text) else resources.getString(R.string.trip_details_unlock_btn_text)
+
+        viewModel.seconds.observe(viewLifecycleOwner) { seconds ->
+            val sec = seconds % 60
+            val secString = if (sec / 10 == 0) "0$sec" else sec.toString()
+            val min = seconds / 60
+            val minString = if (min / 10 == 0) "0$min" else min.toString()
+            val hour = seconds / 3600
+            val hourString = if (hour / 10 == 0) "0$hour" else hour.toString()
+            dialogBinding.timeTV.text = TIME_TEMPLATE_SECONDS.format(hourString, minString, secString)
+        }
+
+        viewModel.trip.observe(viewLifecycleOwner) { trip ->
+            if (trip == null) return@observe
+            val kms = trip.distance.toFloat() / 1000F
+            dialogBinding.distanceTV.text = DISTANCE_TEMPLATE_SECONDS.format(kms)
+        }
+
+        dialogBinding.lockBtn.setOnClickListener {
+            if (isLockable) {
+                viewModel.lockRide(
+                    scooter.id,
+                    currentLocationData.location?.latitude ?: .0,
+                    currentLocationData.location?.longitude ?: .0
+                )
+                dialogBinding.lockBtn.text = resources.getString(R.string.trip_details_unlock_btn_text)
+            } else {
+                viewModel.unlockRide(
+                    scooter.id,
+                    currentLocationData.location?.latitude ?: .0,
+                    currentLocationData.location?.longitude ?: .0
+                )
+                dialogBinding.lockBtn.text = resources.getString(R.string.trip_details_lock_btn_text)
+            }
+            isLockable = !isLockable
+        }
+
+        dialogBinding.endRideBtn.setOnClickListener {
+            viewModel.endRide(
+                scooter.id,
+                currentLocationData.location?.latitude ?: .0,
+                currentLocationData.location?.longitude ?: .0
+            )
+            bottomSheetDialog.dismiss()
+            startScootersUpdates()
+        }
+
+        dialogBinding.minimizeBtn.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            showCurrentRideDialogCollapsed()
+        }
 
         bottomSheetDialog.setContentView(dialogBinding.root)
         bottomSheetDialog.show()
@@ -420,5 +582,9 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         private const val SCOOTER_UPDATES_INTERVAL = 60000L
         private const val LOCATION_UPDATES_INTERVAL = 10000L
         private const val MARKER_ANCHOR = 0.5F
+
+        private const val TIME_TEMPLATE_MINUTES = "%s:%s min"
+        private const val TIME_TEMPLATE_SECONDS = "%s:%s:%s"
+        private const val DISTANCE_TEMPLATE_SECONDS = "%.1f km"
     }
 }

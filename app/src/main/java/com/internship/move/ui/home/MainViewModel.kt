@@ -7,27 +7,26 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.internship.move.data.dto.ErrorResponseDTO
 import com.internship.move.data.model.Scooter
+import com.internship.move.data.model.Trip
 import com.internship.move.data.model.User
-import com.internship.move.data.model.UserStatus
 import com.internship.move.repository.ScooterRepository
+import com.internship.move.repository.TripRepository
 import com.internship.move.repository.UserRepository
 import com.internship.move.ui.home.unlock.UnlockMethod
 import com.internship.move.utils.InternalStorageManager
 import com.internship.move.utils.extensions.toErrorResponseDTO
 import com.squareup.moshi.JsonAdapter
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import com.internship.move.data.model.UserStatus.FREE
 
 class MainViewModel(
     private val userRepo: UserRepository,
     private val scooterRepo: ScooterRepository,
+    private val tripRepo: TripRepository,
     private val internalStorageManager: InternalStorageManager,
     private val errorJSONAdapter: JsonAdapter<ErrorResponseDTO>
 ) : ViewModel() {
-
-    private var _status: UserStatus = FREE
-    val status: UserStatus
-        get() = _status
 
     private val _currentUser: MutableLiveData<User?> = MutableLiveData()
     val currentUser: LiveData<User?>
@@ -43,10 +42,26 @@ class MainViewModel(
 
     val unlockResult: MutableLiveData<Boolean> = MutableLiveData(false)
 
+    private val _seconds: MutableLiveData<Int> = MutableLiveData(0)
+    val seconds: LiveData<Int>
+        get() = _seconds
+
+    private val _trip: MutableLiveData<Trip?> = MutableLiveData(null)
+    val trip: LiveData<Trip?>
+        get() = _trip
+
+    private var timeJob: Job? = null
+    private var tripJob: Job? = null
+
     init {
+        getCurrentUser()
+    }
+
+    private fun getCurrentUser() {
         viewModelScope.launch {
             try {
-                _currentUser.value = userRepo.getCurrentUser().toUser()
+                val scooter = _currentUser.value?.scooter
+                _currentUser.value = userRepo.getCurrentUser().toUser().copy(scooter = scooter)
             } catch (e: Exception) {
                 _currentUser.value = null
                 handleException(e)
@@ -74,15 +89,26 @@ class MainViewModel(
         }
     }
 
+    fun beepScooter(scooterId: String) {
+        viewModelScope.launch {
+            try {
+                scooterRepo.beepScooter(scooterId)
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
     fun scanScooter(method: UnlockMethod, scooterId: Int, location: LatLng) {
         viewModelScope.launch {
             try {
                 val response = scooterRepo.scanScooter(method, scooterId, location)
                 val scooter = response.scooter.toScooter()
-                val user = response.user.toUser().copy(scooter = scooter)
-                _status = user.status
-                _currentUser.value = user
+                val user = response.user.toUser().copy(numberOfTrips = _currentUser.value?.numberOfTrips, scooter = scooter)
+                internalStorageManager.setScooterId(scooter.id)
                 unlockResult.value = true
+                delay(UNLOCK_SUCCESSFUL_DELAY)
+                _currentUser.value = user
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -95,8 +121,8 @@ class MainViewModel(
                 val number = _currentUser.value?.scooter?.number
                 if (number != null) {
                     scooterRepo.cancelScanScooter(number)
+                    internalStorageManager.setScooterId(null)
                 }
-                _scootersList.value = scooterRepo.getAllScooters()
                 _currentUser.value = userRepo.getCurrentUser().toUser()
             } catch (e: Exception) {
                 handleException(e)
@@ -104,7 +130,118 @@ class MainViewModel(
         }
     }
 
+    fun startRide(scooterNumber: Int, latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            try {
+                tripRepo.startRide(scooterNumber, latitude, longitude)
+                getCurrentUser()
+                startTimeUpdates()
+                startTripUpdates()
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun endRide(scooterId: String, latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            try {
+                tripRepo.endRide(scooterId, latitude, longitude)
+                internalStorageManager.setScooterId(null)
+                stopTimeUpdates()
+                stopTripUpdates()
+                getCurrentUser()
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun lockRide(scooterId: String, latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            try {
+                tripRepo.lockRide(scooterId, latitude, longitude)
+                stopTimeUpdates()
+                stopTripUpdates()
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun unlockRide(scooterId: String, latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            try {
+                tripRepo.unlockRide(scooterId, latitude, longitude)
+                startTimeUpdates()
+                startTripUpdates()
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun getCurrentTrip() {
+        viewModelScope.launch {
+            try {
+                val scooterId = internalStorageManager.getScooterId() ?: throw Exception("not in a trip")
+                _trip.value = tripRepo.getCurrentTrip(scooterId)
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    fun getUserTrips() {
+        viewModelScope.launch {
+            try {
+                val tripsList = tripRepo.getUserTrips()
+                // set live data
+            } catch (e: Exception) {
+                handleException(e)
+            }
+        }
+    }
+
+    private fun startTimeUpdates() {
+        stopTimeUpdates()
+        timeJob = viewModelScope.launch {
+            while (true) {
+                _seconds.value = _seconds.value?.plus(1)
+                delay(TIME_UPDATES_INTERVAL)
+            }
+        }
+    }
+
+    private fun stopTimeUpdates() {
+        _seconds.value = 0
+        timeJob?.cancel()
+        timeJob = null
+    }
+
+    private fun startTripUpdates() {
+        stopTripUpdates()
+        tripJob = viewModelScope.launch {
+            while (true) {
+                getCurrentTrip()
+                delay(TRIP_UPDATES_INTERVAL)
+            }
+        }
+    }
+
+    private fun stopTripUpdates() {
+        _trip.value = null
+        tripJob?.cancel()
+        tripJob = null
+    }
+
     private fun handleException(e: Exception) {
         _errorMessage.value = e.toErrorResponseDTO(errorJSONAdapter).message
+    }
+
+    companion object {
+        private const val UNLOCK_SUCCESSFUL_DELAY = 2000L
+        private const val TIME_UPDATES_INTERVAL = 1000L
+        private const val TRIP_UPDATES_INTERVAL = 10000L
     }
 }

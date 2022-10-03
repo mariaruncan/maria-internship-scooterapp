@@ -32,7 +32,7 @@
     </style>
 
     <style name="Button1" parent="TextAppearance">
-        <item name="android:fontFamily">@font/bai_jamjuree_medium</item>
+        <item name="android:fontFamily">@font/bai_jamjuree_bold</item>
     </style>
 
     <style name="Button2" parent="TextAppearance">

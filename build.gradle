@@ -6,6 +6,11 @@ buildscript {
         coroutinesVersion = "1.6.4"
     }
 
+    repositories {
+        google()
+        maven { url "https://jitpack.io" }
+    }
+
     dependencies {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
     }

@@ -2,14 +2,15 @@ package com.internship.move.network
 
 import com.internship.move.data.dto.ScanResponseDTO
 import com.internship.move.data.dto.ScootersResponseDTO
-import com.internship.move.ui.home.unlock.UnlockMethod
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.PUT
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ScooterApi {
 
-    @GET("scooters/all")
+    @GET("scooters")
     suspend fun getAllScooters(): ScootersResponseDTO
 
     @PATCH("scooters/scan")
@@ -22,4 +23,7 @@ interface ScooterApi {
 
     @PATCH("scooters/cancel")
     suspend fun cancelScanScooter(@Query("id") id: Int)
+
+    @PUT("scooters/{id}/beep")
+    suspend fun beepScooter(@Path("id") scooterId: String)
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="@color/scooter_info_card_color"
+    android:backgroundTint="@color/background_color_light"
     app:cardCornerRadius="@dimen/view_scooter_info_card_corner_radius">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,6 +62,7 @@
             tools:text="80%" />
 
         <Button
+            android:id="@+id/startRideBtn"
             style="@style/PrimaryButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
