@@ -99,4 +99,10 @@
     <style name="BottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
         <item name="android:colorBackground">@color/transparent</item>
     </style>
+
+    <style name="AlertTextAppearance">
+        <item name="android:textColor">@color/text_color_light</item>
+        <item name="android:fontFamily">@font/bai_jamjuree_medium</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>

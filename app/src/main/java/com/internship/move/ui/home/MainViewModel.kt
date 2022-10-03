@@ -89,7 +89,7 @@ class MainViewModel(
         }
     }
 
-    fun beepScooter(scooterId: String) {
+    fun ringScooter(scooterId: String) {
         viewModelScope.launch {
             try {
                 scooterRepo.beepScooter(scooterId)

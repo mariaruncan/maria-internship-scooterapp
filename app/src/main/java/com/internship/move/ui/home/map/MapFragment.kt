@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
@@ -52,12 +51,12 @@ import com.internship.move.ui.home.MainViewModel
 import com.internship.move.ui.home.unlock.UnlockMethod
 import com.internship.move.utils.extensions.getDrawableToBitmapDescriptor
 import com.internship.move.utils.extensions.setBatteryIcon
+import com.tapadoo.alerter.Alerter
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
@@ -84,8 +83,13 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.errorMessage.observe(viewLifecycleOwner) { errorMsg ->
-            Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_SHORT).show()
+        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            Alerter.create(requireActivity())
+                .setText(message)
+                .setTextAppearance(R.style.AlertTextAppearance)
+                .setBackgroundColorRes(R.color.primary_color)
+                .enableSwipeToDismiss()
+                .show()
         }
 
         viewModel.currentUser.observe(viewLifecycleOwner) { user ->
@@ -143,7 +147,12 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
                 locationGranted = result
                 if (!locationGranted) {
-                    Toast.makeText(requireContext(), resources.getString(R.string.map_location_denied_message), Toast.LENGTH_SHORT).show()
+                    Alerter.create(requireActivity())
+                        .setText(getString(R.string.map_location_denied_message))
+                        .setTextAppearance(R.style.AlertTextAppearance)
+                        .setBackgroundColorRes(R.color.primary_color)
+                        .enableSwipeToDismiss()
+                        .show()
                 }
                 initMap(savedInstanceState)
                 initToolbar()
@@ -345,7 +354,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
 
         infoWindow.ringBtn.setOnClickListener {
-            viewModel.beepScooter(scooter.id)
+            viewModel.ringScooter(scooter.id)
         }
     }
 
@@ -366,7 +375,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
         dialogBinding.ringBtn.setOnClickListener {
-            viewModel.beepScooter(scooter.id)
+            viewModel.ringScooter(scooter.id)
         }
 
         dialogBinding.nfcBtn.setOnClickListener {
@@ -560,13 +569,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             showCurrentRideDialogCollapsed()
         }
 
-        bottomSheetDialog.behavior.peekHeight = getScreenHeight()
         bottomSheetDialog.setContentView(dialogBinding.root)
         bottomSheetDialog.show()
-    }
-
-    private fun getScreenHeight(): Int {
-        return Resources.getSystem().displayMetrics.heightPixels
     }
 
     companion object {

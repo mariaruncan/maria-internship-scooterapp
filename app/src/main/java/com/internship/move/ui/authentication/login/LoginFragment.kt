@@ -2,7 +2,6 @@ package com.internship.move.ui.authentication.login
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -10,6 +9,7 @@ import com.internship.move.R
 import com.internship.move.databinding.FragmentLoginBinding
 import com.internship.move.ui.authentication.AuthenticationViewModel
 import com.internship.move.utils.extensions.addClickableText
+import com.tapadoo.alerter.Alerter
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -28,7 +28,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun initObservers() {
         viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            Alerter.create(requireActivity())
+                .setText(message)
+                .setTextAppearance(R.style.AlertTextAppearance)
+                .setBackgroundColorRes(R.color.primary_color)
+                .enableSwipeToDismiss()
+                .show()
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->

@@ -5,9 +5,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
-import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -19,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.internship.move.BuildConfig
 import com.internship.move.R
 import com.internship.move.databinding.FragmentDrivingLicenseBinding
+import com.tapadoo.alerter.Alerter
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import java.io.File
 
@@ -38,7 +36,12 @@ class DrivingLicenseFragment : Fragment(R.layout.fragment_driving_license) {
                     )
                 )
             } else {
-                Toast.makeText(requireContext(), getString(R.string.driving_license_fail_message), LENGTH_SHORT).show()
+                Alerter.create(requireActivity())
+                    .setText(getString(R.string.driving_license_fail_message))
+                    .setTextAppearance(R.style.AlertTextAppearance)
+                    .setBackgroundColorRes(R.color.primary_color)
+                    .enableSwipeToDismiss()
+                    .show()
             }
         }
     }
@@ -72,7 +75,12 @@ class DrivingLicenseFragment : Fragment(R.layout.fragment_driving_license) {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { hasUserAcceptedPermissions ->
                 binding.addLicenseBtn.isEnabled = hasUserAcceptedPermissions
                 if (!hasUserAcceptedPermissions) {
-                    Toast.makeText(requireContext(), "Camera permission denied", LENGTH_LONG).show()
+                    Alerter.create(requireActivity())
+                        .setText(getString(R.string.driving_license_permission_denied))
+                        .setTextAppearance(R.style.AlertTextAppearance)
+                        .setBackgroundColorRes(R.color.primary_color)
+                        .enableSwipeToDismiss()
+                        .show()
                 }
             }.launch(Manifest.permission.CAMERA)
         } else {

@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -28,6 +27,7 @@ import com.internship.move.ui.home.MainViewModel
 import com.internship.move.ui.home.unlock.UnlockMethod.NFC
 import com.internship.move.ui.home.unlock.UnlockMethod.PIN
 import com.internship.move.ui.home.unlock.UnlockMethod.QR
+import com.tapadoo.alerter.Alerter
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -44,8 +44,13 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.errorMessage.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            Alerter.create(requireActivity())
+                .setText(message)
+                .setTextAppearance(R.style.AlertTextAppearance)
+                .setBackgroundColorRes(R.color.primary_color)
+                .enableSwipeToDismiss()
+                .show()
         }
 
         when (args.unlockMethod) {
@@ -97,7 +102,12 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
                 if (hasUserAcceptedCameraPermission) {
                     initQRUnlock()
                 } else {
-                    Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_LONG).show()
+                    Alerter.create(requireActivity())
+                        .setText(getString(R.string.driving_license_permission_denied))
+                        .setTextAppearance(R.style.AlertTextAppearance)
+                        .setBackgroundColorRes(R.color.primary_color)
+                        .enableSwipeToDismiss()
+                        .show()
                 }
             }.launch(CAMERA)
         } else {
