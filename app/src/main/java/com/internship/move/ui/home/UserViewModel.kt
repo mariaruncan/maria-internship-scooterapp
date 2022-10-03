@@ -7,12 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.internship.move.data.dto.ErrorResponseDTO
 import com.internship.move.data.model.User
 import com.internship.move.repository.UserRepository
+import com.internship.move.utils.InternalStorageManager
 import com.internship.move.utils.extensions.toErrorResponseDTO
 import com.squareup.moshi.JsonAdapter
 import kotlinx.coroutines.launch
 
 class UserViewModel(
     private val userRepo: UserRepository,
+    private val internalStorageManager: InternalStorageManager,
     private val errorJSONAdapter: JsonAdapter<ErrorResponseDTO>
 ) : ViewModel() {
 
@@ -28,11 +30,14 @@ class UserViewModel(
         getCurrentUser()
     }
 
-    private fun getCurrentUser() {
+    fun clearApp() {
+        internalStorageManager.clearApp()
+    }
+
+    fun getCurrentUser() {
         viewModelScope.launch {
             try {
-                val scooter = _currentUser.value?.scooter
-                _currentUser.value = userRepo.getCurrentUser().toUser().copy(scooter = scooter)
+                _currentUser.value = userRepo.getCurrentUser().toUser()
             } catch (e: Exception) {
                 _currentUser.value = null
                 handleException(e)

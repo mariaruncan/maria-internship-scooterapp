@@ -83,10 +83,6 @@ class ScooterViewModel(
         }
     }
 
-    fun clearApp() {
-        internalStorageManager.clearApp()
-    }
-
     private fun handleException(e: Exception) {
         _errorMessage.value = e.toErrorResponseDTO(errorJSONAdapter).message
     }

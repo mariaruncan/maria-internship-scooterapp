@@ -47,7 +47,9 @@ import com.internship.move.databinding.ViewStartRideDialogBinding
 import com.internship.move.databinding.ViewTripDetailsCollapsedBinding
 import com.internship.move.databinding.ViewTripDetailsExpandedBinding
 import com.internship.move.databinding.ViewUnlockDialogBinding
-import com.internship.move.ui.home.MainViewModel
+import com.internship.move.ui.home.ScooterViewModel
+import com.internship.move.ui.home.TripViewModel
+import com.internship.move.ui.home.UserViewModel
 import com.internship.move.ui.home.unlock.UnlockMethod
 import com.internship.move.utils.extensions.getDrawableToBitmapDescriptor
 import com.internship.move.utils.extensions.setBatteryIcon
@@ -61,7 +63,9 @@ import org.koin.androidx.navigation.koinNavGraphViewModel
 class MapFragment : Fragment(R.layout.fragment_map) {
 
     private val binding by viewBinding(FragmentMapBinding::bind)
-    private val viewModel: MainViewModel by koinNavGraphViewModel(R.id.home_graph)
+    private val userViewModel: UserViewModel by koinNavGraphViewModel(R.id.home_graph)
+    private val scooterViewModel: ScooterViewModel by koinNavGraphViewModel(R.id.home_graph)
+    private val tripViewModel: TripViewModel by koinNavGraphViewModel(R.id.home_graph)
 
     private var locationGranted: Boolean = false
     private val fusedLocationClient: FusedLocationProviderClient by lazy { LocationServices.getFusedLocationProviderClient(requireActivity()) }
@@ -83,18 +87,23 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            Alerter.create(requireActivity())
-                .setText(message)
-                .setTextAppearance(R.style.AlertTextAppearance)
-                .setBackgroundColorRes(R.color.primary_color)
-                .enableSwipeToDismiss()
-                .show()
+        userViewModel.getCurrentUser()
+
+        userViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            createAlerter(message)
         }
 
-        viewModel.currentUser.observe(viewLifecycleOwner) { user ->
+        scooterViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            createAlerter(message)
+        }
+
+        tripViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            createAlerter(message)
+        }
+
+        userViewModel.currentUser.observe(viewLifecycleOwner) { user ->
             if (user == null) {
-                viewModel.clearApp()
+                userViewModel.clearApp()
                 findNavController().navigate(MapFragmentDirections.actionMapFragmentToSplashGraph())
             } else {
                 when (user.status) {
@@ -131,7 +140,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         stopScootersUpdates()
         scootersJob = viewLifecycleOwner.lifecycleScope.launch {
             while (true) {
-                viewModel.getAllScooters()
+                scooterViewModel.getAllScooters()
                 delay(SCOOTER_UPDATES_INTERVAL)
             }
         }
@@ -147,12 +156,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
                 locationGranted = result
                 if (!locationGranted) {
-                    Alerter.create(requireActivity())
-                        .setText(getString(R.string.map_location_denied_message))
-                        .setTextAppearance(R.style.AlertTextAppearance)
-                        .setBackgroundColorRes(R.color.primary_color)
-                        .enableSwipeToDismiss()
-                        .show()
+                    createAlerter(getString(R.string.map_location_denied_message))
                 }
                 initMap(savedInstanceState)
                 initToolbar()
@@ -269,7 +273,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun initObservers() {
-        viewModel.scootersList.observe(viewLifecycleOwner) { scootersList ->
+        scooterViewModel.scootersList.observe(viewLifecycleOwner) { scootersList ->
             displayScooters(scootersList)
         }
     }
@@ -354,7 +358,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
 
         infoWindow.ringBtn.setOnClickListener {
-            viewModel.ringScooter(scooter.id)
+            scooterViewModel.ringScooter(scooter.id)
         }
     }
 
@@ -375,7 +379,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
         dialogBinding.ringBtn.setOnClickListener {
-            viewModel.ringScooter(scooter.id)
+            scooterViewModel.ringScooter(scooter.id)
         }
 
         dialogBinding.nfcBtn.setOnClickListener {
@@ -416,11 +420,11 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun showStartRideDialog() {
-        val scooter: Scooter = viewModel.currentUser.value?.scooter ?: return
+        val scooter: Scooter = scooterViewModel.scannedScooter.value ?: return
 
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         bottomSheetDialog.setOnDismissListener {
-            viewModel.cancelScanScooter()
+            scooterViewModel.cancelScanScooter(scooter.number)
             startScootersUpdates()
         }
 
@@ -430,11 +434,16 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         dialogBinding.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
         dialogBinding.startRideBtn.setOnClickListener {
-            viewModel.startRide(
+            tripViewModel.startRide(
                 scooter.number,
                 currentLocationData.location?.latitude ?: .0,
                 currentLocationData.location?.longitude ?: .0
             )
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(1000L)
+                userViewModel.getCurrentUser()
+            }
             bottomSheetDialog.setOnDismissListener {}
             bottomSheetDialog.dismiss()
         }
@@ -444,7 +453,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun showCurrentRideDialogCollapsed() {
-        val scooter = viewModel.currentUser.value?.scooter ?: return
+        val scooter = scooterViewModel.scannedScooter.value ?: return
 
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
 
@@ -455,7 +464,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         dialogBinding.lockBtn.text =
             if (isLockable) resources.getString(R.string.trip_details_lock_btn_text) else resources.getString(R.string.trip_details_unlock_btn_text)
 
-        viewModel.seconds.observe(viewLifecycleOwner) { seconds ->
+        tripViewModel.seconds.observe(viewLifecycleOwner) { seconds ->
             val min = seconds / 60
             val minString = if (min / 10 == 0) "0$min" else min.toString()
             val hour = seconds / 3600
@@ -463,14 +472,14 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             dialogBinding.durationTV.text = TIME_TEMPLATE_MINUTES.format(hourString, minString)
         }
 
-        viewModel.trip.observe(viewLifecycleOwner) { trip ->
+        tripViewModel.trip.observe(viewLifecycleOwner) { trip ->
             if (trip == null) return@observe
             val kms = trip.distance.toFloat() / 1000F
             dialogBinding.distanceTV.text = DISTANCE_TEMPLATE_SECONDS.format(kms)
         }
 
         dialogBinding.endRideBtn.setOnClickListener {
-            viewModel.endRide(
+            tripViewModel.endRide(
                 scooter.id,
                 currentLocationData.location?.latitude ?: .0,
                 currentLocationData.location?.longitude ?: .0
@@ -481,14 +490,14 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
         dialogBinding.lockBtn.setOnClickListener {
             if (isLockable) {
-                viewModel.lockRide(
+                tripViewModel.lockRide(
                     scooter.id,
                     currentLocationData.location?.latitude ?: .0,
                     currentLocationData.location?.longitude ?: .0
                 )
                 dialogBinding.lockBtn.text = resources.getString(R.string.trip_details_unlock_btn_text)
             } else {
-                viewModel.unlockRide(
+                tripViewModel.unlockRide(
                     scooter.id,
                     currentLocationData.location?.latitude ?: .0,
                     currentLocationData.location?.longitude ?: .0
@@ -508,7 +517,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun showCurrentRideDialogExpanded() {
-        val scooter = viewModel.currentUser.value?.scooter ?: return
+        val scooter = scooterViewModel.scannedScooter.value ?: return
 
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
         bottomSheetDialog.setCancelable(false)
@@ -519,7 +528,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         dialogBinding.lockBtn.text =
             if (isLockable) resources.getString(R.string.trip_details_lock_btn_text) else resources.getString(R.string.trip_details_unlock_btn_text)
 
-        viewModel.seconds.observe(viewLifecycleOwner) { seconds ->
+        tripViewModel.seconds.observe(viewLifecycleOwner) { seconds ->
             val sec = seconds % 60
             val secString = if (sec / 10 == 0) "0$sec" else sec.toString()
             val min = seconds / 60
@@ -529,7 +538,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             dialogBinding.timeTV.text = TIME_TEMPLATE_SECONDS.format(hourString, minString, secString)
         }
 
-        viewModel.trip.observe(viewLifecycleOwner) { trip ->
+        tripViewModel.trip.observe(viewLifecycleOwner) { trip ->
             if (trip == null) return@observe
             val kms = trip.distance.toFloat() / 1000F
             dialogBinding.distanceTV.text = DISTANCE_TEMPLATE_SECONDS.format(kms)
@@ -537,14 +546,14 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
         dialogBinding.lockBtn.setOnClickListener {
             if (isLockable) {
-                viewModel.lockRide(
+                tripViewModel.lockRide(
                     scooter.id,
                     currentLocationData.location?.latitude ?: .0,
                     currentLocationData.location?.longitude ?: .0
                 )
                 dialogBinding.lockBtn.text = resources.getString(R.string.trip_details_unlock_btn_text)
             } else {
-                viewModel.unlockRide(
+                tripViewModel.unlockRide(
                     scooter.id,
                     currentLocationData.location?.latitude ?: .0,
                     currentLocationData.location?.longitude ?: .0
@@ -555,7 +564,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
 
         dialogBinding.endRideBtn.setOnClickListener {
-            viewModel.endRide(
+            tripViewModel.endRide(
                 scooter.id,
                 currentLocationData.location?.latitude ?: .0,
                 currentLocationData.location?.longitude ?: .0
@@ -571,6 +580,15 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
         bottomSheetDialog.setContentView(dialogBinding.root)
         bottomSheetDialog.show()
+    }
+
+    private fun createAlerter(message: String) {
+        Alerter.create(requireActivity())
+            .setText(message)
+            .setTextAppearance(R.style.AlertTextAppearance)
+            .setBackgroundColorRes(R.color.primary_color)
+            .enableSwipeToDismiss()
+            .show()
     }
 
     companion object {

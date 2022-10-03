@@ -23,7 +23,7 @@ import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.internship.move.R
 import com.internship.move.databinding.FragmentUnlockBinding
-import com.internship.move.ui.home.MainViewModel
+import com.internship.move.ui.home.ScooterViewModel
 import com.internship.move.ui.home.unlock.UnlockMethod.NFC
 import com.internship.move.ui.home.unlock.UnlockMethod.PIN
 import com.internship.move.ui.home.unlock.UnlockMethod.QR
@@ -36,7 +36,8 @@ import org.koin.androidx.navigation.koinNavGraphViewModel
 class UnlockFragment : Fragment(R.layout.fragment_unlock) {
 
     private val binding by viewBinding(FragmentUnlockBinding::bind)
-    private val viewModel: MainViewModel by koinNavGraphViewModel(R.id.home_graph)
+    private val scooterViewModel by koinNavGraphViewModel<ScooterViewModel>(R.id.home_graph)
+
     private val args by navArgs<UnlockFragmentArgs>()
     private var cameraSource: CameraSource? = null
     private var scooterId: Int = 0
@@ -44,7 +45,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+        scooterViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
             Alerter.create(requireActivity())
                 .setText(message)
                 .setTextAppearance(R.style.AlertTextAppearance)
@@ -182,12 +183,12 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
     }
 
     private fun initPinUnlock() {
-        viewModel.unlockResult.observe(viewLifecycleOwner) { isUnlockSuccessful ->
+        scooterViewModel.unlockResult.observe(viewLifecycleOwner) { isUnlockSuccessful ->
             if (isUnlockSuccessful) {
                 viewLifecycleOwner.lifecycleScope.launch {
                     displayUnlockSuccessfulScreen()
                     delay(UNLOCK_SUCCESSFUL_DELAY)
-                    viewModel.unlockResult.value = false
+                    scooterViewModel.unlockResult.value = false
                     findNavController().navigateUp()
                 }
             }
@@ -228,7 +229,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
             scooterId += text.toString().toInt()
 
             binding.progressBar.isVisible = true
-            viewModel.scanScooter(PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
+            scooterViewModel.scanScooter(PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
         }
 
         binding.firstBtn.setOnClickListener {
@@ -241,7 +242,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
     }
 
     private fun displayUnlockSuccessfulScreen() {
-        viewModel.unlockResult.value = false
+        scooterViewModel.unlockResult.value = false
         binding.unlockSuccessfulGroup.isVisible = false
         binding.titleTV.text = resources.getString(R.string.unlock_successful_title)
         binding.unlockBgIV.setImageResource(R.drawable.bg_unlock_successful)
