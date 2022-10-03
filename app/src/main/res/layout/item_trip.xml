@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/trips_history_item_height"
+    android:layout_marginBottom="@dimen/medium_margin_size"
+    android:background="@drawable/bg_item_trip"
+    android:padding="@dimen/medium_margin_size">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.65" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontalGL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/fromLabelTV"
+        style="@style/Body2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="From"
+        android:textColor="@color/text_color_light_secondary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/toLabelTV"
+        style="@style/Body2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="To"
+        android:textColor="@color/text_color_light_secondary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/horizontalGL" />
+
+    <TextView
+        android:id="@+id/timeLabelTV"
+        style="@style/Body2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin_size"
+        android:text="Travel time"
+        android:textColor="@color/text_color_light_secondary"
+        app:layout_constraintStart_toStartOf="@id/verticalGL"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/distanceLabelTV"
+        style="@style/Body2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin_size"
+        android:text="Distance"
+        android:textColor="@color/text_color_light_secondary"
+        app:layout_constraintStart_toStartOf="@id/verticalGL"
+        app:layout_constraintTop_toTopOf="@id/horizontalGL" />
+
+    <TextView
+        android:id="@+id/startLocationTV"
+        style="@style/Heading5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bai_jamjuree_bold"
+        android:textColor="@color/text_color_dark"
+        app:layout_constraintEnd_toStartOf="@id/verticalGL"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fromLabelTV"
+        tools:text="860 Tiana Mountains Suite 584" />
+
+    <TextView
+        android:id="@+id/endLocationTV"
+        style="@style/Heading5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bai_jamjuree_bold"
+        android:textColor="@color/text_color_dark"
+        app:layout_constraintEnd_toStartOf="@id/verticalGL"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toLabelTV"
+        tools:text="261 Howell Garden" />
+
+    <TextView
+        android:id="@+id/timeTV"
+        style="@style/Heading5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin_size"
+        android:fontFamily="@font/bai_jamjuree_bold"
+        android:textColor="@color/text_color_dark"
+        app:layout_constraintStart_toStartOf="@id/verticalGL"
+        app:layout_constraintTop_toBottomOf="@id/timeLabelTV"
+        tools:text="00:42 min" />
+
+    <TextView
+        android:id="@+id/distanceTV"
+        style="@style/Heading5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin_size"
+        android:fontFamily="@font/bai_jamjuree_bold"
+        android:textColor="@color/text_color_dark"
+        app:layout_constraintStart_toStartOf="@id/verticalGL"
+        app:layout_constraintTop_toBottomOf="@id/distanceLabelTV"
+        tools:text="7.8 km" />
+</androidx.constraintlayout.widget.ConstraintLayout>

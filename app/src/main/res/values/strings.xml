@@ -132,4 +132,5 @@
     <string name="trip_details_unlock_btn_text">Unlock</string>
     <string name="trip_details_end_ride_btn_text">End ride</string>
     <string name="trip_details_battery_label">Battery</string>
+    <string name="trips_history_title">History</string>
 </resources>

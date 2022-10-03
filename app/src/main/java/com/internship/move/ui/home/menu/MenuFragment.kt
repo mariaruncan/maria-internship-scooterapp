@@ -28,7 +28,7 @@ class MenuFragment : Fragment(R.layout.fragment_menu) {
 
     private fun initListeners() {
         binding.backBtn.setOnClickListener {
-            findNavController().navigate(MenuFragmentDirections.actionMenuFragmentToMapFragment())
+            findNavController().navigateUp()
         }
 
         binding.seeRidesBtn.setOnClickListener {

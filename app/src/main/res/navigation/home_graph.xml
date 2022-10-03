@@ -27,9 +27,7 @@
             app:enterAnim="@anim/enter_from_left"
             app:exitAnim="@anim/exit_to_right"
             app:popEnterAnim="@anim/enter_from_right"
-            app:popExitAnim="@anim/exit_to_left"
-            app:popUpTo="@id/mapFragment"
-            app:popUpToInclusive="true" />
+            app:popExitAnim="@anim/exit_to_left" />
     </fragment>
 
     <fragment
@@ -56,12 +54,6 @@
             app:destination="@id/unlockFragment"
             app:popUpTo="@id/unlockFragment"
             app:popUpToInclusive="true" />
-
-        <action
-            android:id="@+id/action_unlockFragment_to_mapFragment"
-            app:destination="@id/mapFragment"
-            app:popUpTo="@id/unlockFragment"
-            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -71,9 +63,13 @@
         tools:layout="@layout/fragment_menu">
 
         <action
-            android:id="@+id/action_menuFragment_to_mapFragment"
-            app:destination="@id/mapFragment"
-            app:popUpTo="@id/menuFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_menuFragment_to_tripsHistoryFragment"
+            app:destination="@id/tripsHistoryFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/tripsHistoryFragment"
+        android:name="com.internship.move.ui.home.menu.TripsHistoryFragment"
+        android:label="TripsHistoryFragment"
+        tools:layout="@layout/fragment_trips_history" />
 </navigation>
