@@ -3,6 +3,7 @@ package com.internship.move.data.model
 import com.google.android.gms.maps.model.LatLng
 
 data class Trip(
+    val tripId: String,
     val userId: String,
     val scooterId: String,
     val locations: List<LatLng>,

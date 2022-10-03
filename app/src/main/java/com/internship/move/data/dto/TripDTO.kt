@@ -8,6 +8,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class TripDTO(
+    @Json(name = "_id") val tripId: String,
     @Json(name = "startLocation") val startLocation: LocationDTO,
     @Json(name = "endLocation") val endLocation: LocationDTO,
     @Json(name = "userId") val userId: String,
@@ -25,6 +26,7 @@ data class TripDTO(
             locations.add(LatLng(location.coordinates[0], location.coordinates[1]))
         }
         return Trip(
+            tripId,
             userId,
             scooterId,
             locations,
