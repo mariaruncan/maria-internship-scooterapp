@@ -9,12 +9,13 @@ import com.internship.move.databinding.FragmentMenuBinding
 import com.internship.move.ui.home.MainViewModel
 import com.tapadoo.alerter.Alerter
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
+import org.koin.androidx.navigation.koinNavGraphViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class MenuFragment : Fragment(R.layout.fragment_menu) {
 
     private val binding by viewBinding(FragmentMenuBinding::bind)
-    private val viewModel: MainViewModel by sharedViewModel()
+    private val viewModel: MainViewModel by koinNavGraphViewModel(R.id.home_graph)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

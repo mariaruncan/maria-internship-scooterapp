@@ -56,12 +56,12 @@ import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.navigation.koinNavGraphViewModel
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
     private val binding by viewBinding(FragmentMapBinding::bind)
-    private val viewModel: MainViewModel by sharedViewModel()
+    private val viewModel: MainViewModel by koinNavGraphViewModel(R.id.home_graph)
 
     private var locationGranted: Boolean = false
     private val fusedLocationClient: FusedLocationProviderClient by lazy { LocationServices.getFusedLocationProviderClient(requireActivity()) }

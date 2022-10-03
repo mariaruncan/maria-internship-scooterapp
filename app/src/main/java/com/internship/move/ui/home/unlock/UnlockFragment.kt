@@ -31,12 +31,12 @@ import com.tapadoo.alerter.Alerter
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.navigation.koinNavGraphViewModel
 
 class UnlockFragment : Fragment(R.layout.fragment_unlock) {
 
     private val binding by viewBinding(FragmentUnlockBinding::bind)
-    private val viewModel: MainViewModel by sharedViewModel()
+    private val viewModel: MainViewModel by koinNavGraphViewModel(R.id.home_graph)
     private val args by navArgs<UnlockFragmentArgs>()
     private var cameraSource: CameraSource? = null
     private var scooterId: Int = 0
@@ -60,7 +60,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         }
 
         binding.closeBtn.setOnClickListener {
-            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentToMapFragment())
+            findNavController().navigateUp()
         }
     }
 
@@ -82,13 +82,7 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         binding.secondBtn.text = resources.getString(R.string.unlock_nfc_btn_text)
 
         binding.firstBtn.setOnClickListener {
-            findNavController().navigate(
-                UnlockFragmentDirections.actionUnlockFragmentSelf(
-                    args.longitude,
-                    args.latitude,
-                    PIN
-                )
-            )
+            findNavController().navigate(UnlockFragmentDirections.actionUnlockFragmentSelf(args.longitude, args.latitude, PIN))
         }
 
         binding.secondBtn.setOnClickListener {
