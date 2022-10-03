@@ -68,6 +68,7 @@
     <string name="driving_license_fail_message">Could not take picture!</string>
     <string name="driving_license_verify_status">We are currently verifying your driving license</string>
     <string name="driving_license_find_scooters_btn_text">Find scooters</string>
+    <string name="driving_license_permission_denied">Camera permission denied</string>
     <string name="driving_license_validated_status">We’ve successfully validated your driving license</string>
 
     <!-- region MapFragment -->

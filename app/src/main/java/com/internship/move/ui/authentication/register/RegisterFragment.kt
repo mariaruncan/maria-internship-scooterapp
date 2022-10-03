@@ -2,7 +2,6 @@ package com.internship.move.ui.authentication.register
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -10,6 +9,7 @@ import com.internship.move.R
 import com.internship.move.databinding.FragmentRegisterBinding
 import com.internship.move.ui.authentication.AuthenticationViewModel
 import com.internship.move.utils.extensions.addClickableText
+import com.tapadoo.alerter.Alerter
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -32,7 +32,12 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
 
         viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            Alerter.create(requireActivity())
+                .setText(message)
+                .setTextAppearance(R.style.AlertTextAppearance)
+                .setBackgroundColorRes(R.color.primary_color)
+                .enableSwipeToDismiss()
+                .show()
         }
 
         viewModel.user.observe(viewLifecycleOwner) {
@@ -42,11 +47,21 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private fun initClickableText() {
         binding.termsPrivacyTV.addClickableText(text = getString(R.string.register_terms_and_conditions_text)) {
-            Toast.makeText(context, getString(R.string.register_terms_and_conditions_text), Toast.LENGTH_SHORT).show()
+            Alerter.create(requireActivity())
+                .setText(getString(R.string.register_terms_and_conditions_text))
+                .setTextAppearance(R.style.AlertTextAppearance)
+                .setBackgroundColorRes(R.color.primary_color)
+                .enableSwipeToDismiss()
+                .show()
         }
 
         binding.termsPrivacyTV.addClickableText(text = getString(R.string.register_privacy_policy_text)) {
-            Toast.makeText(context, getString(R.string.register_privacy_policy_text), Toast.LENGTH_SHORT).show()
+            Alerter.create(requireActivity())
+                .setText(getString(R.string.register_privacy_policy_text))
+                .setTextAppearance(R.style.AlertTextAppearance)
+                .setBackgroundColorRes(R.color.primary_color)
+                .enableSwipeToDismiss()
+                .show()
         }
 
         binding.loginTV.addClickableText(text = getString(R.string.register_login_here_text)) {

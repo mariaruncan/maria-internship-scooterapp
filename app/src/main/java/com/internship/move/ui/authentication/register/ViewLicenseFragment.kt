@@ -3,7 +3,6 @@ package com.internship.move.ui.authentication.register
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -11,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import com.internship.move.R
 import com.internship.move.databinding.FragmentViewLicenseBinding
 import com.internship.move.ui.authentication.AuthenticationViewModel
+import com.tapadoo.alerter.Alerter
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -40,7 +40,12 @@ class ViewLicenseFragment : Fragment(R.layout.fragment_view_license) {
         }
 
         viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            Alerter.create(requireActivity())
+                .setText(message)
+                .setTextAppearance(R.style.AlertTextAppearance)
+                .setBackgroundColorRes(R.color.primary_color)
+                .enableSwipeToDismiss()
+                .show()
         }
 
         viewModel.user.observe(viewLifecycleOwner) {

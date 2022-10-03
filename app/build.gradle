@@ -65,6 +65,7 @@ dependencies {
     // Koin
     implementation "io.insert-koin:koin-core:$koin_version"
     implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "io.insert-koin:koin-androidx-navigation:$koin_version"
 
     // Camera
     implementation "androidx.activity:activity-ktx:1.6.0"

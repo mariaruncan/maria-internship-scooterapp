@@ -34,4 +34,5 @@
     <color name="text_input_color_focused">@color/white</color>
     <color name="text_input_color_unfocused">@color/pastel_purple</color>
     <color name="scooter_info_card_color">@color/white</color>
+    <color name="primary_color">@color/indigo</color>
 </resources>

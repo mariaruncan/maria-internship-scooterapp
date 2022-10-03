@@ -10,7 +10,9 @@ import com.internship.move.repository.ScooterRepository
 import com.internship.move.repository.TripRepository
 import com.internship.move.repository.UserRepository
 import com.internship.move.ui.authentication.AuthenticationViewModel
-import com.internship.move.ui.home.MainViewModel
+import com.internship.move.ui.home.ScooterViewModel
+import com.internship.move.ui.home.TripViewModel
+import com.internship.move.ui.home.UserViewModel
 import com.internship.move.ui.onboarding.OnboardingViewModel
 import com.internship.move.ui.splash.SplashViewModel
 import com.internship.move.utils.Constants.HttpClient.CONNECT_TIMEOUT
@@ -33,15 +35,9 @@ val viewModels = module {
     viewModel { SplashViewModel(internalStorageManager = get()) }
     viewModel { OnboardingViewModel(internalStorageManager = get()) }
     viewModel { AuthenticationViewModel(repo = get(), internalStorageManager = get(), errorJSONAdapter = get()) }
-    viewModel {
-        MainViewModel(
-            userRepo = get(),
-            scooterRepo = get(),
-            tripRepo = get(),
-            internalStorageManager = get(),
-            errorJSONAdapter = get()
-        )
-    }
+    viewModel { UserViewModel(userRepo = get(), internalStorageManager = get(), errorJSONAdapter = get()) }
+    viewModel { ScooterViewModel(scooterRepo = get(), internalStorageManager = get(), errorJSONAdapter = get()) }
+    viewModel { TripViewModel(tripRepo = get(), internalStorageManager = get(), errorJSONAdapter = get()) }
 }
 
 val repositories = module {
