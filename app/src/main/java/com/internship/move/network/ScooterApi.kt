@@ -9,11 +9,12 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ScooterApi {
+    // Physical
 
     @GET("scooters")
     suspend fun getAllScooters(): ScootersResponseDTO
 
-    @PATCH("scooters/scan")
+    @PATCH("scooters/scanPhysical")
     suspend fun scanScooter(
         @Query("method") method: String,
         @Query("id") id: Int,
@@ -21,7 +22,7 @@ interface ScooterApi {
         @Query("longitude") longitude: Double
     ): ScanResponseDTO
 
-    @PATCH("scooters/cancel")
+    @PATCH("scooters/cancelPhysical")
     suspend fun cancelScanScooter(@Query("id") id: Int)
 
     @PUT("scooters/{id}/beep")

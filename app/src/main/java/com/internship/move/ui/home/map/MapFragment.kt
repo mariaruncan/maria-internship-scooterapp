@@ -51,8 +51,10 @@ import com.internship.move.ui.home.ScooterViewModel
 import com.internship.move.ui.home.TripViewModel
 import com.internship.move.ui.home.UserViewModel
 import com.internship.move.ui.home.unlock.UnlockMethod
+import com.internship.move.utils.extensions.fromSecondsToList
 import com.internship.move.utils.extensions.getDrawableToBitmapDescriptor
 import com.internship.move.utils.extensions.setBatteryIcon
+import com.internship.move.utils.extensions.toKms
 import com.tapadoo.alerter.Alerter
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import kotlinx.coroutines.Job
@@ -350,7 +352,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         infoWindow.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
         val address = geocoder.getFromLocation(scooter.latLng.latitude, scooter.latLng.longitude, 1)?.firstOrNull() ?: return
-        infoWindow.addressTV.text = SCOOTER_ADDRESS_TEMPLATE.format(address.thoroughfare, address.subThoroughfare)
+        infoWindow.addressTV.text = getString(R.string.address_template).format(address.thoroughfare ?: "", address.subThoroughfare ?: "")
 
         infoWindow.unlockBtn.setOnClickListener {
             showUnlockDialog(scooter)
@@ -435,7 +437,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
         dialogBinding.startRideBtn.setOnClickListener {
             tripViewModel.startRide(
-                scooter.number,
+                scooter.id,
                 currentLocationData.location?.latitude ?: .0,
                 currentLocationData.location?.longitude ?: .0
             )
@@ -465,17 +467,16 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             if (isLockable) resources.getString(R.string.trip_details_lock_btn_text) else resources.getString(R.string.trip_details_unlock_btn_text)
 
         tripViewModel.seconds.observe(viewLifecycleOwner) { seconds ->
-            val min = seconds / 60
-            val minString = if (min / 10 == 0) "0$min" else min.toString()
-            val hour = seconds / 3600
-            val hourString = if (hour / 10 == 0) "0$hour" else hour.toString()
-            dialogBinding.durationTV.text = TIME_TEMPLATE_MINUTES.format(hourString, minString)
+            val durationList = seconds.fromSecondsToList()
+            val hourString = if (durationList[0] / 10 == 0) "0${durationList[0]}" else durationList[0].toString()
+            val minString = if (durationList[1] / 10 == 0) "0${durationList[1]}" else durationList[1].toString()
+            dialogBinding.durationTV.text = getString(R.string.time_minutes_template).format(hourString, minString)
         }
 
         tripViewModel.trip.observe(viewLifecycleOwner) { trip ->
             if (trip == null) return@observe
-            val kms = trip.distance.toFloat() / 1000F
-            dialogBinding.distanceTV.text = DISTANCE_TEMPLATE_SECONDS.format(kms)
+            val kms = trip.distance.toKms()
+            dialogBinding.distanceTV.text = getString(R.string.distance_template).format(kms)
         }
 
         dialogBinding.endRideBtn.setOnClickListener {
@@ -529,19 +530,17 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             if (isLockable) resources.getString(R.string.trip_details_lock_btn_text) else resources.getString(R.string.trip_details_unlock_btn_text)
 
         tripViewModel.seconds.observe(viewLifecycleOwner) { seconds ->
-            val sec = seconds % 60
-            val secString = if (sec / 10 == 0) "0$sec" else sec.toString()
-            val min = seconds / 60
-            val minString = if (min / 10 == 0) "0$min" else min.toString()
-            val hour = seconds / 3600
-            val hourString = if (hour / 10 == 0) "0$hour" else hour.toString()
-            dialogBinding.timeTV.text = TIME_TEMPLATE_SECONDS.format(hourString, minString, secString)
+            val durationList = seconds.fromSecondsToList()
+            val hourString = if (durationList[0] / 10 == 0) "0${durationList[0]}" else durationList[0].toString()
+            val minString = if (durationList[1] / 10 == 0) "0${durationList[1]}" else durationList[1].toString()
+            val secString = if (durationList[2] / 10 == 0) "0${durationList[2]}" else durationList[2].toString()
+            dialogBinding.timeTV.text = getString(R.string.time_seconds_template).format(hourString, minString, secString)
         }
 
         tripViewModel.trip.observe(viewLifecycleOwner) { trip ->
             if (trip == null) return@observe
-            val kms = trip.distance.toFloat() / 1000F
-            dialogBinding.distanceTV.text = DISTANCE_TEMPLATE_SECONDS.format(kms)
+            val kms = trip.distance.toKms()
+            dialogBinding.distanceTV.text = getString(R.string.distance_template).format(kms)
         }
 
         dialogBinding.lockBtn.setOnClickListener {
@@ -594,7 +593,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     companion object {
         private const val SCOOTER_NUMBER_TEMPLATE = "#%d"
         private const val SCOOTER_BATTERY_TEMPLATE = "%d%%"
-        private const val SCOOTER_ADDRESS_TEMPLATE = "%s %s"
 
         private const val ZOOM_VALUE = 17F
         private const val ZOOM_VALUE_CLUSTER = 14F
@@ -609,9 +607,5 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         private const val SCOOTER_UPDATES_INTERVAL = 60000L
         private const val LOCATION_UPDATES_INTERVAL = 10000L
         private const val MARKER_ANCHOR = 0.5F
-
-        private const val TIME_TEMPLATE_MINUTES = "%s:%s min"
-        private const val TIME_TEMPLATE_SECONDS = "%s:%s:%s"
-        private const val DISTANCE_TEMPLATE_SECONDS = "%.1f km"
     }
 }

@@ -10,5 +10,5 @@ data class Trip(
     val status: TripStatus,
     val duration: Int,
     val distance: Int,
-    val cost: Int
+    val cost: Float
 )

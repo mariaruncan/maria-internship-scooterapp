@@ -21,7 +21,7 @@ data class ScooterDTO(
         Scooter(
             this.scooterId,
             this.scooterNumber,
-            LatLng(this.location.coordinates[0], this.location.coordinates[1]),
+            LatLng(this.location.coordinates[1], this.location.coordinates[0]),
             this.batteryLevel,
             BookedStatus.fromString(this.bookedStatus),
             LockedStatus.fromString(this.lockedStatus)

@@ -2,6 +2,10 @@
     <string name="app_name">Move</string>
     <string name="home_fragment_title">Map fragment</string>
     <string name="login_fragment_title">Login fragment</string>
+    <string name="address_template">%1$s %2$s</string>
+    <string name="time_seconds_template">%1$s:%2$s:%3$s</string>
+    <string name="time_minutes_template">%1$s:%2$s min</string>
+    <string name="distance_template">%1$.1f km</string>
 
     <!-- Buttons text -->
     <string name="map_btn_text">Map</string>

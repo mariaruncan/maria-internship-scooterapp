@@ -20,6 +20,10 @@ class TripViewModel(
     private val errorJSONAdapter: JsonAdapter<ErrorResponseDTO>
 ) : ViewModel() {
 
+    private val _tripsList: MutableLiveData<List<Trip>> = MutableLiveData()
+    val tripsList: LiveData<List<Trip>>
+        get() = _tripsList
+
     private val _trip: MutableLiveData<Trip?> = MutableLiveData(null)
     val trip: LiveData<Trip?>
         get() = _trip
@@ -35,10 +39,10 @@ class TripViewModel(
     private var tripJob: Job? = null
     private var timeJob: Job? = null
 
-    fun startRide(scooterNumber: Int, latitude: Double, longitude: Double) {
+    fun startRide(scooterId: String, latitude: Double, longitude: Double) {
         viewModelScope.launch {
             try {
-                tripRepo.startRide(scooterNumber, latitude, longitude)
+                tripRepo.startRide(scooterId, latitude, longitude)
                 startTimeUpdates()
                 startTripUpdates()
             } catch (e: Exception) {
@@ -50,10 +54,12 @@ class TripViewModel(
     fun endRide(scooterId: String, latitude: Double, longitude: Double) {
         viewModelScope.launch {
             try {
-                tripRepo.endRide(scooterId, latitude, longitude)
-                stopTimeUpdates()
                 stopTripUpdates()
+                stopTimeUpdates()
+                _trip.value = tripRepo.endRide(scooterId, latitude, longitude)
             } catch (e: Exception) {
+                startTripUpdates()
+                startTimeUpdates()
                 handleException(e)
             }
         }
@@ -63,7 +69,6 @@ class TripViewModel(
         viewModelScope.launch {
             try {
                 tripRepo.lockRide(scooterId, latitude, longitude)
-                stopTimeUpdates()
                 stopTripUpdates()
             } catch (e: Exception) {
                 handleException(e)
@@ -75,7 +80,6 @@ class TripViewModel(
         viewModelScope.launch {
             try {
                 tripRepo.unlockRide(scooterId, latitude, longitude)
-                startTimeUpdates()
                 startTripUpdates()
             } catch (e: Exception) {
                 handleException(e)
@@ -97,8 +101,7 @@ class TripViewModel(
     fun getUserTrips() {
         viewModelScope.launch {
             try {
-                val tripsList = tripRepo.getUserTrips()
-                // set live data
+                _tripsList.value = tripRepo.getUserTrips()
             } catch (e: Exception) {
                 handleException(e)
             }

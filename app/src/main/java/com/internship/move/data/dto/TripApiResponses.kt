@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class TripResponseDTO(
-    @Json(name = "currTrip") val trip: TripDTO
+    @Json(name = "trip") val trip: TripDTO
 ) {
 
     fun toTrip(): Trip = trip.toTrip()
@@ -24,3 +24,8 @@ data class MultipleTripsResponseDTO(
         return resultList
     }
 }
+
+@JsonClass(generateAdapter = true)
+data class EndTripResponseDTO(
+    @Json(name = "endedTrip") val endedTrip: TripDTO
+)
