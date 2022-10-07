@@ -29,11 +29,15 @@ class ScooterViewModel(
     val scannedScooter: LiveData<Scooter?>
         get() = _scannedScooter
 
-    private val _errorMessage: MutableLiveData<String> = MutableLiveData()
-    val errorMessage: LiveData<String>
+    private val _errorMessage: MutableLiveData<String?> = MutableLiveData()
+    val errorMessage: LiveData<String?>
         get() = _errorMessage
 
     val unlockResult: MutableLiveData<Boolean> = MutableLiveData(false)
+
+    private val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
 
     fun getAllScooters() {
         viewModelScope.launch {
@@ -58,14 +62,17 @@ class ScooterViewModel(
     fun scanScooter(method: UnlockMethod, scooterId: Int, location: LatLng) {
         viewModelScope.launch {
             try {
+                _isLoading.value = true
                 val response = scooterRepo.scanScooter(method, scooterId, location)
                 val scooter = response.scooter.toScooter()
+                _isLoading.value = false
                 unlockResult.value = true
                 internalStorageManager.setScooterId(scooter.id)
                 internalStorageManager.setScooterNumber(scooter.number)
                 delay(UNLOCK_SUCCESSFUL_DELAY)
                 _scannedScooter.value = scooter
             } catch (e: Exception) {
+                _isLoading.value = false
                 handleException(e)
             }
         }
@@ -85,6 +92,7 @@ class ScooterViewModel(
 
     private fun handleException(e: Exception) {
         _errorMessage.value = e.toErrorResponseDTO(errorJSONAdapter).message
+        _errorMessage.value = null
     }
 
     companion object {

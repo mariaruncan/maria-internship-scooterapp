@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.internship.move.data.model.Trip
 import com.internship.move.databinding.ItemTripBinding
 
-class TripsAdapter: ListAdapter<Trip, TripViewHolder>(TripsDiffUtilItemCallback) {
+class TripsAdapter : ListAdapter<Trip, TripViewHolder>(TripsDiffUtilItemCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripViewHolder =
         TripViewHolder(

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.internship.move.R
 import com.internship.move.databinding.FragmentChangePasswordBinding
 import com.internship.move.ui.home.UserViewModel
@@ -22,6 +23,10 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     }
 
     private fun initListeners() {
+        binding.backBtn.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
         binding.oldPassTIET.doOnTextChanged { _, _, _, _ ->
             binding.saveBtn.setIsEnabled(areFieldsNotEmpty())
         }

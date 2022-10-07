@@ -83,7 +83,9 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
 
         scooterViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            createAlerter(message)
+            if(message != null) {
+                createAlerter(message)
+            }
         }
 
         tripViewModel.errorMessage.observe(viewLifecycleOwner) { message ->

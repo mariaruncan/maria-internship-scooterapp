@@ -40,18 +40,20 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
 
     private val args by navArgs<UnlockFragmentArgs>()
     private var cameraSource: CameraSource? = null
-    private var scooterId: Int = 0
+    private var scooterNumber: Int = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         scooterViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            Alerter.create(requireActivity())
-                .setText(message)
-                .setTextAppearance(R.style.AlertTextAppearance)
-                .setBackgroundColorRes(R.color.primary_color)
-                .enableSwipeToDismiss()
-                .show()
+            if (message != null) {
+                Alerter.create(requireActivity())
+                    .setText(message)
+                    .setTextAppearance(R.style.AlertTextAppearance)
+                    .setBackgroundColorRes(R.color.primary_color)
+                    .enableSwipeToDismiss()
+                    .show()
+            }
         }
 
         when (args.unlockMethod) {
@@ -65,13 +67,14 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
         cameraSource?.stop()
+        super.onDestroyView()
     }
 
     private fun initQRUnlock() {
         binding.toolbarTitleTV.text = resources.getString(R.string.unlock_qr_toolbar_title)
+        binding.codeInputLL.isVisible = false
         binding.unlockBgIV.setImageResource(R.drawable.bg_unlock_qr)
         binding.cameraSurface.isVisible = true
         binding.titleTV.text = resources.getString(R.string.unlock_qr_title)
@@ -157,6 +160,8 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
     }
 
     private fun initNFCUnlock() {
+        binding.progressBar.isVisible = false
+        binding.codeInputLL.isVisible = false
         binding.root.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_default, null)
         binding.toolbarTitleTV.text = resources.getString(R.string.unlock_nfc_toolbar_title)
         binding.titleTV.text = resources.getString(R.string.unlock_nfc_title)
@@ -191,45 +196,71 @@ class UnlockFragment : Fragment(R.layout.fragment_unlock) {
                     scooterViewModel.unlockResult.value = false
                     findNavController().navigateUp()
                 }
+            } else {
+                binding.firstDigitTIET.requestFocus()
             }
         }
 
+        scooterViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBar.isVisible = isLoading
+        }
+
+        binding.codeInputLL.isVisible = true
         binding.root.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_default, null)
         binding.toolbarTitleTV.text = resources.getString(R.string.unlock_code_toolbar_title)
         binding.titleTV.text = resources.getString(R.string.unlock_code_title)
         binding.descriptionTV.text = resources.getString(R.string.unlock_code_description)
         binding.codeInputLL.isVisible = true
-        binding.progressBar.isVisible = false
         binding.firstBtn.text = resources.getString(R.string.unlock_qr_btn_text)
         binding.secondBtn.text = resources.getString(R.string.unlock_nfc_btn_text)
 
         binding.firstDigitTIET.doOnTextChanged { text, _, _, _ ->
-            binding.firstDigitTIET.clearFocus()
-            scooterId = text.toString().toInt()
-            binding.secondDigitTIET.requestFocus()
+            try {
+                binding.firstDigitTIET.clearFocus()
+                scooterNumber = text.toString().toInt()
+
+                binding.secondDigitTIET.requestFocus()
+            } catch (e: Exception) {
+                binding.firstDigitTIET.requestFocus()
+            }
         }
 
         binding.secondDigitTIET.doOnTextChanged { text, _, _, _ ->
-            binding.secondDigitTIET.clearFocus()
-            scooterId *= 10
-            scooterId += text.toString().toInt()
-            binding.thirdDigitTIET.requestFocus()
+            try {
+                binding.secondDigitTIET.clearFocus()
+                scooterNumber *= 10
+                scooterNumber += text.toString().toInt()
+
+                binding.thirdDigitTIET.requestFocus()
+            } catch (e: Exception) {
+                binding.secondDigitTIET.clearFocus()
+                binding.firstDigitTIET.requestFocus()
+            }
         }
 
         binding.thirdDigitTIET.doOnTextChanged { text, _, _, _ ->
-            binding.thirdDigitTIET.clearFocus()
-            scooterId *= 10
-            scooterId += text.toString().toInt()
-            binding.fourthDigitTIET.requestFocus()
+            try {
+                binding.thirdDigitTIET.clearFocus()
+                scooterNumber *= 10
+                scooterNumber += text.toString().toInt()
+
+                binding.fourthDigitTIET.requestFocus()
+            } catch (e: Exception) {
+                binding.thirdDigitTIET.clearFocus()
+                binding.secondDigitTIET.requestFocus()
+            }
         }
 
         binding.fourthDigitTIET.doOnTextChanged { text, _, _, _ ->
-            binding.fourthDigitTIET.clearFocus()
-            scooterId *= 10
-            scooterId += text.toString().toInt()
+            try {
+                scooterNumber *= 10
+                scooterNumber += text.toString().toInt()
 
-            binding.progressBar.isVisible = true
-            scooterViewModel.scanScooter(PIN, scooterId, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
+                scooterViewModel.scanScooter(PIN, scooterNumber, LatLng(args.latitude.toDouble(), args.longitude.toDouble()))
+            } catch (e: Exception) {
+                binding.fourthDigitTIET.clearFocus()
+                binding.thirdDigitTIET.requestFocus()
+            }
         }
 
         binding.firstBtn.setOnClickListener {

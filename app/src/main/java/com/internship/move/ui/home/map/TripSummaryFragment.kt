@@ -40,7 +40,7 @@ class TripSummaryFragment : Fragment(R.layout.fragment_trip_summary) {
     }
 
     private fun displayTripDetails(trip: Trip?) {
-        if(trip == null || trip.status != TripStatus.ENDED) return
+        if (trip == null || trip.status != TripStatus.ENDED) return
         println(trip.toString())
         val startLocation = trip.locations.firstOrNull()
         val endLocation = trip.locations.lastOrNull()

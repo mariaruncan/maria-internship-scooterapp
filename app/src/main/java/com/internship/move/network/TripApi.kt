@@ -12,6 +12,8 @@ import retrofit2.http.Path
 
 interface TripApi {
 
+    // add Physical to url for PhysicalScooter
+
     @POST("trips/start/{id}")
     suspend fun startRide(@Path("id") scooterId: String, @Body coordinates: CoordinatesDTO)
 
