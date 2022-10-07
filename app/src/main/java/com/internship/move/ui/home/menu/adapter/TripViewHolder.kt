@@ -38,9 +38,11 @@ class TripViewHolder(private val binding: ItemTripBinding) : RecyclerView.ViewHo
         }
 
         val durationList = trip.duration.fromSecondsToList()
+        val hoursString = if(durationList[0] / 10 == 0) "0${durationList[0]}" else durationList[0].toString()
+        val minString = if(durationList[1] / 10 == 0) "0${durationList[1]}" else durationList[1].toString()
         binding.timeTV.text = MoveApp.getAppContext().getString(R.string.time_minutes_template).format(
-            durationList[0],
-            durationList[1]
+            hoursString,
+            minString
         )
 
         binding.distanceTV.text = MoveApp.getAppContext().getString(R.string.distance_template).format(

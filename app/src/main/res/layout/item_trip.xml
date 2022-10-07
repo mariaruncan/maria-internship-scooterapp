@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.65" />
+        app:layout_constraintGuide_percent="0.6" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontalGL"
@@ -27,7 +27,7 @@
         style="@style/Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="From"
+        android:text="@string/trips_history_from_text"
         android:textColor="@color/text_color_light_secondary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -37,7 +37,7 @@
         style="@style/Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="To"
+        android:text="@string/trips_history_to_text"
         android:textColor="@color/text_color_light_secondary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/horizontalGL" />
@@ -47,8 +47,8 @@
         style="@style/Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/large_margin_size"
-        android:text="Travel time"
+        android:layout_marginStart="@dimen/medium_margin_size"
+        android:text="@string/trips_history_time_text"
         android:textColor="@color/text_color_light_secondary"
         app:layout_constraintStart_toStartOf="@id/verticalGL"
         app:layout_constraintTop_toTopOf="parent" />
@@ -58,8 +58,8 @@
         style="@style/Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/large_margin_size"
-        android:text="Distance"
+        android:layout_marginStart="@dimen/medium_margin_size"
+        android:text="@string/trips_history_distance_text"
         android:textColor="@color/text_color_light_secondary"
         app:layout_constraintStart_toStartOf="@id/verticalGL"
         app:layout_constraintTop_toTopOf="@id/horizontalGL" />
@@ -93,7 +93,7 @@
         style="@style/Heading5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/large_margin_size"
+        android:layout_marginStart="@dimen/medium_margin_size"
         android:fontFamily="@font/bai_jamjuree_bold"
         android:textColor="@color/text_color_dark"
         app:layout_constraintStart_toStartOf="@id/verticalGL"
@@ -105,7 +105,7 @@
         style="@style/Heading5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/large_margin_size"
+        android:layout_marginStart="@dimen/medium_margin_size"
         android:fontFamily="@font/bai_jamjuree_bold"
         android:textColor="@color/text_color_dark"
         app:layout_constraintStart_toStartOf="@id/verticalGL"

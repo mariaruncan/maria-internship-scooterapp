@@ -20,13 +20,11 @@ class TripViewModel(
     private val errorJSONAdapter: JsonAdapter<ErrorResponseDTO>
 ) : ViewModel() {
 
+    val trip: MutableLiveData<Trip?> = MutableLiveData(null)
+
     private val _tripsList: MutableLiveData<List<Trip>> = MutableLiveData()
     val tripsList: LiveData<List<Trip>>
         get() = _tripsList
-
-    private val _trip: MutableLiveData<Trip?> = MutableLiveData(null)
-    val trip: LiveData<Trip?>
-        get() = _trip
 
     private val _seconds: MutableLiveData<Int> = MutableLiveData(0)
     val seconds: LiveData<Int>
@@ -54,12 +52,11 @@ class TripViewModel(
     fun endRide(scooterId: String, latitude: Double, longitude: Double) {
         viewModelScope.launch {
             try {
-                stopTripUpdates()
+                _seconds.value = 0
+                trip.value = tripRepo.endRide(scooterId, latitude, longitude)
                 stopTimeUpdates()
-                _trip.value = tripRepo.endRide(scooterId, latitude, longitude)
+                stopTripUpdates()
             } catch (e: Exception) {
-                startTripUpdates()
-                startTimeUpdates()
                 handleException(e)
             }
         }
@@ -69,6 +66,7 @@ class TripViewModel(
         viewModelScope.launch {
             try {
                 tripRepo.lockRide(scooterId, latitude, longitude)
+                stopTimeUpdates()
                 stopTripUpdates()
             } catch (e: Exception) {
                 handleException(e)
@@ -80,6 +78,7 @@ class TripViewModel(
         viewModelScope.launch {
             try {
                 tripRepo.unlockRide(scooterId, latitude, longitude)
+                startTimeUpdates()
                 startTripUpdates()
             } catch (e: Exception) {
                 handleException(e)
@@ -91,7 +90,7 @@ class TripViewModel(
         viewModelScope.launch {
             try {
                 val scooterId = internalStorageManager.getScooterId() ?: throw Exception("scooterId is null!!")
-                _trip.value = tripRepo.getCurrentTrip(scooterId)
+                trip.value = tripRepo.getCurrentTrip(scooterId)
             } catch (e: Exception) {
                 handleException(e)
             }
@@ -119,7 +118,6 @@ class TripViewModel(
     }
 
     private fun stopTimeUpdates() {
-        _seconds.value = 0
         timeJob?.cancel()
         timeJob = null
     }
@@ -135,7 +133,7 @@ class TripViewModel(
     }
 
     private fun stopTripUpdates() {
-        _trip.value = null
+        trip.value = null
         tripJob?.cancel()
         tripJob = null
     }

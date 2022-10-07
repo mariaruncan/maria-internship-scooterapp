@@ -12,16 +12,16 @@ import retrofit2.http.Path
 
 interface TripApi {
 
-    @POST("trips/startPhysical/{id}")
+    @POST("trips/start/{id}")
     suspend fun startRide(@Path("id") scooterId: String, @Body coordinates: CoordinatesDTO)
 
-    @PATCH("trips/endPhysical/{id}")
+    @PATCH("trips/end/{id}")
     suspend fun endRide(@Path("id") scooterId: String, @Body coordinates: CoordinatesDTO): EndTripResponseDTO
 
-    @PATCH("trips/lockPhysical/{id}")
+    @PATCH("trips/lock/{id}")
     suspend fun lockRide(@Path("id") scooterId: String, @Body coordinates: CoordinatesDTO)
 
-    @PATCH("trips/unlockPhysical/{id}")
+    @PATCH("trips/unlock/{id}")
     suspend fun unlockRide(@Path("id") scooterId: String, @Body coordinates: CoordinatesDTO)
 
     @GET("trips/current/{id}")

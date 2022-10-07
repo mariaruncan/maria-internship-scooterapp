@@ -16,21 +16,13 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.CircleOptions
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.ClusterManager.OnClusterClickListener
@@ -39,14 +31,9 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.internship.move.R
 import com.internship.move.data.model.CurrentLocationData
 import com.internship.move.data.model.Scooter
-import com.internship.move.data.model.UserStatus.BUSY
-import com.internship.move.data.model.UserStatus.FREE
-import com.internship.move.data.model.UserStatus.SCANNED
-import com.internship.move.databinding.FragmentMapBinding
-import com.internship.move.databinding.ViewStartRideDialogBinding
-import com.internship.move.databinding.ViewTripDetailsCollapsedBinding
-import com.internship.move.databinding.ViewTripDetailsExpandedBinding
-import com.internship.move.databinding.ViewUnlockDialogBinding
+import com.internship.move.data.model.TripStatus
+import com.internship.move.data.model.UserStatus.*
+import com.internship.move.databinding.*
 import com.internship.move.ui.home.ScooterViewModel
 import com.internship.move.ui.home.TripViewModel
 import com.internship.move.ui.home.UserViewModel
@@ -352,7 +339,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         infoWindow.batteryTV.text = SCOOTER_BATTERY_TEMPLATE.format(scooter.batteryLevel)
 
         val address = geocoder.getFromLocation(scooter.latLng.latitude, scooter.latLng.longitude, 1)?.firstOrNull() ?: return
-        infoWindow.addressTV.text = getString(R.string.address_template).format(address.thoroughfare ?: "", address.subThoroughfare ?: "")
+        infoWindow.addressTV.text = getString(R.string.address_template).format(address.thoroughfare, address.subThoroughfare)
 
         infoWindow.unlockBtn.setOnClickListener {
             showUnlockDialog(scooter)
@@ -456,6 +443,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun showCurrentRideDialogCollapsed() {
         val scooter = scooterViewModel.scannedScooter.value ?: return
+        if (tripViewModel.trip.value?.status != TripStatus.IN_PROGRESS) return
 
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialog)
 
@@ -467,9 +455,9 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             if (isLockable) resources.getString(R.string.trip_details_lock_btn_text) else resources.getString(R.string.trip_details_unlock_btn_text)
 
         tripViewModel.seconds.observe(viewLifecycleOwner) { seconds ->
-            val durationList = seconds.fromSecondsToList()
-            val hourString = if (durationList[0] / 10 == 0) "0${durationList[0]}" else durationList[0].toString()
-            val minString = if (durationList[1] / 10 == 0) "0${durationList[1]}" else durationList[1].toString()
+            val duration = seconds.fromSecondsToList()
+            val hourString = if (duration[0] / 10 == 0) "0${duration[0]}" else duration[0].toString()
+            val minString = if (duration[1] / 10 == 0) "0${duration[1]}" else duration[1].toString()
             dialogBinding.durationTV.text = getString(R.string.time_minutes_template).format(hourString, minString)
         }
 
@@ -485,8 +473,9 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 currentLocationData.location?.latitude ?: .0,
                 currentLocationData.location?.longitude ?: .0
             )
+            tripViewModel.trip.removeObservers(viewLifecycleOwner)
             bottomSheetDialog.dismiss()
-            startScootersUpdates()
+            findNavController().navigate(MapFragmentDirections.actionMapFragmentToTripSummaryFragment())
         }
 
         dialogBinding.lockBtn.setOnClickListener {
@@ -530,10 +519,10 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             if (isLockable) resources.getString(R.string.trip_details_lock_btn_text) else resources.getString(R.string.trip_details_unlock_btn_text)
 
         tripViewModel.seconds.observe(viewLifecycleOwner) { seconds ->
-            val durationList = seconds.fromSecondsToList()
-            val hourString = if (durationList[0] / 10 == 0) "0${durationList[0]}" else durationList[0].toString()
-            val minString = if (durationList[1] / 10 == 0) "0${durationList[1]}" else durationList[1].toString()
-            val secString = if (durationList[2] / 10 == 0) "0${durationList[2]}" else durationList[2].toString()
+            val duration = seconds.fromSecondsToList()
+            val hourString = if (duration[0] / 10 == 0) "0${duration[0]}" else duration[0].toString()
+            val minString = if (duration[1] / 10 == 0) "0${duration[1]}" else duration[1].toString()
+            val secString = if (duration[2] / 10 == 0) "0${duration[2]}" else duration[2].toString()
             dialogBinding.timeTV.text = getString(R.string.time_seconds_template).format(hourString, minString, secString)
         }
 
@@ -568,8 +557,9 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 currentLocationData.location?.latitude ?: .0,
                 currentLocationData.location?.longitude ?: .0
             )
+            tripViewModel.trip.removeObservers(viewLifecycleOwner)
             bottomSheetDialog.dismiss()
-            startScootersUpdates()
+            findNavController().navigate(MapFragmentDirections.actionMapFragmentToTripSummaryFragment())
         }
 
         dialogBinding.minimizeBtn.setOnClickListener {
@@ -585,7 +575,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         Alerter.create(requireActivity())
             .setText(message)
             .setTextAppearance(R.style.AlertTextAppearance)
-            .setBackgroundColorRes(R.color.primary_color)
+            .setBackgroundColorRes(R.color.purple)
             .enableSwipeToDismiss()
             .show()
     }
