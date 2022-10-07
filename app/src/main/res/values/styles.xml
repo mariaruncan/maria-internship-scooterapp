@@ -105,4 +105,19 @@
         <item name="android:fontFamily">@font/bai_jamjuree_medium</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="TextInputLayoutSecondary" parent="TextAppearance">
+        <item name="errorTextColor">@color/red</item>
+        <item name="boxStrokeErrorColor">@color/red</item>
+        <item name="boxStrokeColor">@color/pastel_purple</item>
+        <item name="android:textColorHint">@color/pastel_purple</item>
+        <item name="endIconTint">@color/icon_tint</item>
+        <item name="hintTextColor">@color/pastel_purple</item>
+    </style>
+
+    <style name="TextInputEditTextSecondary" parent="TextAppearance">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/text_color_dark</item>
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
 </resources>

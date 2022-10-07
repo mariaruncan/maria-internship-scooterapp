@@ -27,9 +27,11 @@
             app:enterAnim="@anim/enter_from_left"
             app:exitAnim="@anim/exit_to_right"
             app:popEnterAnim="@anim/enter_from_right"
-            app:popExitAnim="@anim/exit_to_left"
-            app:popUpTo="@id/mapFragment"
-            app:popUpToInclusive="true" />
+            app:popExitAnim="@anim/exit_to_left" />
+
+        <action
+            android:id="@+id/action_mapFragment_to_tripSummaryFragment"
+            app:destination="@id/tripSummaryFragment" />
     </fragment>
 
     <fragment
@@ -56,12 +58,6 @@
             app:destination="@id/unlockFragment"
             app:popUpTo="@id/unlockFragment"
             app:popUpToInclusive="true" />
-
-        <action
-            android:id="@+id/action_unlockFragment_to_mapFragment"
-            app:destination="@id/mapFragment"
-            app:popUpTo="@id/unlockFragment"
-            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -71,9 +67,46 @@
         tools:layout="@layout/fragment_menu">
 
         <action
-            android:id="@+id/action_menuFragment_to_mapFragment"
-            app:destination="@id/mapFragment"
-            app:popUpTo="@id/menuFragment"
+            android:id="@+id/action_menuFragment_to_tripsHistoryFragment"
+            app:destination="@id/tripsHistoryFragment" />
+
+        <action
+            android:id="@+id/action_menuFragment_to_accountFragment"
+            app:destination="@id/accountFragment" />
+
+        <action
+            android:id="@+id/action_menuFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/tripsHistoryFragment"
+        android:name="com.internship.move.ui.home.menu.TripsHistoryFragment"
+        android:label="TripsHistoryFragment"
+        tools:layout="@layout/fragment_trips_history" />
+
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.internship.move.ui.home.menu.AccountFragment"
+        android:label="AccountFragment"
+        tools:layout="@layout/fragment_account">
+
+        <action
+            android:id="@+id/action_accountFragment_to_splash_graph"
+            app:destination="@id/splash_graph"
+            app:popUpTo="@id/accountFragment"
             app:popUpToInclusive="true" />
     </fragment>
+
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.internship.move.ui.home.menu.ChangePasswordFragment"
+        android:label="ChangePasswordFragment"
+        tools:layout="@layout/fragment_change_password" />
+
+    <fragment
+        android:id="@+id/tripSummaryFragment"
+        android:name="com.internship.move.ui.home.map.TripSummaryFragment"
+        android:label="TripSummaryFragment"
+        tools:layout="@layout/fragment_trip_summary" />
 </navigation>

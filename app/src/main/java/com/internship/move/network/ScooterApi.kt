@@ -9,6 +9,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ScooterApi {
+    // add Physical to url for PhysicalScooter
 
     @GET("scooters")
     suspend fun getAllScooters(): ScootersResponseDTO

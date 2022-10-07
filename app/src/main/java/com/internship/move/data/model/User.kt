@@ -5,6 +5,5 @@ data class User(
     val email: String,
     val status: UserStatus,
     val hasDrivingLicense: Boolean,
-    val numberOfTrips: Int? = null,
-    val scooter: Scooter? = null
+    val numberOfTrips: Int? = null
 )

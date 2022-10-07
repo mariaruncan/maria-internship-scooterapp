@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/medium_margin_size">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/verticalGL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/backBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_arrow_back"
+        android:backgroundTint="@color/text_color_dark"
+        app:layout_constraintBottom_toBottomOf="@id/titleTV"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/titleTV"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/titleTV"
+        style="@style/Heading3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/trip_summary_title"
+        android:textColor="@color/text_color_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/routeIV"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_margin_size"
+        android:scaleType="centerCrop"
+        android:src="@drawable/mock_trip_route"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleTV"
+        tools:ignore="ContentDescription" />
+
+    <LinearLayout
+        android:id="@+id/addressLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_margin_size"
+        android:background="@drawable/bg_address"
+        android:orientation="vertical"
+        android:padding="@dimen/small_margin_size"
+        app:layout_constraintTop_toBottomOf="@id/routeIV">
+
+        <TextView
+            style="@style/Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/trip_summary_from_text"
+            android:textColor="@color/text_color_light_secondary" />
+
+        <TextView
+            android:id="@+id/endLocationTV"
+            style="@style/Heading5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_color_dark"
+            tools:text="Str. Avram Iancu nr. 26 Cladirea 2" />
+
+        <TextView
+            style="@style/Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin_size"
+            android:text="@string/trip_summary_to_text"
+            android:textColor="@color/text_color_light_secondary" />
+
+        <TextView
+            android:id="@+id/startLocationTV"
+            style="@style/Heading5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_color_dark"
+            tools:text="Gradina Miko" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/clockIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_margin_size"
+        android:src="@drawable/ic_clock"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addressLL"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/timeLabelTV"
+        style="@style/Body2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/trip_summary_time_text"
+        android:textColor="@color/text_color_light_secondary"
+        app:layout_constraintStart_toEndOf="@id/clockIV"
+        app:layout_constraintTop_toTopOf="@id/clockIV" />
+
+    <ImageView
+        android:id="@+id/mapIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_margin_size"
+        android:src="@drawable/ic_map"
+        app:layout_constraintStart_toStartOf="@id/verticalGL"
+        app:layout_constraintTop_toBottomOf="@id/addressLL"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/distanceLabelTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/trip_summary_distance_text"
+        android:textColor="@color/text_color_light_secondary"
+        app:layout_constraintStart_toEndOf="@id/mapIV"
+        app:layout_constraintTop_toTopOf="@id/mapIV" />
+
+    <TextView
+        android:id="@+id/timeTV"
+        style="@style/Heading5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_color_dark"
+        app:layout_constraintStart_toStartOf="@id/timeLabelTV"
+        app:layout_constraintTop_toBottomOf="@id/timeLabelTV"
+        tools:text="00:12 min" />
+
+    <TextView
+        android:id="@+id/distanceTV"
+        style="@style/Heading5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_color_dark"
+        app:layout_constraintStart_toStartOf="@id/distanceLabelTV"
+        app:layout_constraintTop_toBottomOf="@id/distanceLabelTV"
+        tools:text="2.7 km" />
+
+    <Button
+        android:id="@+id/mapBtn"
+        style="@style/PrimaryButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/trip_summary_map_btn_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

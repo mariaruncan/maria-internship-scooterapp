@@ -1,8 +1,8 @@
 package com.internship.move.network
 
 import com.internship.move.data.dto.CoordinatesDTO
+import com.internship.move.data.dto.EndTripResponseDTO
 import com.internship.move.data.dto.MultipleTripsResponseDTO
-import com.internship.move.data.dto.StartRideRequestDTO
 import com.internship.move.data.dto.TripResponseDTO
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -12,11 +12,13 @@ import retrofit2.http.Path
 
 interface TripApi {
 
-    @POST("trips")
-    suspend fun startRide(@Body startRideRequest: StartRideRequestDTO)
+    // add Physical to url for PhysicalScooter
+
+    @POST("trips/start/{id}")
+    suspend fun startRide(@Path("id") scooterId: String, @Body coordinates: CoordinatesDTO)
 
     @PATCH("trips/end/{id}")
-    suspend fun endRide(@Path("id") scooterId: String, @Body coordinates: CoordinatesDTO)
+    suspend fun endRide(@Path("id") scooterId: String, @Body coordinates: CoordinatesDTO): EndTripResponseDTO
 
     @PATCH("trips/lock/{id}")
     suspend fun lockRide(@Path("id") scooterId: String, @Body coordinates: CoordinatesDTO)

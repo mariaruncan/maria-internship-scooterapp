@@ -2,6 +2,10 @@
     <string name="app_name">Move</string>
     <string name="home_fragment_title">Map fragment</string>
     <string name="login_fragment_title">Login fragment</string>
+    <string name="address_template">%1$s %2$s</string>
+    <string name="time_seconds_template">%1$s:%2$s:%3$s</string>
+    <string name="time_minutes_template">%1$s:%2$s min</string>
+    <string name="distance_template">%1$.1f km</string>
 
     <!-- Buttons text -->
     <string name="map_btn_text">Map</string>
@@ -132,4 +136,31 @@
     <string name="trip_details_unlock_btn_text">Unlock</string>
     <string name="trip_details_end_ride_btn_text">End ride</string>
     <string name="trip_details_battery_label">Battery</string>
+
+    <!-- region TripsHistory -->
+    <string name="trips_history_title">History</string>
+    <string name="trips_history_from_text">From</string>
+    <string name="trips_history_to_text">To</string>
+    <string name="trips_history_time_text">Travel time</string>
+    <string name="trips_history_distance_text">Distance</string>
+
+    <!-- region Account -->
+    <string name="account_email_hint">Email address</string>
+    <string name="account_username_hint">Username</string>
+    <string name="account_title">Account</string>
+    <string name="account_log_out_text">Log out</string>
+
+    <!-- region ChangePassword -->
+    <string name="change_pass_title">Change password</string>
+    <string name="change_pass_old_pass_hint">Old password</string>
+    <string name="change_pass_new_pass_hint">New password</string>
+    <string name="change_pass_confirm_pass_hint">Confirm new password</string>
+
+    <!-- region TripSummary -->
+    <string name="trip_summary_title">Trip summary</string>
+    <string name="trip_summary_from_text">From</string>
+    <string name="trip_summary_to_text">To</string>
+    <string name="trip_summary_time_text">Time</string>
+    <string name="trip_summary_distance_text">Distance</string>
+    <string name="trip_summary_map_btn_text">Return to map</string>
 </resources>
